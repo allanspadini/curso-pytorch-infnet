@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import Controls from './components/Controls';
 import NotesDrawer from './components/NotesDrawer';
 import OverviewModal from './components/OverviewModal';
+import MathView from './components/MathView';
 
 // Interactive Components
 import VennDiagram from './components/interactive/VennDiagram';
@@ -235,8 +236,8 @@ export default function App() {
       case 'math-focus':
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', height: '100%', justifyContent: 'center' }}>
-            <div className="math-box" style={{ fontSize: '1.4rem', padding: '20px', borderLeftWidth: '6px' }}>
-              {slide.equation}
+            <div className="math-box" style={{ fontSize: '1.6rem', padding: '20px', borderLeftWidth: '6px' }}>
+              <MathView math={slide.equation} displayMode={true} />
             </div>
 
             <div className="grid-3">
