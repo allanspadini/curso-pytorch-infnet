@@ -13,6 +13,7 @@ import BiologicalNeuronToggle from './components/interactive/BiologicalNeuronTog
 import VennDiagram from './components/interactive/VennDiagram';
 import PerceptronSimulator from './components/interactive/PerceptronSimulator';
 import ActivationPlotter from './components/interactive/ActivationPlotter';
+import ActivationFunctionsGrid from './components/interactive/ActivationFunctionsGrid';
 import XorVisualizer from './components/interactive/XorVisualizer';
 import MlpNetworkDiagram from './components/interactive/MlpNetworkDiagram';
 import QuizWidget from './components/interactive/QuizWidget';
@@ -113,6 +114,8 @@ export default function App() {
         return <PerceptronSimulator />;
       case 'ActivationPlotter':
         return <ActivationPlotter />;
+      case 'ActivationFunctionsGrid':
+        return <ActivationFunctionsGrid />;
       case 'XorVisualizer':
         return <XorVisualizer />;
       case 'MlpNetworkDiagram':

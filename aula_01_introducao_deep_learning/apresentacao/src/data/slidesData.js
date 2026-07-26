@@ -163,18 +163,11 @@ export const slidesData = [
   },
   {
     id: 14,
-    type: 'image-text',
+    type: 'custom',
+    component: 'ActivationFunctionsGrid',
     title: 'Visão Geral das Funções de Ativação',
-    subtitle: 'As 4 principais funções da literatura',
-    imageSrc: '/imagens/funcoes_ativacao.png',
-    imageAlt: 'Visão Geral das Funções de Ativação',
-    bulletPoints: [
-      'Sigmoid: Ideal para probabilidade de saída em classificação binária [0, 1].',
-      'Tanh: Tangente hiperbólica centrada em zero [-1, 1], usada em redes recorrentes.',
-      'ReLU: f(z) = max(0, z) — o padrão ouro para camadas ocultas em Deep Learning.',
-      'Leaky ReLU: Permite um pequeno vazamento em valores negativos para evitar neurônios mortos.'
-    ],
-    notes: 'Neste slide comparativo vemos as quatro principais funções. Enquanto a Sigmoid é ótima para a camada final de classificação binária, a ReLU tornou-se o padrão absoluto para todas as camadas ocultas intermediárias do Deep Learning moderno.'
+    subtitle: 'Comparativo dos 4 modelos fundamentais em gráficos vetoriais de alta resolução',
+    notes: 'Neste slide comparativo vemos as quatro principais funções de ativação em gráficos vetoriais lado a lado: Sigmoid, Tanh, ReLU e Leaky ReLU. Reparem como a Sigmoid e Tanh saturam em valores extremos, enquanto a ReLU mantém o gradiente constante de 1.0 para z positivo.'
   },
   {
     id: 15,
