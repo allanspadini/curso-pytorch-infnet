@@ -11,11 +11,6 @@ wheels/
 node_modules/
 .vite/
 
-# Non-Lesson 1 content & drafts
-aula_02*
-.agents/
-WhatsApp Image*
-
 # Temporary scratch files
 scratch_odp/
 scratch_slide*
