@@ -1,0 +1,58 @@
+# Datasets Reais para Projetos de IA & SaaS
+
+Este arquivo contém uma curadoria de datasets do mundo real (Kaggle e Hugging Face) que servem de base para os projetos de SaaS e negócios desenvolvidos ao longo das aulas de PyTorch.
+
+---
+
+## 📊 1. Dados Tabulares & Modelagem Clássica
+
+### Previsão de Churn de Assinantes (Customer Success SaaS)
+*   **Caso de Uso**: Predição de cancelamento de assinatura de clientes para plataformas B2B.
+*   **Dataset**: Telco Customer Churn (Kaggle)
+*   **Link**: [Telco Customer Churn no Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
+*   **Aplicação (Aula 2)**: Treinamento de uma MLP binária para classificar probabilidade de saída do cliente baseado em dados demográficos e de uso.
+
+### Categorização de Transações Financeiras (Fintech SaaS)
+*   **Caso de Uso**: Classificação automática de despesas ou faturas de usuários em categorias de gastos (ex: alimentação, transporte, lazer).
+*   **Dataset**: Personal Finance Transaction Analysis Dataset (Kaggle)
+*   **Link**: [Personal Finance Dataset no Kaggle](https://www.kaggle.com/datasets/lopesenrique/personal-finance-transaction-analysis-dataset)
+*   **Aplicação (Aula 3)**: Rede neural multiclasse utilizando embeddings para mapear descrições de transações bancárias.
+
+### Detecção de Fraude em Cartões de Crédito (Anti-fraud SaaS)
+*   **Caso de Uso**: Bloqueio de transações suspeitas de e-commerce em tempo real.
+*   **Dataset**: Credit Card Fraud Detection (Kaggle)
+*   **Link**: [Credit Card Fraud Detection no Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+*   **Aplicação (Aula 4)**: Estudo de classes altamente desbalanceadas (fraudes representam <0.2% das transações) com foco em Precision, Recall, F1-Score e técnicas de regularização como Dropout.
+
+---
+
+## 🖼️ 2. Visão Computacional (Imagens)
+
+### Detecção de Pragas e Doenças em Lavouras (AgriTech SaaS)
+*   **Caso de Uso**: Diagnóstico rápido de pragas em plantações por fotos tiradas no celular.
+*   **Dataset**: PlantVillage Dataset (Hugging Face / Kaggle)
+*   **Link HF**: [PlantVillage no Hugging Face](https://huggingface.co/datasets/mohanty/PlantVillage)
+*   **Link Kaggle**: [PlantVillage Dataset no Kaggle](https://www.kaggle.com/datasets/abdallahalashqar/plantvillage-dataset)
+*   **Aplicação (Aula 5)**: Criação de uma rede convolucional (CNN) do zero para classificar folhas saudáveis vs. doentes.
+
+### Denoising e Limpeza de Documentos Digitalizados (OCR SaaS / Document AI)
+*   **Caso de Uso**: Limpeza visual e remoção de ruídos (dobras, sombras, manchas de café) de PDFs e imagens para otimização de motores OCR.
+*   **Dataset**: Denoising Dirty Documents (Kaggle)
+*   **Link**: [Denoising Dirty Documents no Kaggle](https://www.kaggle.com/competitions/denoising-dirty-documents)
+*   **Aplicação (Aula 6)**: Autoencoders convolucionais para reconstrução e denoising de imagens.
+
+### Classificação de Recibos para Reembolso (Expense Tracking SaaS)
+*   **Caso de Uso**: Identificação e extração automática de dados de fotos de recibos corporativos.
+*   **Dataset**: SROIE v2 (Scanned Receipts OCR - Kaggle)
+*   **Link**: [SROIE Dataset no Kaggle](https://www.kaggle.com/datasets/urbikn/sroie-datasetv2)
+*   **Aplicação (Aula 8 - Prática Integradora)**: Pipeline completo de classificação de imagem de ponta a ponta e preparação para exportação.
+
+---
+
+## 📈 3. Séries Temporais & Dados Sequenciais
+
+### Previsão de Demanda de Vendas para E-commerce (Demand Forecasting SaaS)
+*   **Caso de Uso**: Previsão automatizada de estoque de produtos em lojas virtuais para otimização logística.
+*   **Dataset**: Store Item Demand Forecasting (Kaggle)
+*   **Link**: [Store Item Demand Forecasting no Kaggle](https://www.kaggle.com/competitions/demand-forecasting-kernels-only)
+*   **Aplicação (Aula 7)**: Redes recorrentes LSTMs e GRUs para prever vendas futuras com base no histórico temporal.

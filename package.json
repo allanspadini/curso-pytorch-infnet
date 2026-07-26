@@ -1,0 +1,10 @@
+{
+  "name": "curso-pytorch-infnet",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm run dev --prefix aula_01_introducao_deep_learning/apresentacao",
+    "dev:aula01": "npm run dev --prefix aula_01_introducao_deep_learning/apresentacao",
+    "build:aula01": "npm run build --prefix aula_01_introducao_deep_learning/apresentacao"
+  }
+}

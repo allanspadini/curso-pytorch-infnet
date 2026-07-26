@@ -1,0 +1,22 @@
+# Python & Virtual environments
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.venv
+
+# Node / JS
+node_modules/
+.vite/
+
+# Temporary scratch files
+scratch_odp/
+scratch_slide*
+Template de Slides para Aulas.pdf
+
+# Jupyter & IDEs
+.ipynb_checkpoints/
+.obsidian/
+.DS_Store
