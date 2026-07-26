@@ -55,13 +55,12 @@ export default function ActivationPlotter() {
   const derivVal = current.calcDeriv(zVal);
 
   // SVG dimensions
-  const width = 360;
-  const height = 240;
-  const margin = 30;
+  const width = 460;
+  const height = 340;
+  const margin = 35;
 
   const scaleX = (z) => margin + ((z + 6) / 12) * (width - 2 * margin);
   const scaleY = (y) => {
-    // scale y from -1.5 to +2.5
     const minY = -1.5;
     const maxY = 2.5;
     return height - margin - ((y - minY) / (maxY - minY)) * (height - 2 * margin);
@@ -76,11 +75,11 @@ export default function ActivationPlotter() {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '20px', alignItems: 'center' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: '28px', height: '100%', alignItems: 'stretch' }}>
       {/* Interactive Controls & Info */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'center' }}>
         {/* Function selector tabs */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
           {Object.keys(funcs).map((key) => (
             <button
               key={key}
@@ -89,11 +88,12 @@ export default function ActivationPlotter() {
                 background: fnType === key ? funcs[key].color : '#F1F5F9',
                 color: fnType === key ? '#FFFFFF' : '#334155',
                 border: 'none',
-                padding: '8px 12px',
-                borderRadius: '8px',
-                fontWeight: '700',
-                fontSize: '0.85rem',
+                padding: '10px 14px',
+                borderRadius: '10px',
+                fontWeight: '800',
+                fontSize: '1.05rem',
                 cursor: 'pointer',
+                boxShadow: fnType === key ? '0 4px 12px rgba(0,0,0,0.15)' : 'none',
                 transition: 'all 0.2s ease'
               }}
             >
@@ -103,10 +103,10 @@ export default function ActivationPlotter() {
         </div>
 
         {/* Input slider */}
-        <div className="interactive-widget-box" style={{ padding: '16px' }}>
-          <div className="slider-label">
+        <div className="interactive-widget-box" style={{ padding: '20px' }}>
+          <div className="slider-label" style={{ fontSize: '1.15rem' }}>
             <span>Entrada (z):</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '800', color: current.color, fontSize: '1.05rem' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '800', color: current.color, fontSize: '1.25rem' }}>
               {zVal.toFixed(2)}
             </span>
           </div>
@@ -120,57 +120,57 @@ export default function ActivationPlotter() {
             className="custom-range"
           />
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '8px' }}>
-            <div style={{ background: '#FFFFFF', padding: '8px 12px', borderRadius: '6px', border: '1px solid #E2E8F0', textCenter: 'center' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748B', display: 'block' }}>Saída f(z):</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '800', color: current.color, fontSize: '1.1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginTop: '12px' }}>
+            <div style={{ background: '#FFFFFF', padding: '10px 14px', borderRadius: '8px', border: '1px solid #E2E8F0', textAlign: 'center' }}>
+              <span style={{ fontSize: '0.88rem', color: '#64748B', display: 'block', fontWeight: '600' }}>Saída f(z):</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '800', color: current.color, fontSize: '1.25rem' }}>
                 {outputVal.toFixed(4)}
               </span>
             </div>
 
-            <div style={{ background: '#FFFFFF', padding: '8px 12px', borderRadius: '6px', border: '1px solid #E2E8F0', textCenter: 'center' }}>
-              <span style={{ fontSize: '0.75rem', color: '#64748B', display: 'block' }}>Gradiente f'(z):</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '800', color: '#E11D48', fontSize: '1.1rem' }}>
+            <div style={{ background: '#FFFFFF', padding: '10px 14px', borderRadius: '8px', border: '1px solid #E2E8F0', textAlign: 'center' }}>
+              <span style={{ fontSize: '0.88rem', color: '#64748B', display: 'block', fontWeight: '600' }}>Gradiente f'(z):</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '800', color: '#E11D48', fontSize: '1.25rem' }}>
                 {derivVal.toFixed(4)}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="content-card" style={{ padding: '16px', borderColor: current.color }}>
-          <h4 style={{ color: current.color, fontWeight: '700', fontSize: '1.05rem', marginBottom: '6px' }}>
+        <div className="content-card" style={{ padding: '22px', borderColor: current.color }}>
+          <h4 style={{ color: current.color, fontWeight: '800', fontSize: '1.3rem', marginBottom: '8px' }}>
             {current.name} (Intervalo: {current.range})
           </h4>
-          <p style={{ fontSize: '0.88rem', color: '#334155', lineHeight: '1.45' }}>
+          <p style={{ fontSize: '1.12rem', color: '#334155', lineHeight: '1.5' }}>
             {current.desc}
           </p>
         </div>
       </div>
 
       {/* SVG Plot Column */}
-      <div style={{ background: '#FFFFFF', borderRadius: '12px', border: '1px solid #CBD5E1', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '8px', fontSize: '0.85rem', fontWeight: '700' }}>
+      <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #CBD5E1', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-sm)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '12px', fontSize: '1.05rem', fontWeight: '800' }}>
           <span style={{ color: current.color }}>— f(z)</span>
           <span style={{ color: '#E11D48' }}>- - Derivada f'(z)</span>
         </div>
 
-        <svg width={width} height={height} style={{ background: '#F8FAFC', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+        <svg width="100%" height="auto" viewBox={`0 0 ${width} ${height}`} style={{ background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0', maxHeight: '350px' }}>
           {/* Axes */}
-          <line x1={margin} y1={scaleY(0)} x2={width - margin} y2={scaleY(0)} stroke="#CBD5E1" strokeWidth="2" />
-          <line x1={scaleX(0)} y1={margin} x2={scaleX(0)} y2={height - margin} stroke="#CBD5E1" strokeWidth="2" />
+          <line x1={margin} y1={scaleY(0)} x2={width - margin} y2={scaleY(0)} stroke="#CBD5E1" strokeWidth="2.5" />
+          <line x1={scaleX(0)} y1={margin} x2={scaleX(0)} y2={height - margin} stroke="#CBD5E1" strokeWidth="2.5" />
 
           {/* Function Curve */}
-          <polyline fill="none" stroke={current.color} strokeWidth="3" points={points.join(' ')} />
+          <polyline fill="none" stroke={current.color} strokeWidth="4" points={points.join(' ')} />
 
           {/* Derivative Curve */}
-          <polyline fill="none" stroke="#E11D48" strokeWidth="2" strokeDasharray="4,4" points={derivPoints.join(' ')} />
+          <polyline fill="none" stroke="#E11D48" strokeWidth="2.5" strokeDasharray="5,5" points={derivPoints.join(' ')} />
 
           {/* Active Point Indicator */}
-          <circle cx={scaleX(zVal)} cy={scaleY(outputVal)} r="6" fill={current.color} stroke="#FFFFFF" strokeWidth="2" />
-          <circle cx={scaleX(zVal)} cy={scaleY(derivVal)} r="5" fill="#E11D48" stroke="#FFFFFF" strokeWidth="2" />
+          <circle cx={scaleX(zVal)} cy={scaleY(outputVal)} r="8" fill={current.color} stroke="#FFFFFF" strokeWidth="2.5" />
+          <circle cx={scaleX(zVal)} cy={scaleY(derivVal)} r="7" fill="#E11D48" stroke="#FFFFFF" strokeWidth="2.5" />
         </svg>
 
-        <div className="math-box" style={{ width: '100%', fontSize: '0.85rem', padding: '8px', margin: '10px 0 0 0' }}>
+        <div className="math-box" style={{ width: '100%', fontSize: '1.15rem', padding: '12px 18px', margin: '14px 0 0 0', borderLeftWidth: '5px' }}>
           {current.formula}
         </div>
       </div>

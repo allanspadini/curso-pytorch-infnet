@@ -37,9 +37,9 @@ export default function PerceptronSimulator() {
   const accuracy = Math.round((correctCount / athletes.length) * 100);
 
   // Map graph coordinates to SVG (x1: 0..12, x2: 0..20)
-  const width = 360;
-  const height = 260;
-  const margin = 35;
+  const width = 460;
+  const height = 360;
+  const margin = 42;
 
   const scaleX = (val) => margin + (val / 12) * (width - 2 * margin);
   const scaleY = (val) => height - margin - (val / 20) * (height - 2 * margin);
@@ -49,69 +49,69 @@ export default function PerceptronSimulator() {
   const yAt12 = w2 !== 0 ? (-w1 * 12 - b) / w2 : 0;
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: '20px', alignItems: 'center' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: '28px', height: '100%', alignItems: 'stretch' }}>
       {/* Controls Column */}
-      <div className="interactive-widget-box">
+      <div className="interactive-widget-box" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '28px', gap: '16px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontWeight: '800', color: '#0A345D', fontSize: '1rem' }}>⚙️ Parâmetros do Neurônio</span>
+          <span style={{ fontWeight: '800', color: '#0A345D', fontSize: '1.25rem' }}>⚙️ Parâmetros do Neurônio</span>
           <span style={{ 
             background: accuracy >= 90 ? '#DEF7EC' : accuracy >= 60 ? '#FEF08A' : '#FDE8E8',
             color: accuracy >= 90 ? '#03543F' : accuracy >= 60 ? '#713F12' : '#9B1C1C',
-            fontWeight: '800', padding: '4px 12px', borderRadius: '16px', fontSize: '0.85rem'
+            fontWeight: '800', padding: '6px 16px', borderRadius: '20px', fontSize: '1.05rem'
           }}>
             Acurácia: {accuracy}%
           </span>
         </div>
 
-        <div className="slider-group">
-          <div className="slider-label">
+        <div className="slider-group" style={{ margin: '4px 0' }}>
+          <div className="slider-label" style={{ fontSize: '1.1rem' }}>
             <span>Peso W₁ (Creatina):</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700' }}>{w1.toFixed(2)}</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '800', color: '#1BB5D8' }}>{w1.toFixed(2)}</span>
           </div>
           <input type="range" min="-3" max="3" step="0.1" value={w1} onChange={e => setW1(parseFloat(e.target.value))} className="custom-range" />
         </div>
 
-        <div className="slider-group">
-          <div className="slider-label">
+        <div className="slider-group" style={{ margin: '4px 0' }}>
+          <div className="slider-label" style={{ fontSize: '1.1rem' }}>
             <span>Peso W₂ (Horas Treino):</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700' }}>{w2.toFixed(2)}</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '800', color: '#1BB5D8' }}>{w2.toFixed(2)}</span>
           </div>
           <input type="range" min="-3" max="3" step="0.1" value={w2} onChange={e => setW2(parseFloat(e.target.value))} className="custom-range" />
         </div>
 
-        <div className="slider-group">
-          <div className="slider-label">
+        <div className="slider-group" style={{ margin: '4px 0' }}>
+          <div className="slider-label" style={{ fontSize: '1.1rem' }}>
             <span>Viés (Bias - b):</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '700' }}>{b.toFixed(1)}</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '800', color: '#0A345D' }}>{b.toFixed(1)}</span>
           </div>
           <input type="range" min="-25" max="5" step="0.5" value={b} onChange={e => setB(parseFloat(e.target.value))} className="custom-range" />
         </div>
 
-        <div className="math-box" style={{ fontSize: '0.9rem', margin: 0, padding: '10px' }}>
+        <div className="math-box" style={{ fontSize: '1.15rem', margin: '4px 0', padding: '14px 18px', borderLeftWidth: '5px' }}>
           z = ({w1.toFixed(1)} × x₁) + ({w2.toFixed(1)} × x₂) + ({b.toFixed(1)})
         </div>
 
         <button 
           onClick={() => { setW1(1.2); setW2(0.9); setB(-11.5); }}
-          style={{ background: '#0A345D', color: '#FFF', border: 'none', padding: '8px 14px', borderRadius: '6px', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer' }}
+          style={{ background: '#0A345D', color: '#FFF', border: 'none', padding: '12px 20px', borderRadius: '10px', fontWeight: '800', fontSize: '1.05rem', cursor: 'pointer', marginTop: '4px', boxShadow: 'var(--shadow-sm)' }}
         >
           🔄 Resetar para Solução Ótima
         </button>
       </div>
 
       {/* SVG Graph Column */}
-      <div style={{ background: '#FFFFFF', borderRadius: '12px', border: '1px solid #CBD5E1', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <h4 style={{ color: '#0A345D', fontSize: '0.95rem', fontWeight: '700', marginBottom: '8px' }}>
+      <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #CBD5E1', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-sm)' }}>
+        <h4 style={{ color: '#0A345D', fontSize: '1.15rem', fontWeight: '800', marginBottom: '14px', textAlign: 'center' }}>
           Fronteira de Decisão: {w1.toFixed(1)}·x₁ + {w2.toFixed(1)}·x₂ + ({b.toFixed(1)}) = 0
         </h4>
 
-        <svg width={width} height={height} style={{ background: '#F8FAFC', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+        <svg width="100%" height="auto" viewBox={`0 0 ${width} ${height}`} style={{ background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0', maxHeight: '370px' }}>
           {/* Axis Grid */}
-          <line x1={margin} y1={height - margin} x2={width - margin} y2={height - margin} stroke="#94A3B8" strokeWidth="2" />
-          <line x1={margin} y1={margin} x2={margin} y2={height - margin} stroke="#94A3B8" strokeWidth="2" />
+          <line x1={margin} y1={height - margin} x2={width - margin} y2={height - margin} stroke="#94A3B8" strokeWidth="2.5" />
+          <line x1={margin} y1={margin} x2={margin} y2={height - margin} stroke="#94A3B8" strokeWidth="2.5" />
 
-          <text x={width - margin} y={height - 10} fill="#64748B" fontSize="10" textAnchor="end">Creatina (g)</text>
-          <text x={10} y={margin - 10} fill="#64748B" fontSize="10" textAnchor="start">Treino (h)</text>
+          <text x={width - margin} y={height - 12} fill="#64748B" fontSize="12" fontWeight="bold" textAnchor="end">Creatina (g)</text>
+          <text x={12} y={margin - 14} fill="#64748B" fontSize="12" fontWeight="bold" textAnchor="start">Treino (h)</text>
 
           {/* Decision Line */}
           {w2 !== 0 && (
@@ -121,8 +121,8 @@ export default function PerceptronSimulator() {
               x2={scaleX(12)} 
               y2={scaleY(yAt12)} 
               stroke="#1BB5D8" 
-              strokeWidth="3" 
-              strokeDasharray="4,4"
+              strokeWidth="3.5" 
+              strokeDasharray="5,5"
             />
           )}
 
@@ -135,23 +135,23 @@ export default function PerceptronSimulator() {
                 <circle 
                   cx={scaleX(a.x1)} 
                   cy={scaleY(a.x2)} 
-                  r={isCorrect ? "7" : "9"} 
+                  r={isCorrect ? "9" : "11"} 
                   fill={fillColor}
                   stroke={isCorrect ? "#FFFFFF" : "#000000"} 
-                  strokeWidth={isCorrect ? "2" : "3"}
+                  strokeWidth={isCorrect ? "2.5" : "3.5"}
                 />
                 {!isCorrect && (
-                  <text x={scaleX(a.x1)} y={scaleY(a.x2) - 10} fill="#DC2626" fontSize="10" fontWeight="bold" textAnchor="middle">❌</text>
+                  <text x={scaleX(a.x1)} y={scaleY(a.x2) - 14} fill="#DC2626" fontSize="12" fontWeight="bold" textAnchor="middle">❌</text>
                 )}
               </g>
             );
           })}
         </svg>
 
-        <div style={{ display: 'flex', gap: '16px', marginTop: '12px', fontSize: '0.8rem', fontWeight: '600' }}>
+        <div style={{ display: 'flex', gap: '20px', marginTop: '16px', fontSize: '1.02rem', fontWeight: '700' }}>
           <span style={{ color: '#7CB342' }}>● Alta Performance (1)</span>
           <span style={{ color: '#EF4444' }}>● Regular (0)</span>
-          <span style={{ color: '#1BB5D8' }}>-- Linha z = 0</span>
+          <span style={{ color: '#1BB5D8' }}>-- Reta z = 0</span>
         </div>
       </div>
     </div>

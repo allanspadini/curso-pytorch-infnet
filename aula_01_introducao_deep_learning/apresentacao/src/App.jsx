@@ -252,18 +252,18 @@ export default function App() {
 
       case 'math-focus':
         return (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', height: '100%', justifyContent: 'center' }}>
-            <div className="math-box" style={{ fontSize: '1.6rem', padding: '20px', borderLeftWidth: '6px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', height: '100%', justifyContent: 'flex-start', paddingTop: '10px' }}>
+            <div className="math-box" style={{ fontSize: '2.1rem', padding: '24px 32px', borderLeftWidth: '8px', marginBottom: '8px' }}>
               <MathView math={slide.equation} displayMode={true} />
             </div>
 
-            <div className="grid-3">
+            <div className="grid-3" style={{ flex: 1 }}>
               {slide.explanations.map((exp, idx) => (
-                <div key={idx} className="content-card" style={{ padding: '16px' }}>
-                  <span style={{ fontSize: '0.9rem', fontWeight: '800', color: '#0A345D', display: 'block', marginBottom: '6px' }}>
+                <div key={idx} className="content-card" style={{ padding: '28px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '1.28rem', fontWeight: '800', color: '#0A345D', display: 'block', marginBottom: '12px' }}>
                     {exp.term}
                   </span>
-                  <p style={{ fontSize: '0.9rem', color: '#334155', lineHeight: '1.45' }}>
+                  <p style={{ fontSize: '1.2rem', color: '#334155', lineHeight: '1.55' }}>
                     {exp.desc}
                   </p>
                 </div>
@@ -274,12 +274,12 @@ export default function App() {
 
       case 'grid-cards':
         return (
-          <div className="grid-3">
+          <div className="grid-3" style={{ alignItems: 'stretch', height: '100%' }}>
             {slide.cards.map((c, idx) => (
-              <div key={idx} className="content-card" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <span className="card-header-badge">{c.badge}</span>
-                <h3 className="card-title" style={{ fontSize: '1.2rem' }}>{c.title}</h3>
-                <p className="card-text" style={{ fontSize: '0.92rem' }}>{c.text}</p>
+              <div key={idx} className="content-card" style={{ display: 'flex', flexDirection: 'column', gap: '14px', padding: '28px', justifyContent: 'center' }}>
+                <span className="card-header-badge" style={{ fontSize: '1.05rem' }}>{c.badge}</span>
+                <h3 className="card-title" style={{ fontSize: '1.5rem', lineHeight: '1.3' }}>{c.title}</h3>
+                <p className="card-text" style={{ fontSize: '1.2rem', lineHeight: '1.55' }}>{c.text}</p>
               </div>
             ))}
           </div>
@@ -287,14 +287,14 @@ export default function App() {
 
       case 'flow':
         return (
-          <div className="grid-2" style={{ alignItems: 'center' }}>
+          <div className="grid-2" style={{ alignItems: 'stretch', height: '100%' }}>
             {slide.steps.map((st, idx) => (
-              <div key={idx} className="content-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderColor: '#1BB5D8' }}>
-                <span className="card-header-badge">{st.step}</span>
-                <div className="math-box" style={{ fontSize: '1.1rem', margin: '12px 0' }}>
+              <div key={idx} className="content-card" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderColor: '#1BB5D8', padding: '32px' }}>
+                <span className="card-header-badge" style={{ fontSize: '1.15rem', padding: '8px 18px' }}>{st.step}</span>
+                <div className="math-box" style={{ fontSize: '1.85rem', margin: '20px 0', padding: '22px' }}>
                   {st.formula}
                 </div>
-                <p className="card-text">{st.desc}</p>
+                <p className="card-text" style={{ fontSize: '1.3rem', lineHeight: '1.6' }}>{st.desc}</p>
               </div>
             ))}
           </div>
