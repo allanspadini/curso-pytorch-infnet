@@ -80,6 +80,34 @@ html, body, #root {
   }
 }
 
+/* Fullscreen mode: Expand slide viewport to fill 100% of the screen without black borders */
+:fullscreen,
+:-webkit-full-screen {
+  background: var(--slide-bg) !important;
+}
+
+.app-container.is-fullscreen,
+.app-container:fullscreen,
+.app-container:-webkit-full-screen {
+  background: var(--slide-bg) !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.app-container.is-fullscreen .slide-viewport,
+.app-container:fullscreen .slide-viewport,
+.app-container:-webkit-full-screen .slide-viewport {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
 /* ODP Top Wave Artwork Header */
 .odp-header-wave {
   position: absolute;

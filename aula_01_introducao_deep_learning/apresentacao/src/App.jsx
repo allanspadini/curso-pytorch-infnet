@@ -22,10 +22,23 @@ export default function App() {
   const [showNotes, setShowNotes] = useState(false);
   const [showOverview, setShowOverview] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const totalSlides = slidesData.length;
   const slide = slidesData[currentSlideIndex];
   const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handleFSChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFSChange);
+    document.addEventListener('webkitfullscreenchange', handleFSChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFSChange);
+      document.removeEventListener('webkitfullscreenchange', handleFSChange);
+    };
+  }, []);
 
   // Next / Prev navigation
   const nextSlide = () => {
@@ -296,7 +309,7 @@ export default function App() {
   };
 
   return (
-    <div className="app-container" ref={containerRef}>
+    <div className={`app-container ${isFullscreen ? 'is-fullscreen' : ''}`} ref={containerRef}>
       <div className="slide-viewport">
         {/* Top ODP-styled Header (hidden on title slide) */}
         <Header 
