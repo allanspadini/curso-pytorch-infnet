@@ -8,6 +8,7 @@ import OverviewModal from './components/OverviewModal';
 import MathView from './components/MathView';
 
 // Interactive Components
+import BiologicalNeuronToggle from './components/interactive/BiologicalNeuronToggle';
 import VennDiagram from './components/interactive/VennDiagram';
 import PerceptronSimulator from './components/interactive/PerceptronSimulator';
 import ActivationPlotter from './components/interactive/ActivationPlotter';
