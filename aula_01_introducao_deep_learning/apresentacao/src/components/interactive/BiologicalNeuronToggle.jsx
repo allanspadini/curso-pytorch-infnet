@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export default function BiologicalNeuronToggle() {
   const [viewMode, setViewMode] = useState('biological'); // 'biological', 'artificial'
@@ -148,7 +149,7 @@ export default function BiologicalNeuronToggle() {
                 🤖 Diagrama do Perceptron Artificial
               </div>
               <img 
-                src="/imagens/perceptron_generico.jpg" 
+                src={getAssetUrl('/imagens/perceptron_generico.jpg')} 
                 alt="Perceptron Genérico" 
                 style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain', borderRadius: '8px' }}
               />

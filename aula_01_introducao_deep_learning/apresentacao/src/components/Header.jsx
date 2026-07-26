@@ -1,4 +1,5 @@
 import React from 'react';
+import { getAssetUrl } from '../utils/assetHelper';
 
 export default function Header({ title, subtitle, showLogo = true }) {
   return (
@@ -22,7 +23,7 @@ export default function Header({ title, subtitle, showLogo = true }) {
       {/* Official Instituto Infnet Logo top-right */}
       {showLogo && (
         <img 
-          src="/infnet_logo.png" 
+          src={getAssetUrl('/infnet_logo.png')} 
           alt="Instituto Infnet 1994" 
           className="odp-logo"
         />

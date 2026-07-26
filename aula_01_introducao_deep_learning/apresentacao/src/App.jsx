@@ -6,6 +6,7 @@ import Controls from './components/Controls';
 import NotesDrawer from './components/NotesDrawer';
 import OverviewModal from './components/OverviewModal';
 import MathView from './components/MathView';
+import { getAssetUrl } from './utils/assetHelper';
 
 // Interactive Components
 import BiologicalNeuronToggle from './components/interactive/BiologicalNeuronToggle';
@@ -136,7 +137,7 @@ export default function App() {
           <div className="grid-2" style={{ gridTemplateColumns: '0.85fr 1.15fr', alignItems: 'stretch' }}>
             <div className="content-card" style={{ textAlign: 'center', borderColor: '#0A345D', padding: '28px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(180deg, #FFFFFF 0%, #F0F9FF 100%)' }}>
               <img 
-                src={slide.photo || "/allan_spadini.jpg"} 
+                src={getAssetUrl(slide.photo || "/allan_spadini.jpg")} 
                 alt={slide.name} 
                 style={{
                   width: '145px',
@@ -192,7 +193,7 @@ export default function App() {
           <div className="grid-2" style={{ gridTemplateColumns: '0.9fr 1.1fr', alignItems: 'center' }}>
             <div style={{ background: '#FFF', borderRadius: '12px', border: '1px solid #CBD5E1', padding: '16px', display: 'flex', justifyContent: 'center', boxShadow: 'var(--shadow-sm)' }}>
               <img 
-                src={slide.imageSrc} 
+                src={getAssetUrl(slide.imageSrc)} 
                 alt={slide.imageAlt} 
                 style={{ maxWidth: '100%', maxHeight: '380px', objectFit: 'contain', borderRadius: '8px' }}
               />
