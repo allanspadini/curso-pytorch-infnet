@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export default function BiologicalNeuronToggle() {
-  const [viewMode, setViewMode] = useState('compare'); // 'compare', 'biological', 'artificial'
+  const [viewMode, setViewMode] = useState('biological'); // 'biological', 'artificial'
   const [activePart, setActivePart] = useState('dendrites'); // 'dendrites', 'soma', 'axon', 'synapses'
 
   const parts = {
@@ -45,33 +45,20 @@ export default function BiologicalNeuronToggle() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', height: '100%' }}>
       {/* Mode selector buttons */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button
-            onClick={() => setViewMode('compare')}
-            style={{
-              background: viewMode === 'compare' ? '#0A345D' : '#F1F5F9',
-              color: viewMode === 'compare' ? '#FFFFFF' : '#334155',
-              border: 'none',
-              padding: '6px 14px',
-              borderRadius: '20px',
-              fontWeight: '700',
-              fontSize: '0.85rem',
-              cursor: 'pointer'
-            }}
-          >
-            🔄 Comparação Lado a Lado
-          </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
           <button
             onClick={() => setViewMode('biological')}
             style={{
               background: viewMode === 'biological' ? '#1BB5D8' : '#F1F5F9',
               color: viewMode === 'biological' ? '#FFFFFF' : '#334155',
               border: 'none',
-              padding: '6px 14px',
+              padding: '8px 18px',
               borderRadius: '20px',
               fontWeight: '700',
-              fontSize: '0.85rem',
-              cursor: 'pointer'
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              boxShadow: viewMode === 'biological' ? '0 4px 12px rgba(27, 181, 216, 0.3)' : 'none',
+              transition: 'all 0.15s ease'
             }}
           >
             🧠 Neurônio Biológico Humano
@@ -82,19 +69,21 @@ export default function BiologicalNeuronToggle() {
               background: viewMode === 'artificial' ? '#7CB342' : '#F1F5F9',
               color: viewMode === 'artificial' ? '#FFFFFF' : '#334155',
               border: 'none',
-              padding: '6px 14px',
+              padding: '8px 18px',
               borderRadius: '20px',
               fontWeight: '700',
-              fontSize: '0.85rem',
-              cursor: 'pointer'
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              boxShadow: viewMode === 'artificial' ? '0 4px 12px rgba(124, 179, 66, 0.3)' : 'none',
+              transition: 'all 0.15s ease'
             }}
           >
             🤖 Perceptron Artificial
           </button>
         </div>
 
-        <span style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: '600' }}>
-          💡 Clique nas partes do neurônio abaixo para explorar!
+        <span style={{ fontSize: '0.88rem', color: '#64748B', fontWeight: '600' }}>
+          💡 Clique nas partes do neurônio para ver a analogia!
         </span>
       </div>
 
@@ -102,10 +91,10 @@ export default function BiologicalNeuronToggle() {
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '20px', alignItems: 'stretch', flex: 1 }}>
         {/* SVG Interactive Neuron Viewer */}
         <div style={{ background: '#FFFFFF', borderRadius: '12px', border: '1px solid #CBD5E1', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          {(viewMode === 'compare' || viewMode === 'biological') && (
+          {viewMode === 'biological' ? (
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#0A345D', marginBottom: '8px' }}>
-                {viewMode === 'compare' ? '🧠 Neurônio Biológico vs 🤖 Modelo Matemático' : '🧠 Anatomia do Neurônio Humano Biológico'}
+              <div style={{ fontSize: '0.95rem', fontWeight: '800', color: '#0A345D', marginBottom: '8px' }}>
+                🧠 Anatomia do Neurônio Humano Biológico
               </div>
 
               {/* Vector SVG Diagram of Biological Human Neuron */}
@@ -153,11 +142,9 @@ export default function BiologicalNeuronToggle() {
                 </g>
               </svg>
             </div>
-          )}
-
-          {viewMode === 'artificial' && (
+          ) : (
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#0A345D', marginBottom: '8px' }}>
+              <div style={{ fontSize: '0.95rem', fontWeight: '800', color: '#0A345D', marginBottom: '8px' }}>
                 🤖 Diagrama do Perceptron Artificial
               </div>
               <img 
@@ -180,9 +167,9 @@ export default function BiologicalNeuronToggle() {
                   background: activePart === pKey ? parts[pKey].color : '#F1F5F9',
                   color: activePart === pKey ? '#FFFFFF' : '#475569',
                   border: 'none',
-                  padding: '5px 12px',
+                  padding: '6px 12px',
                   borderRadius: '14px',
-                  fontSize: '0.8rem',
+                  fontSize: '0.82rem',
                   fontWeight: '700',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease'
@@ -196,15 +183,15 @@ export default function BiologicalNeuronToggle() {
           <span className="card-header-badge" style={{ background: current.bgBadge, color: current.color }}>
             🧠 BIOLÓGICO: {current.bioTitle}
           </span>
-          <h3 style={{ color: '#0A345D', fontSize: '1.25rem', fontWeight: '800', marginBottom: '8px' }}>
+          <h3 style={{ color: '#0A345D', fontSize: '1.3rem', fontWeight: '800', marginBottom: '8px' }}>
             🤖 {current.artTitle}
           </h3>
 
-          <p style={{ fontSize: '0.92rem', color: '#334155', lineHeight: '1.45', marginBottom: '12px' }}>
+          <p style={{ fontSize: '0.95rem', color: '#334155', lineHeight: '1.45', marginBottom: '12px' }}>
             <strong>Estrutura Biológica:</strong> {current.desc}
           </p>
 
-          <div style={{ background: '#F8FAFC', borderLeft: `4px solid ${current.color}`, padding: '10px 14px', borderRadius: '6px', fontSize: '0.88rem', color: '#0A345D', fontWeight: '500' }}>
+          <div style={{ background: '#F8FAFC', borderLeft: `4px solid ${current.color}`, padding: '12px 14px', borderRadius: '6px', fontSize: '0.92rem', color: '#0A345D', fontWeight: '500' }}>
             <strong>💡 Analogia Matemática:</strong> {current.analogy}
           </div>
         </div>
