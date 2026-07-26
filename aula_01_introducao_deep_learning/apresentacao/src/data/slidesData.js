@@ -74,18 +74,11 @@ export const slidesData = [
   },
   {
     id: 6,
-    type: 'image-text',
-    title: 'A Origem: O Perceptron de Rosenblatt (1957)',
-    subtitle: 'Do modelo biológico para a formalização matemática',
-    imageSrc: '/imagens/perceptron_generico.jpg',
-    imageAlt: 'Perceptron Genérico',
-    bulletPoints: [
-      'Inspirado na estrutura do neurônio biológico (dendritos, corpo celular, axônio).',
-      'Entradas (x₁, x₂) representam os estímulos elétricos.',
-      'Pesos (w₁, w₂) medem a importância ou força de cada conexão sináptica.',
-      'Viés (b) atua como o limiar de disparo elétrico do neurônio.'
-    ],
-    notes: 'Em 1957, Frank Rosenblatt criou o Perceptron. Ele se inspirou no neurônio biológico: os dendritos recebem os sinais (x), o corpo celular soma esses sinais ponderados pelos pesos (w) e pelo viés (b), e o axônio transmite o disparo através da função de ativação.'
+    type: 'custom',
+    component: 'BiologicalNeuronToggle',
+    title: 'A Origem Biológica do Perceptron',
+    subtitle: 'Clique nas partes do neurônio para ver a analogia entre biologia e matemática',
+    notes: 'Em 1957, Frank Rosenblatt criou o Perceptron se inspirando diretamente na anatomia do neurônio humano biológico. Na tela, vocês podem clicar em cada estrutura do neurônio (Dendritos, Sinapses, Soma e Axônio) para entender como os impulsos elétricos foram traduzidos em equações matemáticas.'
   },
   {
     id: 7,

@@ -90,6 +90,8 @@ export default function App() {
   // Render Interactive Component by Name
   const renderInteractiveComponent = (name) => {
     switch (name) {
+      case 'BiologicalNeuronToggle':
+        return <BiologicalNeuronToggle />;
       case 'VennDiagram':
         return <VennDiagram />;
       case 'PerceptronSimulator':
