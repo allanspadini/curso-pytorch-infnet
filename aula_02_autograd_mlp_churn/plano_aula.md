@@ -30,5 +30,7 @@ Ao final desta aula, o aluno será capaz de:
 ---
 
 ## 🛠️ Recursos e Arquivos de Apoio
-*   **Jupyter Notebook de Prática**: [aula_02_autograd_mlp_churn.ipynb](aula_02_autograd_mlp_churn.ipynb)
+*   **Jupyter Notebook de Nivelamento (Prática ML)**: [aula_02_introducao_machine_learning.ipynb](aula_02_introducao_machine_learning.ipynb)
+*   **Jupyter Notebook Principal**: [aula_02_autograd_mlp_churn.ipynb](aula_02_autograd_mlp_churn.ipynb)
 *   **Ambiente Técnico recomendado**: Python 3.10+, PyTorch 2.0+, `uv` gerenciador de pacotes.
+

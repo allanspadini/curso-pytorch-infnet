@@ -76,5 +76,6 @@ A carga horária desta aula é distribuída em 5 módulos de estudo teórico-pr�
 ## 🛠️ Recursos e Arquivos de Apoio
 *   **Guia de Aula e Planilha**: [simulacao_perceptron.xlsx](simulacao_perceptron.xlsx)
 *   **Jupyter Notebook de Prática**: [aula_01_introducao_deep_learning.ipynb](aula_01_introducao_deep_learning.ipynb)
-*   **Apresentação Quarto/Reveal.js**: [apresentacao.qmd](apresentacao.qmd)
 *   **Ambiente Técnico recomendado**: Python 3.10+, PyTorch 2.0+, `uv` gerenciador de pacotes.
+
+

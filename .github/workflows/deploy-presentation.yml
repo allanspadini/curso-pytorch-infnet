@@ -29,11 +29,67 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies & Build
+      - name: Build All Presentations
         run: |
-          cd aula_01_introducao_deep_learning/apresentacao
-          npm ci
-          npm run build
+          mkdir -p site
+
+          # Aula 1
+          if [ -d "aula_01_introducao_deep_learning/apresentacao" ]; then
+            echo "Building Aula 1..."
+            cd aula_01_introducao_deep_learning/apresentacao
+            npm ci || npm install
+            npm run build
+            cd ../..
+            mkdir -p site/aula01
+            cp -r aula_01_introducao_deep_learning/apresentacao/dist/* site/aula01/
+          fi
+
+          # Aula 2
+          if [ -d "aula_02_autograd_mlp_churn/apresentacao" ]; then
+            echo "Building Aula 2..."
+            cd aula_02_autograd_mlp_churn/apresentacao
+            npm ci || npm install
+            npm run build
+            cd ../..
+            mkdir -p site/aula02
+            cp -r aula_02_autograd_mlp_churn/apresentacao/dist/* site/aula02/
+          fi
+
+          # Aula 3
+          if [ -d "aula_03_treinamento_estavel_mlp/apresentacao" ]; then
+            echo "Building Aula 3..."
+            cd aula_03_treinamento_estavel_mlp/apresentacao
+            npm ci || npm install
+            npm run build
+            cd ../..
+            mkdir -p site/aula03
+            cp -r aula_03_treinamento_estavel_mlp/apresentacao/dist/* site/aula03/
+          fi
+
+          # Aula 4
+          if [ -d "aula_04/apresentacao" ]; then
+            echo "Building Aula 4..."
+            cd aula_04/apresentacao
+            npm ci || npm install
+            npm run build
+            cd ../..
+            mkdir -p site/aula04
+            cp -r aula_04/apresentacao/dist/* site/aula04/
+          fi
+
+          # Aula 5
+          if [ -d "aula_05/apresentacao" ]; then
+            echo "Building Aula 5..."
+            cd aula_05/apresentacao
+            npm ci || npm install
+            npm run build
+            cd ../..
+            mkdir -p site/aula05
+            cp -r aula_05/apresentacao/dist/* site/aula05/
+          fi
+
+          # Copy main portal landing page
+          cp site_index.html site/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -41,7 +97,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'aula_01_introducao_deep_learning/apresentacao/dist'
+          path: 'site'
 
       - name: Deploy to GitHub Pages
         id: deployment
