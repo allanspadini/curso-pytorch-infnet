@@ -1,10 +1,31 @@
 {
-  "name": "curso-pytorch-infnet",
+  "name": "curso-pytorch-infnet-graduacao",
   "private": true,
   "version": "1.0.0",
   "scripts": {
     "dev": "npm run dev --prefix aula_01_introducao_deep_learning/apresentacao",
     "dev:aula01": "npm run dev --prefix aula_01_introducao_deep_learning/apresentacao",
-    "build:aula01": "npm run build --prefix aula_01_introducao_deep_learning/apresentacao"
+    "build:aula01": "npm run build --prefix aula_01_introducao_deep_learning/apresentacao",
+    "dev:aula02": "npm run dev --prefix aula_02_autograd_mlp_churn/apresentacao",
+    "build:aula02": "npm run build --prefix aula_02_autograd_mlp_churn/apresentacao",
+    "dev:aula03": "npm run dev --prefix aula_03_pipelines_dados_classificacao_regressao/apresentacao",
+    "build:aula03": "npm run build --prefix aula_03_pipelines_dados_classificacao_regressao/apresentacao",
+    "dev:aula04": "npm run dev --prefix aula_04_estabilidade_inicializacao_regularizacao/apresentacao",
+    "build:aula04": "npm run build --prefix aula_04_estabilidade_inicializacao_regularizacao/apresentacao",
+    "dev:aula05": "npm run dev --prefix aula_05_otimizacao_diagnostico_tensorboard/apresentacao",
+    "build:aula05": "npm run build --prefix aula_05_otimizacao_diagnostico_tensorboard/apresentacao",
+    "dev:aula06": "npm run dev --prefix aula_06_introducao_visao_computacional_convolucoes/apresentacao",
+    "build:aula06": "npm run build --prefix aula_06_introducao_visao_computacional_convolucoes/apresentacao",
+    "dev:aula07": "npm run dev --prefix aula_07_cnns_profundas_imagens_reais/apresentacao",
+    "build:aula07": "npm run build --prefix aula_07_cnns_profundas_imagens_reais/apresentacao",
+    "dev:aula08": "npm run dev --prefix aula_08_autoencoders_espaco_latente_anomalias/apresentacao",
+    "build:aula08": "npm run build --prefix aula_08_autoencoders_espaco_latente_anomalias/apresentacao",
+    "dev:aula09": "npm run dev --prefix aula_09_avaliacao_metricas_desbalanceamento/apresentacao",
+    "build:aula09": "npm run build --prefix aula_09_avaliacao_metricas_desbalanceamento/apresentacao",
+    "dev:aula10": "npm run dev --prefix aula_10_modelagem_sequencial_series_temporais/apresentacao",
+    "build:aula10": "npm run build --prefix aula_10_modelagem_sequencial_series_temporais/apresentacao",
+    "dev:aula11": "npm run dev --prefix aula_11_lstms_grus_features_ciclicas/apresentacao",
+    "build:aula11": "npm run build --prefix aula_11_lstms_grus_features_ciclicas/apresentacao",
+    "build:all": "npm run build:aula01 && npm run build:aula02 && npm run build:aula03 && npm run build:aula04 && npm run build:aula05 && npm run build:aula06 && npm run build:aula07 && npm run build:aula08 && npm run build:aula09 && npm run build:aula10 && npm run build:aula11"
   }
 }

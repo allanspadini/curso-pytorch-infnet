@@ -1,8 +1,8 @@
 # Plano de Aula - Aula 01: Fundamentos de Deep Learning, Neurônio Artificial & Funções de Ativação
 
 **Tema**: Conceitos de DL e Neurônio Artificial: Perceptron, ativações e combinação linear. Funcionamento na planilha com caso prático (Consumo de Creatina em Esportes) e Tensores no PyTorch.  
-**Carga Horária Equivalente**: 8 horas  
-**Modalidade**: EAD Pós-Graduação  
+**Duração da Aula Síncrona**: 1h30 (90 minutos)  
+**Modalidade**: Graduação EAD (Faculdade Infnet)  
 
 ---
 
@@ -15,21 +15,17 @@ Ao final desta aula, o aluno será capaz de:
 5. Executar operações fundamentais de tensores no PyTorch, dominando conceitos de dimensionalidade, *broadcasting*, *slicing* e álgebra linear.
 6. Programar o *Forward Pass* manual do neurônio artificial com álgebra de tensores em PyTorch.
 
-> **Nota de Organização**: Todo o módulo prático de treinamento automático de redes neurais (usando `nn.Module`, `Autograd`, funções de perda e otimizadores) foi transferido para a **Aula 02**.
+> **Nota de Organização**: Todo o módulo prático de treinamento automático de redes neurais (usando `nn.Module`, `Autograd`, funções de perda e otimizadores) é coberto a partir da **Aula 02**.
 
 ---
 
-## 🧭 Divisão da Carga Horária Equivalente (8 Horas)
-
-A carga horária desta aula é distribuída em 5 módulos de estudo teórico-prático autônomo, projetados para aprofundar o domínio técnico do aluno:
+## 🧭 Roteiro da Aula Síncrona (90 Minutos)
 
 ```
-[Módulo 1: Setup Local] ──> [Módulo 2: Matemática & Planilha] ──> [Módulo 3: Funções de Ativação]
-       (1.5 horas)                     (1.5 horas)                         (2.0 horas)
-                                                                                │
-                                                                                ▼
-[Módulo 5: Forward Pass Manual] <── [Módulo 4: Bootcamp Tensores] <──────────────┘
-       (1.0 hora)                      (2.0 horas)
+[00-15 min: Contexto & IA vs ML vs DL] ──> [15-35 min: O Perceptron & Geometria 2D] ──> [35-55 min: Ativações & XOR]
+                                                                                                    │
+                                                                                                    ▼
+[75-90 min: Mão na Massa PyTorch] <──── [55-75 min: Prática Guiada na Planilha] <─────────────────┘
 ```
 
 ---

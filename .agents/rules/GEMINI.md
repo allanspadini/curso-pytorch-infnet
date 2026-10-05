@@ -1,7 +1,7 @@
-Este é um projeto de aulas sobre PyTorch para um curso de pós-graduação EAD da Faculdade Infnet.
+Este é um projeto de aulas sobre PyTorch para um curso de graduação EAD da Faculdade Infnet.
 Para as aulas, o foco principal é construir exemplos práticos com dados reais do mundo real (fontes como Kaggle e Hugging Face).
 
-Dentro do arquivo `cronograma.csv` temos o cronograma oficial das aulas.
+
 
 ---
 
@@ -96,7 +96,7 @@ Cada slide no arquivo `slidesData.js` deve possuir:
 ### 🧠 Nível dos Blocos e Conteúdo Pedagógico
 
 Observe que o bloco **Redes Neurais Profundas (Deep Learning e Visão Computacional)** é introdutório:
-- Para os fundamentos matemáticos, pegue bem leve (público de pós-graduação particular).
+- Para os fundamentos matemáticos, pegue bem leve (público de graduação particular que só tem ensino médio como base).
 - Utilize exemplos visuais e simulações em planilha (ex: Excel) antes da implementação em código.
 - Tópicos do bloco Redes Neurais Profundas:
   1. Projetar redes neurais profundas do zero com fundamentos matemáticos e PyTorch.
@@ -105,5 +105,5 @@ Observe que o bloco **Redes Neurais Profundas (Deep Learning e Visão Computacio
   4. Avaliar o treinamento de redes neurais com métricas e ferramentas de debugging.
   5. Implementar redes recorrentes LSTM e GRU para modelagem de dados sequenciais.
 
-*Nota:* O bloco avançado de **Visão Computacional com CNNs e Transformers** será coberto no módulo seguinte, devendo o primeiro bloco focar nos fundamentos sólidos de Deep Learning e arquiteturas base.
+*Nota:* O bloco avançado de **Visão Computacional com CNNs e Transformers** será coberto no módulo seguinte, devendo o primeiro bloco focar nos fundamentos sólidos de Deep Learning e arquiteturas base. 
  

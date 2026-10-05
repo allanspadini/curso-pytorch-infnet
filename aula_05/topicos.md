@@ -1,7 +1,0 @@
-- imagem em escala de cinza - matriz 0 a 255
-- Como a imagem que é uma matriz quadrada é "estirada" para ser passada para a rede ainda sem considerar convoluções.
-- mostrar visualmente em gráficos o resultado de uma convolução 1D com diferentes tipos de filtro. Deixar evidente a redução do número de amostras depois da operação. 
-- mostrar com valores em uma matriz o que acontece depois de uma operação de convolução 2d
-- imagens coloridas, como são representadas considerando rgb
-- deixar evidente que após uma convolução no pytorch são geradas várias imagens
-- pooling layers

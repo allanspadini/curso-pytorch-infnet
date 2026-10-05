@@ -4,7 +4,7 @@ export default function Footer({ currentSlide, totalSlides, onOpenNotes, onOpenO
   return (
     <footer className="slide-footer">
       <div className="footer-left">
-        Redes Neurais Profundas (Deep Learning e Visão Computacional) | Instituto Infnet
+        Redes Neurais Profundas (Deep Learning e Visão Computacional) | Faculdade Infnet
       </div>
 
       <div className="footer-right" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>

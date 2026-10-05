@@ -19,7 +19,19 @@ import MlpNetworkDiagram from './components/interactive/MlpNetworkDiagram';
 import QuizWidget from './components/interactive/QuizWidget';
 
 export default function App() {
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const getInitialSlideIndex = () => {
+    const params = new URLSearchParams(window.location.search);
+    const slideParam = params.get('slide');
+    if (slideParam) {
+      const parsed = parseInt(slideParam, 10) - 1;
+      if (!isNaN(parsed) && parsed >= 0 && parsed < slidesData.length) {
+        return parsed;
+      }
+    }
+    return 0;
+  };
+
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(getInitialSlideIndex);
   const [showNotes, setShowNotes] = useState(false);
   const [showOverview, setShowOverview] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -28,6 +40,29 @@ export default function App() {
   const totalSlides = slidesData.length;
   const slide = slidesData[currentSlideIndex];
   const containerRef = useRef(null);
+
+  // Sync slide number to URL query parameter
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('slide', (currentSlideIndex + 1).toString());
+    window.history.replaceState({}, '', url.toString());
+  }, [currentSlideIndex]);
+
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const slideParam = params.get('slide');
+      if (slideParam) {
+        const parsed = parseInt(slideParam, 10) - 1;
+        if (!isNaN(parsed) && parsed >= 0 && parsed < totalSlides) {
+          setCurrentSlideIndex(parsed);
+        }
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [totalSlides]);
 
   useEffect(() => {
     const handleFSChange = () => {

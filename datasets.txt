@@ -18,11 +18,11 @@ Este arquivo contém uma curadoria de datasets do mundo real (Kaggle e Hugging F
 *   **Link**: [Personal Finance Dataset no Kaggle](https://www.kaggle.com/datasets/lopesenrique/personal-finance-transaction-analysis-dataset)
 *   **Aplicação (Aula 3)**: Rede neural multiclasse utilizando embeddings para mapear descrições de transações bancárias.
 
-### Detecção de Fraude em Cartões de Crédito (Anti-fraud SaaS)
-*   **Caso de Uso**: Bloqueio de transações suspeitas de e-commerce em tempo real.
-*   **Dataset**: Credit Card Fraud Detection (Kaggle)
-*   **Link**: [Credit Card Fraud Detection no Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
-*   **Aplicação (Aula 4)**: Estudo de classes altamente desbalanceadas (fraudes representam <0.2% das transações) com foco em Precision, Recall, F1-Score e técnicas de regularização como Dropout.
+### Análise de Sentimento e Avaliação de Modelos em E-Commerce
+*   **Caso de Uso**: Classificação de avaliações de clientes, calibração de incerteza e otimização de threshold de satisfação.
+*   **Dataset**: Women's E-Commerce Clothing Reviews (Kaggle)
+*   **Link**: [Women's Clothing Reviews no Kaggle](https://www.kaggle.com/datasets/nicapotato/womens-ecommerce-clothing-reviews)
+*   **Aplicação (Aula 7)**: Avaliação avançada de modelos (PR-AUC, calibração ECE, Bootstrap 95% CI, Focal Loss e agendadores de taxa de aprendizado).
 
 ---
 

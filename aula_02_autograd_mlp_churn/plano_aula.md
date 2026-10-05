@@ -1,8 +1,8 @@
 # Plano de Aula - Aula 02: Grafos de Computação, Autograd e a Primeira MLP (Previsão de Churn em SaaS)
 
 **Tema**: Grafos de computação, Autograd e a primeira MLP (Multi-Layer Perceptron) para previsão de Churn de clientes em um SaaS de assinatura com `nn.Module`.  
-**Carga Horária Equivalente**: 8 horas  
-**Modalidade**: EAD Pós-Graduação  
+**Duração da Aula Síncrona**: 1h30 (90 minutos)  
+**Modalidade**: Graduação EAD (Faculdade Infnet)  
 
 ---
 
@@ -16,15 +16,13 @@ Ao final desta aula, o aluno será capaz de:
 
 ---
 
-## 🧭 Divisão da Carga Horária Equivalente (8 Horas)
+## 🧭 Roteiro da Aula Síncrona (90 Minutos)
 
 ```
-[Módulo 1: Grafos & Autograd] ──> [Módulo 2: Treinamento do Perceptron] ──> [Módulo 3: Lab Learning Rate]
-       (2.0 horas)                         (2.0 horas)                         (1.5 horas)
-                                                                                    │
-                                                                                    ▼
-[Módulo 5: Avaliação & Churn] <── [Módulo 4: Arquitetura MLP SaaS] <────────────────┘
-       (1.0 hora)                          (1.5 horas)
+[00-20 min: Grafos & Autograd] ──> [20-40 min: Ciclo em 5 Passos] ──> [40-60 min: Lab Learning Rate]
+                                                                                   │
+                                                                                   ▼
+[75-90 min: Avaliação & Churn] <──── [60-75 min: Arquitetura MLP SaaS] <──────────┘
 ```
 
 ---

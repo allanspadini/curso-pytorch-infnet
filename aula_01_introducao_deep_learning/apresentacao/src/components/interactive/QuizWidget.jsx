@@ -54,79 +54,81 @@ export default function QuizWidget() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', height: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', height: '100%', justifyContent: 'space-between' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h4 style={{ color: '#0A345D', fontSize: '1.35rem', fontWeight: '800' }}>
+        <h4 style={{ color: '#0A345D', fontSize: '1.25rem', fontWeight: '800', margin: 0 }}>
           🧠 Teste Rápido de Fixação de Conceitos
         </h4>
         {submitted && (
-          <span style={{ background: '#7CB342', color: '#FFF', fontWeight: '800', padding: '6px 18px', borderRadius: '24px', fontSize: '1.15rem' }}>
+          <span style={{ background: '#7CB342', color: '#FFF', fontWeight: '800', padding: '4px 16px', borderRadius: '20px', fontSize: '1.05rem' }}>
             Pontuação: {calculateScore()} / {questions.length}
           </span>
         )}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'auto', flex: 1, paddingRight: '8px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', flex: 1, alignItems: 'stretch' }}>
         {questions.map((q) => {
           const selected = answers[q.id];
           const isCorrect = selected === q.correct;
 
           return (
-            <div key={q.id} style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '14px', padding: '20px' }}>
-              <p style={{ fontWeight: '800', color: '#0A345D', fontSize: '1.18rem', marginBottom: '12px', lineHeight: '1.4' }}>
-                {q.question}
-              </p>
+            <div key={q.id} style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <p style={{ fontWeight: '800', color: '#0A345D', fontSize: '1.02rem', marginBottom: '12px', lineHeight: '1.35', minHeight: '44px' }}>
+                  {q.question}
+                </p>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {q.options.map((opt, idx) => {
-                  let btnBg = '#FFFFFF';
-                  let btnBorder = '#CBD5E1';
-                  let txtColor = '#334155';
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {q.options.map((opt, idx) => {
+                    let btnBg = '#FFFFFF';
+                    let btnBorder = '#CBD5E1';
+                    let txtColor = '#334155';
 
-                  if (selected === idx) {
-                    btnBg = '#E0F2FE';
-                    btnBorder = '#0284C7';
-                    txtColor = '#0369A1';
-                  }
-
-                  if (submitted) {
-                    if (idx === q.correct) {
-                      btnBg = '#DEF7EC';
-                      btnBorder = '#31C48D';
-                      txtColor = '#03543F';
-                    } else if (selected === idx && !isCorrect) {
-                      btnBg = '#FDE8E8';
-                      btnBorder = '#F05252';
-                      txtColor = '#9B1C1C';
+                    if (selected === idx) {
+                      btnBg = '#E0F2FE';
+                      btnBorder = '#0284C7';
+                      txtColor = '#0369A1';
                     }
-                  }
 
-                  return (
-                    <button
-                      key={idx}
-                      onClick={() => handleSelect(q.id, idx)}
-                      style={{
-                        background: btnBg,
-                        border: `2px solid ${btnBorder}`,
-                        color: txtColor,
-                        borderRadius: '10px',
-                        padding: '12px 18px',
-                        textAlign: 'left',
-                        fontSize: '1.08rem',
-                        fontWeight: selected === idx ? '700' : '500',
-                        lineHeight: '1.45',
-                        cursor: submitted ? 'default' : 'pointer',
-                        transition: 'all 0.15s ease'
-                      }}
-                    >
-                      {opt}
-                    </button>
-                  );
-                })}
+                    if (submitted) {
+                      if (idx === q.correct) {
+                        btnBg = '#DEF7EC';
+                        btnBorder = '#31C48D';
+                        txtColor = '#03543F';
+                      } else if (selected === idx && !isCorrect) {
+                        btnBg = '#FDE8E8';
+                        btnBorder = '#F05252';
+                        txtColor = '#9B1C1C';
+                      }
+                    }
+
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => handleSelect(q.id, idx)}
+                        style={{
+                          background: btnBg,
+                          border: `1.5px solid ${btnBorder}`,
+                          color: txtColor,
+                          borderRadius: '8px',
+                          padding: '10px 12px',
+                          textAlign: 'left',
+                          fontSize: '0.92rem',
+                          fontWeight: selected === idx ? '700' : '500',
+                          lineHeight: '1.35',
+                          cursor: submitted ? 'default' : 'pointer',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        {opt}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {submitted && (
-                <div style={{ marginTop: '12px', fontSize: '1.05rem', color: isCorrect ? '#03543F' : '#9B1C1C', fontWeight: '700', lineHeight: '1.4' }}>
+                <div style={{ marginTop: '10px', fontSize: '0.88rem', color: isCorrect ? '#03543F' : '#9B1C1C', fontWeight: '700', lineHeight: '1.35', background: isCorrect ? '#F0FDF4' : '#FEF2F2', padding: '8px 10px', borderRadius: '6px', border: `1px solid ${isCorrect ? '#86EFAC' : '#FECACA'}` }}>
                   {isCorrect ? '✅ Correto! ' : '❌ Incorreto. '} {q.explanation}
                 </div>
               )}
@@ -135,7 +137,7 @@ export default function QuizWidget() {
         })}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', paddingTop: '4px' }}>
         {!submitted ? (
           <button
             onClick={() => setSubmitted(true)}
@@ -144,10 +146,10 @@ export default function QuizWidget() {
               background: Object.keys(answers).length === questions.length ? '#7CB342' : '#CBD5E1',
               color: '#FFFFFF',
               border: 'none',
-              padding: '12px 26px',
-              borderRadius: '12px',
+              padding: '10px 22px',
+              borderRadius: '10px',
               fontWeight: '800',
-              fontSize: '1.1rem',
+              fontSize: '1.02rem',
               cursor: Object.keys(answers).length === questions.length ? 'pointer' : 'not-allowed',
               boxShadow: Object.keys(answers).length === questions.length ? '0 4px 14px rgba(124, 179, 66, 0.35)' : 'none'
             }}
@@ -157,7 +159,7 @@ export default function QuizWidget() {
         ) : (
           <button
             onClick={() => { setAnswers({}); setSubmitted(false); }}
-            style={{ background: '#0A345D', color: '#FFFFFF', border: 'none', padding: '12px 26px', borderRadius: '12px', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 4px 14px rgba(10, 52, 93, 0.35)' }}
+            style={{ background: '#0A345D', color: '#FFFFFF', border: 'none', padding: '10px 22px', borderRadius: '10px', fontWeight: '800', fontSize: '1.02rem', cursor: 'pointer', boxShadow: '0 4px 14px rgba(10, 52, 93, 0.35)' }}
           >
             Refazer Quiz
           </button>
