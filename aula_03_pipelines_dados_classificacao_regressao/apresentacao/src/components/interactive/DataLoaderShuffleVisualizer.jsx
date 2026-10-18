@@ -23,18 +23,18 @@ export default function DataLoaderShuffleVisualizer() {
   const batches = getBatches();
 
   return (
-    <div style={{ background: '#061F38', border: '1px solid #1E3A5F', borderRadius: '14px', padding: '16px', color: '#FFFFFF', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <div style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '14px', padding: '16px', color: '#1E293B', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', fontSize: '0.85rem', fontWeight: '700' }}>
-          <span style={{ color: '#64D9EF' }}>■ Classe 0 (Azul)</span>
-          <span style={{ color: '#FF7043' }}>■ Classe 1 (Laranja)</span>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', fontSize: '0.85rem', fontWeight: '800' }}>
+          <span style={{ color: '#0284C7' }}>■ Classe 0 (Azul)</span>
+          <span style={{ color: '#EA580C' }}>■ Classe 1 (Laranja)</span>
         </div>
 
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
             onClick={() => setShuffle(!shuffle)}
             style={{
-              background: shuffle ? '#7CB342' : '#FF7043',
+              background: shuffle ? '#16A34A' : '#FF7043',
               color: '#FFFFFF',
               border: 'none',
               borderRadius: '20px',
@@ -50,8 +50,8 @@ export default function DataLoaderShuffleVisualizer() {
           <button
             onClick={() => setEpoch(e => e + 1)}
             style={{
-              background: '#1BB5D8',
-              color: '#0A345D',
+              background: '#0284C7',
+              color: '#FFFFFF',
               border: 'none',
               borderRadius: '20px',
               padding: '6px 14px',
@@ -65,7 +65,6 @@ export default function DataLoaderShuffleVisualizer() {
         </div>
       </div>
 
-      {/* SVG Batch & Gradient Vector Diagram */}
       <svg viewBox="0 0 920 245" style={{ width: '100%', maxHeight: '260px' }}>
         {batches.map((batch, bIdx) => {
           const xBase = 55 + bIdx * 290;
@@ -75,12 +74,11 @@ export default function DataLoaderShuffleVisualizer() {
 
           return (
             <g key={bIdx} transform={`translate(${xBase}, 20)`}>
-              <rect x="0" y="0" width="245" height="195" rx="12" fill="#0B2545" stroke={shuffle ? '#1BB5D8' : '#FF7043'} strokeWidth="2.5" />
-              <text x="122" y="28" textAnchor="middle" fill="#FFFFFF" fontSize="15" fontWeight="800" fontFamily="Outfit">
+              <rect x="0" y="0" width="245" height="195" rx="12" fill="#FFFFFF" stroke={shuffle ? '#0284C7' : '#FF7043'} strokeWidth="2.5" />
+              <text x="122" y="28" textAnchor="middle" fill="#0A345D" fontSize="15" fontWeight="800" fontFamily="Outfit">
                 Mini-Batch #{bIdx + 1}
               </text>
 
-              {/* 4 sample blocks */}
               {batch.map((item, i) => (
                 <g key={item.id} transform={`translate(${18 + i * 54}, 45)`}>
                   <rect
@@ -89,23 +87,22 @@ export default function DataLoaderShuffleVisualizer() {
                     width="46"
                     height="46"
                     rx="8"
-                    fill={item.label === 0 ? '#1BB5D8' : '#FF7043'}
+                    fill={item.label === 0 ? '#0284C7' : '#FF7043'}
                   />
-                  <text x="23" y="28" textAnchor="middle" fill="#FFF" fontSize="13" fontWeight="800" fontFamily="Fira Code">
+                  <text x="23" y="28" textAnchor="middle" fill="#FFFFFF" fontSize="13" fontWeight="800" fontFamily="Fira Code">
                     #{item.id}
                   </text>
                 </g>
               ))}
 
-              {/* Gradient Vector Compass */}
-              <text x="122" y="122" textAnchor="middle" fill="#94A3B8" fontSize="11" fontWeight="700">
+              <text x="122" y="122" textAnchor="middle" fill="#475569" fontSize="11" fontWeight="700">
                 Direção do Gradiente (∇L)
               </text>
               <g transform={`translate(122, 155) rotate(${angle})`}>
-                <line x1="-45" y1="0" x2="45" y2="0" stroke={shuffle ? '#7CB342' : '#FF7043'} strokeWidth="4" />
-                <polygon points="45,-6 58,0 45,6" fill={shuffle ? '#7CB342' : '#FF7043'} />
+                <line x1="-45" y1="0" x2="45" y2="0" stroke={shuffle ? '#16A34A' : '#EA580C'} strokeWidth="4" />
+                <polygon points="45,-6 58,0 45,6" fill={shuffle ? '#16A34A' : '#EA580C'} />
               </g>
-              <text x="122" y="184" textAnchor="middle" fill={shuffle ? '#AED581' : '#FF7043'} fontSize="12" fontWeight="800">
+              <text x="122" y="184" textAnchor="middle" fill={shuffle ? '#15803D' : '#C2410C'} fontSize="12" fontWeight="800">
                 {c0} Classe 0 | {c1} Classe 1
               </text>
             </g>
@@ -114,13 +111,14 @@ export default function DataLoaderShuffleVisualizer() {
       </svg>
 
       <div style={{
-        background: '#081D33',
-        borderLeft: `4px solid ${shuffle ? '#7CB342' : '#FF7043'}`,
+        background: '#FFFFFF',
+        border: '1px solid #E2E8F0',
+        borderLeft: `4px solid ${shuffle ? '#16A34A' : '#FF7043'}`,
         padding: '8px 14px',
         borderRadius: '6px',
         fontSize: '0.88rem',
         fontWeight: '600',
-        color: '#E2E8F0'
+        color: '#1E293B'
       }}>
         {shuffle
           ? '✨ shuffle=True: Lotes misturados mantêm o vetor gradiente apontando de forma estável para o mínimo global.'

@@ -10,42 +10,42 @@ export default function QuizWidget() {
     {
       question: '1. O que ocorre se aplicarmos o StandardScaler ANTES da divisão train_test_split?',
       options: [
-        { text: 'A) Vazamento de Dados (Data Leakage), pois as estatísticas (média/desvio) do teste influenciam o treino.', correct: true },
-        { text: 'B) O treinamento fica mais rápido, pois o scaler é executado uma única vez.', correct: false },
-        { text: 'C) O modelo aprende melhor, pois vê a distribuição real inteira.', correct: false },
-        { text: 'D) O PyTorch dispara um erro de runtime ao criar o DataLoader.', correct: false }
+        { text: 'A) Vazamento de Dados (Data Leakage), pois a média e o desvio do teste contaminam o treino.', correct: true },
+        { text: 'B) O treinamento fica mais estável, pois usa a distribuição completa.', correct: false },
+        { text: 'C) O PyTorch bloqueia a criação do DataLoader.', correct: false },
+        { text: 'D) Não há impacto algum nas métricas de produção.', correct: false }
       ],
-      explanation: 'Vazamento de dados ocorre quando informações do conjunto de validação/teste contaminam o treino, gerando métricas de validação ilusoriamente altas que despencam em produção real.'
+      explanation: 'Ajustar (.fit) o escalador antes do split contamina o treino com informações do teste, gerando acurácia ilusória que cai em produção.'
     },
     {
-      question: '2. Qual a diferença fundamental de eixo entre BatchNorm1d e LayerNorm?',
+      question: '2. Quais são os 3 métodos obrigatórios em uma classe que herda de torch.utils.data.Dataset?',
       options: [
-        { text: 'A) BatchNorm1d normaliza ao longo do eixo de batch N; LayerNorm normaliza ao longo das features C de uma única amostra.', correct: true },
-        { text: 'B) LayerNorm depende fortemente do batch size, enquanto BatchNorm1d funciona com batch size = 1.', correct: false },
-        { text: 'C) BatchNorm1d é aplicada apenas em imagens, enquanto LayerNorm é para dados tabulares.', correct: false },
-        { text: 'D) Não existe diferença; ambos calculam a mesma média e desvio padrão.', correct: false }
+        { text: 'A) __init__, __len__ e __getitem__', correct: true },
+        { text: 'B) __init__, forward e backward', correct: false },
+        { text: 'C) fit, transform e fit_transform', correct: false },
+        { text: 'D) zero_grad, step e eval', correct: false }
       ],
-      explanation: 'BatchNorm1d calcula média e desvio padrão ao longo da dimensão N (batch), enquanto LayerNorm calcula ao longo da dimensão C (features) para cada exemplo individualmente.'
+      explanation: '__init__ armazena os tensores, __len__ retorna o total de amostras e __getitem__(idx) busca um par (X[idx], y[idx]).'
     },
     {
-      question: '3. Por que a inicialização Kaiming (He) Normal é preferida para ativações ReLU?',
+      question: '3. Por que NÃO colocamos nn.Softmax() na última camada ao usar nn.CrossEntropyLoss()?',
       options: [
-        { text: 'A) Porque compensa o fato da ReLU zerar 50% dos neurônios (entradas negativas), dobrando a variância inicial.', correct: true },
-        { text: 'B) Porque força todos os pesos a serem estritamente positivos.', correct: false },
-        { text: 'C) Porque funciona apenas com Tanh e Sigmoide.', correct: false },
-        { text: 'D) Porque zera todos os viéses (biases) da rede neural.', correct: false }
+        { text: 'A) Porque a nn.CrossEntropyLoss já aplica LogSoftmax internamente sobre os logits brutos com estabilidade numérica.', correct: true },
+        { text: 'B) Porque redes multiclasse usam Sigmoid na saída.', correct: false },
+        { text: 'C) Porque o DataLoader já normaliza as probabilidades.', correct: false },
+        { text: 'D) Porque o PyTorch só aceita saídas entre -1 e 1.', correct: false }
       ],
-      explanation: 'Como a ReLU zera todas as entradas negativas, metade do sinal é perdido. Kaiming Normal usa Var(W) = 2/fan_in para manter a variância das ativações constante em redes profundas.'
+      explanation: 'Passar Softmax antes da CrossEntropyLoss aplicaria a exponencial duas vezes e prejudicaria a estabilidade numérica do gradiente.'
     },
     {
-      question: '4. O que é o Inverted Dropout implementado nativamente no PyTorch (nn.Dropout)?',
+      question: '4. Na regressão contínua, o que significa um modelo obter R² = 0.0 no conjunto de teste?',
       options: [
-        { text: 'A) Zera neurônios no treino com prob p e multiplica os restantes por 1/(1-p), eliminando ajustes no teste (model.eval()).', correct: true },
-        { text: 'B) Zera neurônios apenas durante o teste de produção.', correct: false },
-        { text: 'C) Inverte o sinal dos gradientes durante o backward pass.', correct: false },
-        { text: 'D) Multiplica os pesos por zero para prevenir overfitting.', correct: false }
+        { text: 'A) O modelo tem o mesmo erro de um baseline trivial que chuta sempre a média global (ȳ).', correct: true },
+        { text: 'B) O modelo acertou 100% das previsões sem nenhum resíduo.', correct: false },
+        { text: 'C) O erro absoluto médio (MAE) foi exatamente zero dólares.', correct: false },
+        { text: 'D) O DataLoader estava com shuffle=True no teste.', correct: false }
       ],
-      explanation: 'Inverted Dropout dimensiona as ativações no treino por 1/(1-p). Assim, na inferência (eval()), nenhum multiplicador precisa ser aplicado, mantendo o tempo de execução veloz.'
+      explanation: 'Por definição matemática, R² = 0 equivale a chutar sempre a média ȳ. Nossa rede neural precisa superar expressivamente esse baseline!'
     }
   ];
 
@@ -69,35 +69,38 @@ export default function QuizWidget() {
   const q = questions[currentQ];
 
   return (
-    <div style={{ background: '#081D33', border: '1px solid #1E3A5F', borderRadius: '14px', padding: '20px', color: '#FFFFFF' }}>
+    <div style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '14px', padding: '20px', color: '#1E293B' }}>
       {!showResult ? (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ fontSize: '0.88rem', color: '#64D9EF', fontWeight: '700' }}>
-              ❓ Quiz de Fixação: Questão {currentQ + 1} de {questions.length}
+            <span style={{ fontSize: '0.88rem', color: '#0284C7', fontWeight: '800' }}>
+              ❓ Questão {currentQ + 1} de {questions.length}
             </span>
-            <span style={{ fontSize: '0.85rem', color: '#CBD5E1' }}>
+            <span style={{ fontSize: '0.85rem', color: '#475569', fontWeight: '700' }}>
               Pontuação: {score} / {questions.length}
             </span>
           </div>
 
-          <h4 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.1rem', marginBottom: '14px', color: '#FFFFFF' }}>
+          <h4 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.15rem', marginBottom: '14px', color: '#0A345D' }}>
             {q.question}
           </h4>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '14px' }}>
             {q.options.map((opt, idx) => {
               const isSelected = selectedOpt === idx;
-              let bg = '#041221';
-              let border = '#1E3A5F';
+              let bg = '#FFFFFF';
+              let border = '#CBD5E1';
+              let textColor = '#1E293B';
 
               if (selectedOpt !== null) {
                 if (opt.correct) {
-                  bg = 'rgba(124, 179, 66, 0.2)';
-                  border = '#7CB342';
+                  bg = '#F0FDF4';
+                  border = '#16A34A';
+                  textColor = '#166534';
                 } else if (isSelected) {
-                  bg = 'rgba(255, 112, 67, 0.2)';
+                  bg = '#FFF7ED';
                   border = '#FF7043';
+                  textColor = '#9A3412';
                 }
               }
 
@@ -107,12 +110,13 @@ export default function QuizWidget() {
                   onClick={() => handleSelect(idx)}
                   style={{
                     background: bg,
-                    border: `1.5px solid ${border}`,
+                    border: `2px solid ${border}`,
                     borderRadius: '8px',
                     padding: '10px 14px',
-                    color: '#FFFFFF',
+                    color: textColor,
+                    fontWeight: '600',
                     textAlign: 'left',
-                    fontSize: '0.88rem',
+                    fontSize: '0.9rem',
                     cursor: selectedOpt === null ? 'pointer' : 'default',
                     transition: 'all 0.15s ease'
                   }}
@@ -124,17 +128,17 @@ export default function QuizWidget() {
           </div>
 
           {selectedOpt !== null && (
-            <div style={{ background: '#041221', padding: '12px', borderRadius: '8px', border: '1px solid #1E293B', marginBottom: '12px' }}>
-              <div style={{ fontWeight: '700', color: '#64D9EF', fontSize: '0.85rem', marginBottom: '2px' }}>💡 Explicação:</div>
-              <div style={{ fontSize: '0.82rem', color: '#CBD5E1' }}>{q.explanation}</div>
+            <div style={{ background: '#EFF6FF', padding: '12px', borderRadius: '8px', borderLeft: '4px solid #0284C7', marginBottom: '12px' }}>
+              <div style={{ fontWeight: '800', color: '#0A345D', fontSize: '0.85rem', marginBottom: '2px' }}>💡 Feedback:</div>
+              <div style={{ fontSize: '0.85rem', color: '#1E293B' }}>{q.explanation}</div>
             </div>
           )}
 
           {selectedOpt !== null && (
             <div style={{ textAlign: 'right' }}>
-              <button 
+              <button
                 onClick={handleNext}
-                style={{ background: '#1BB5D8', color: '#0A345D', border: 'none', borderRadius: '20px', padding: '8px 20px', fontWeight: '800', cursor: 'pointer', fontSize: '0.85rem' }}
+                style={{ background: '#0284C7', color: '#FFFFFF', border: 'none', borderRadius: '20px', padding: '8px 20px', fontWeight: '800', cursor: 'pointer', fontSize: '0.85rem' }}
               >
                 {currentQ < questions.length - 1 ? 'Próxima Questão ➔' : 'Ver Resultado Final 🏆'}
               </button>
@@ -144,21 +148,21 @@ export default function QuizWidget() {
       ) : (
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🏆</div>
-          <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.4rem', color: '#64D9EF', marginBottom: '6px' }}>
+          <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.4rem', color: '#0A345D', marginBottom: '6px' }}>
             Quiz Concluído!
           </h3>
-          <p style={{ fontSize: '1.1rem', color: '#FFFFFF', marginBottom: '14px' }}>
+          <p style={{ fontSize: '1.1rem', color: '#334155', marginBottom: '14px' }}>
             Você acertou <strong>{score}</strong> de <strong>{questions.length}</strong> questões ({Math.round((score / questions.length) * 100)}%).
           </p>
 
-          <button 
+          <button
             onClick={() => {
               setCurrentQ(0);
               setSelectedOpt(null);
               setShowResult(false);
               setScore(0);
             }}
-            style={{ background: '#7CB342', color: '#FFF', border: 'none', borderRadius: '20px', padding: '8px 22px', fontWeight: '800', cursor: 'pointer', fontSize: '0.88rem' }}
+            style={{ background: '#16A34A', color: '#FFFFFF', border: 'none', borderRadius: '20px', padding: '8px 22px', fontWeight: '800', cursor: 'pointer', fontSize: '0.88rem' }}
           >
             🔄 Tentar Novamente
           </button>

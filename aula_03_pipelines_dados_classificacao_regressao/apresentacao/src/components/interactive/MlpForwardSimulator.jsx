@@ -8,7 +8,7 @@ export default function MlpForwardSimulator() {
   ];
 
   const [selectedSampleIdx, setSelectedSampleIdx] = useState(0);
-  const [layerStep, setLayerStep] = useState(2); // 0: Input, 1: Hidden ReLU, 2: Output Softmax
+  const [layerStep, setLayerStep] = useState(2);
 
   const sample = samples[selectedSampleIdx];
   const [x1, x2, x3, x4] = sample.x;
@@ -36,13 +36,12 @@ export default function MlpForwardSimulator() {
   const sumExp = expLogits.reduce((a, b) => a + b, 0);
   const probs = expLogits.map(e => e / sumExp);
 
-  const inY = [45, 105, 165, 225];
+  const inY = [48, 106, 164, 222];
   const hidY = [65, 135, 205];
   const outY = [65, 135, 205];
 
   return (
-    <div style={{ background: '#061F38', border: '1px solid #1E3A5F', borderRadius: '14px', padding: '16px', color: '#FFFFFF', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-      {/* Top Bar: Sample Selector & Layer Step */}
+    <div style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '14px', padding: '16px', color: '#1E293B', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
         <div style={{ display: 'flex', gap: '6px' }}>
           {samples.map((s, idx) => (
@@ -52,12 +51,12 @@ export default function MlpForwardSimulator() {
               style={{
                 padding: '6px 12px',
                 borderRadius: '18px',
-                border: selectedSampleIdx === idx ? '2px solid #1BB5D8' : '1px solid #334155',
-                background: selectedSampleIdx === idx ? '#0A345D' : 'transparent',
-                color: '#FFFFFF',
+                border: selectedSampleIdx === idx ? '2px solid #0284C7' : '1px solid #CBD5E1',
+                background: selectedSampleIdx === idx ? '#E0F2FE' : '#FFFFFF',
+                color: '#0A345D',
                 cursor: 'pointer',
                 fontSize: '0.8rem',
-                fontWeight: '700'
+                fontWeight: '800'
               }}
             >
               🌸 {s.name}
@@ -73,9 +72,9 @@ export default function MlpForwardSimulator() {
               style={{
                 padding: '6px 12px',
                 borderRadius: '18px',
-                border: 'none',
-                background: layerStep === idx ? '#7CB342' : 'rgba(255,255,255,0.08)',
-                color: layerStep === idx ? '#FFFFFF' : '#CBD5E1',
+                border: `1.5px solid ${layerStep === idx ? '#16A34A' : '#CBD5E1'}`,
+                background: layerStep === idx ? '#F0FDF4' : '#FFFFFF',
+                color: layerStep === idx ? '#15803D' : '#475569',
                 cursor: 'pointer',
                 fontSize: '0.8rem',
                 fontWeight: '800'
@@ -87,75 +86,69 @@ export default function MlpForwardSimulator() {
         </div>
       </div>
 
-      {/* Neural Network Graph SVG */}
-      <svg viewBox="0 0 920 265" style={{ width: '100%', maxHeight: '275px' }}>
-        {/* Connections Input -> Hidden */}
+      <svg viewBox="0 0 920 260" style={{ width: '100%', maxHeight: '270px', background: '#FFFFFF', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
         {layerStep >= 1 && inY.map((iy, i) =>
           hidY.map((hy, j) => (
             <line
               key={`w1-${i}-${j}`}
               x1="180"
               y1={iy}
-              x2="450"
+              x2="446"
               y2={hy}
-              stroke={a1[j] > 0 ? '#1BB5D8' : '#334155'}
-              strokeWidth={a1[j] > 0 ? '2' : '1'}
-              opacity={a1[j] > 0 ? 0.65 : 0.25}
+              stroke={a1[j] > 0 ? '#0284C7' : '#CBD5E1'}
+              strokeWidth={a1[j] > 0 ? '2.2' : '1.2'}
+              opacity={a1[j] > 0 ? 0.65 : 0.4}
             />
           ))
         )}
 
-        {/* Connections Hidden -> Output */}
         {layerStep >= 2 && hidY.map((hy, j) =>
           outY.map((oy, k) => (
             <line
               key={`w2-${j}-${k}`}
-              x1="490"
+              x1="494"
               y1={hy}
-              x2="730"
+              x2="726"
               y2={oy}
-              stroke={k === sample.target ? '#7CB342' : '#64748B'}
+              stroke={k === sample.target ? '#16A34A' : '#94A3B8'}
               strokeWidth={k === sample.target ? '2.8' : '1.2'}
-              opacity={0.7}
+              opacity={0.75}
             />
           ))
         )}
 
-        {/* Layer 0: Input Nodes */}
-        <text x="160" y="20" textAnchor="middle" fill="#64D9EF" fontSize="13" fontWeight="800">Camada de Entrada (4)</text>
+        <text x="160" y="22" textAnchor="middle" fill="#0A345D" fontSize="13" fontWeight="800">Camada de Entrada (4)</text>
         {['Sépala C.', 'Sépala L.', 'Pétala C.', 'Pétala L.'].map((label, i) => (
           <g key={i}>
-            <text x="115" y={inY[i] + 5} textAnchor="end" fill="#CBD5E1" fontSize="12" fontWeight="600">{label}</text>
-            <circle cx="160" cy={inY[i]} r="20" fill="#0B2545" stroke="#1BB5D8" strokeWidth="2.5" />
-            <text x="160" y={inY[i] + 4} textAnchor="middle" fill="#FFFFFF" fontSize="12" fontWeight="800" fontFamily="Fira Code">
+            <text x="115" y={inY[i] + 5} textAnchor="end" fill="#334155" fontSize="12" fontWeight="700">{label}</text>
+            <circle cx="160" cy={inY[i]} r="20" fill="#E0F2FE" stroke="#0284C7" strokeWidth="2.5" />
+            <text x="160" y={inY[i] + 4} textAnchor="middle" fill="#0A345D" fontSize="12" fontWeight="800" fontFamily="Fira Code">
               {sample.x[i]}
             </text>
           </g>
         ))}
 
-        {/* Layer 1: Hidden ReLU Nodes */}
-        <g style={{ opacity: layerStep >= 1 ? 1 : 0.18, transition: 'all 0.3s' }}>
-          <text x="470" y="20" textAnchor="middle" fill="#AED581" fontSize="13" fontWeight="800">Oculta + ReLU (3)</text>
+        <g style={{ opacity: layerStep >= 1 ? 1 : 0.2, transition: 'all 0.3s' }}>
+          <text x="470" y="22" textAnchor="middle" fill="#15803D" fontSize="13" fontWeight="800">Oculta + ReLU (3)</text>
           {a1.map((val, j) => (
             <g key={j}>
               <circle
                 cx="470"
                 cy={hidY[j]}
                 r="24"
-                fill={val > 0 ? '#0A345D' : '#1E293B'}
-                stroke={val > 0 ? '#7CB342' : '#FF7043'}
+                fill={val > 0 ? '#F0FDF4' : '#FFF7ED'}
+                stroke={val > 0 ? '#16A34A' : '#EA580C'}
                 strokeWidth="3"
               />
-              <text x="470" y={hidY[j] + 5} textAnchor="middle" fill="#FFFFFF" fontSize="12" fontWeight="800" fontFamily="Fira Code">
+              <text x="470" y={hidY[j] + 5} textAnchor="middle" fill="#0A345D" fontSize="12" fontWeight="800" fontFamily="Fira Code">
                 {val.toFixed(1)}
               </text>
             </g>
           ))}
         </g>
 
-        {/* Layer 2: Output Nodes */}
-        <g style={{ opacity: layerStep >= 2 ? 1 : 0.18, transition: 'all 0.3s' }}>
-          <text x="750" y="20" textAnchor="middle" fill="#E9D5FF" fontSize="13" fontWeight="800">Saída Softmax (3)</text>
+        <g style={{ opacity: layerStep >= 2 ? 1 : 0.2, transition: 'all 0.3s' }}>
+          <text x="750" y="22" textAnchor="middle" fill="#6B21A8" fontSize="13" fontWeight="800">Saída Softmax (3)</text>
           {['Setosa', 'Versicolor', 'Virginica'].map((name, k) => {
             const isTarget = k === sample.target;
             return (
@@ -164,14 +157,14 @@ export default function MlpForwardSimulator() {
                   cx="750"
                   cy={outY[k]}
                   r="24"
-                  fill={isTarget ? 'rgba(124,179,66,0.25)' : '#0B2545'}
-                  stroke={isTarget ? '#7CB342' : '#64D9EF'}
+                  fill={isTarget ? '#DCFCE7' : '#F8FAFC'}
+                  stroke={isTarget ? '#16A34A' : '#0284C7'}
                   strokeWidth={isTarget ? '3.5' : '2'}
                 />
-                <text x="750" y={outY[k] + 5} textAnchor="middle" fill="#FFFFFF" fontSize="12" fontWeight="800" fontFamily="Fira Code">
+                <text x="750" y={outY[k] + 5} textAnchor="middle" fill="#0A345D" fontSize="12" fontWeight="800" fontFamily="Fira Code">
                   {(probs[k] * 100).toFixed(0)}%
                 </text>
-                <text x="785" y={outY[k] + 5} fill={isTarget ? '#AED581' : '#94A3B8'} fontSize="13" fontWeight="700">
+                <text x="785" y={outY[k] + 5} fill={isTarget ? '#15803D' : '#475569'} fontSize="13" fontWeight="800">
                   {name}
                 </text>
               </g>
@@ -181,13 +174,14 @@ export default function MlpForwardSimulator() {
       </svg>
 
       <div style={{
-        background: '#081D33',
-        borderLeft: '4px solid #1BB5D8',
+        background: '#FFFFFF',
+        border: '1px solid #E2E8F0',
+        borderLeft: '4px solid #0284C7',
         padding: '8px 14px',
         borderRadius: '6px',
         fontSize: '0.88rem',
         fontWeight: '600',
-        color: '#E2E8F0'
+        color: '#1E293B'
       }}>
         {layerStep === 0 && 'Passo 1: As 4 medidas da flor entram como um tensor float32 na camada inicial.'}
         {layerStep === 1 && 'Passo 2: A camada linear multiplica pelos pesos W1 e a ReLU zera ativações negativas.'}
