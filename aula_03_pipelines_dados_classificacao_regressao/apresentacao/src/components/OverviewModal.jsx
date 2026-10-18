@@ -4,7 +4,7 @@ export default function OverviewModal({ slides, currentSlide, onSelectSlide, onC
   return (
     <div className="overview-overlay" onClick={onClose}>
       <div className="overview-header" onClick={e => e.stopPropagation()}>
-        <h3> Visão Geral dos Slides da Aula 04</h3>
+        <h3>Visão Geral dos Slides da Aula 03</h3>
         <button 
           onClick={onClose} 
           style={{ background: 'none', border: 'none', color: '#FFFFFF', cursor: 'pointer', fontSize: '1.5rem' }}

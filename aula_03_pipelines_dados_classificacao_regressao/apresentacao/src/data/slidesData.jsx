@@ -22,26 +22,9 @@ Aprenderemos a prevenir o famigerado Data Leakage — o vazamento de dados que e
 Por fim, implementaremos duas arquiteturas supervisionadas completas: um classificador multiclasse para prever o comportamento de clientes de E-commerce e um regressor contínuo para estimar custos médicos de seguros. Vamos começar!`
   },
 
-  // Slide 2: Instructor
+  // Slide 2: Roadmap
   {
     id: 2,
-    type: 'instructor',
-    title: 'Apresentação do Professor',
-    subtitle: 'Conheça quem estará com você nesta jornada',
-    name: 'Allan Spadini',
-    role: 'Professor & Pesquisador em IA',
-    photo: '/allan_spadini.jpg',
-    highlights: [
-      { badge: 'FORMAÇÃO', title: 'Doutor em Geofísica', desc: 'Sólida base quantitativa, modelagem física e matemática aplicada.' },
-      { badge: 'ESPECIALIZAÇÃO', title: 'Ciência de Dados e IA', desc: 'Especialista em análise estatística, aprendizado profundo e Big Data.' },
-      { badge: 'ATUAÇÃO', title: 'Pesquisador em Inteligência Artificial', desc: 'Desenvolvimento e arquitetura de redes neurais e agentes inteligentes.' }
-    ],
-    notes: `Para quem está ingressando agora, meu nome é Allan Spadini. Minha formação é focada em modelagem matemática e física, com atuação contínua em pesquisa de IA. Nesta aula, nosso foco é 100% aplicado à engenharia de dados e modelagem prática com PyTorch, preparando a base exata exigida no Projeto 1 da disciplina.`
-  },
-
-  // Slide 3: Roadmap
-  {
-    id: 3,
     type: 'roadmap',
     title: 'Roteiro & Objetivos da Aula',
     subtitle: 'Cinco etapas estratégicas para dominar pipelines supervisionados',
@@ -60,9 +43,9 @@ Quarto, a implementação prática de classificação multiclasse com CrossEntro
 E quinto, a modelagem de regressão com MSELoss e avaliação por MAE, RMSE e R².`
   },
 
-  // Slide 4: Comparison - The Golden Rule of Splitting
+  // Slide 3: Comparison - The Golden Rule of Splitting
   {
-    id: 4,
+    id: 3,
     type: 'comparison',
     title: 'A Regra de Ouro do Particionamento',
     subtitle: 'Evitando contaminação estatística entre treino, validação e teste',
@@ -91,9 +74,9 @@ Se você normalizar todo o seu conjunto de dados antes de dividi-lo em treino e 
 A regra é taxativa: primeiro separamos os conjuntos. Depois, calculamos a média e o desvio padrão exclusivamente sobre o conjunto de treino (.fit_transform) e simplesmente usamos esses parâmetros fixos para transformar validação e teste (.transform).`
   },
 
-  // Slide 5: Custom - Data Leakage Simulator
+  // Slide 4: Custom - Data Leakage Simulator
   {
-    id: 5,
+    id: 4,
     type: 'custom',
     title: 'Simulador Interativo: Detecção de Data Leakage',
     subtitle: 'Compare o comportamento do modelo com vs. sem vazamento de dados',
@@ -103,9 +86,9 @@ Vocês podem alternar entre a abordagem Ingênua (com Data Leakage) e a abordage
 Notem como o Data Leakage mascara o verdadeiro desempenho, gerando um gap inesperado quando o modelo enfrenta dados verdadeiramente inéditos. Com o pipeline isolado, o comportamento em teste reflete a realidade operacional.`
   },
 
-  // Slide 6: Flow - Dataset PyTorch Anatomy
+  // Slide 5: Flow - Dataset PyTorch Anatomy
   {
-    id: 6,
+    id: 5,
     type: 'roadmap',
     title: 'Anatomia da Classe Dataset',
     subtitle: 'Como o PyTorch padroniza o acesso aos dados em memória ou disco',
@@ -121,9 +104,9 @@ O __len__, que responde quantas linhas temos no total;
 E o __getitem__, que recebe um índice inteiro e devolve o par (X, y) correspondente. Com esses 3 métodos, o PyTorch ganha o poder de iterar e fatiar qualquer tipo de dado.`
   },
 
-  // Slide 7: Comparison - DataLoader & Batching
+  // Slide 6: Comparison - DataLoader & Batching
   {
-    id: 7,
+    id: 6,
     type: 'comparison',
     title: 'O Papel Estratégico do DataLoader',
     subtitle: 'Por que não treinamos com o dataset inteiro de uma só vez?',
@@ -152,9 +135,9 @@ Primeiro: economia de memória. Em datasets de milhões de linhas ou imagens de 
 Segundo: dinâmica do gradiente. Atualizar os pesos após cada mini-batch introduz um ruído estocástico saudável que auxilia a rede a escapar de vales planos e mínimos locais rasos!`
   },
 
-  // Slide 8: Custom - DataLoader Shuffle Visualizer
+  // Slide 7: Custom - DataLoader Shuffle Visualizer
   {
-    id: 8,
+    id: 7,
     type: 'custom',
     title: 'Visualizador Interativo: O Efeito do Shuffle',
     subtitle: 'Observe a distribuição das classes por mini-batch a cada nova época',
@@ -163,9 +146,9 @@ Segundo: dinâmica do gradiente. Atualizar os pesos após cada mini-batch introd
 Se shuffle=False, lotes inteiros podem conter apenas amostras de uma mesma categoria, enviesando o cálculo dos gradientes daquela iteração. Com shuffle=True, cada batch recebe uma amostra representativa e equilibrada da população.`
   },
 
-  // Slide 9: Custom - MLP Forward Simulator
+  // Slide 8: Custom - MLP Forward Simulator
   {
-    id: 9,
+    id: 8,
     type: 'custom',
     title: 'Simulador do Forward Pass Tabular',
     subtitle: 'Acompanhe a propagação dos atributos pelas camadas lineares e ativações',
@@ -174,9 +157,9 @@ Se shuffle=False, lotes inteiros podem conter apenas amostras de uma mesma categ
 Os atributos normalizados entram pela camada de entrada, sofrem combinações lineares ponderadas pelos pesos w, são ativados por funções não-lineares (como ReLU) e chegam na camada de saída com o resultado predito.`
   },
 
-  // Slide 10: Comparison - Classification vs Regression
+  // Slide 9: Comparison - Classification vs Regression
   {
-    id: 10,
+    id: 9,
     type: 'comparison',
     title: 'Classificação vs. Regressão em PyTorch',
     subtitle: 'Ajustando a camada de saída e a função de custo para cada tarefa',
@@ -205,9 +188,9 @@ Em classificação multiclasse, nossa saída possui o mesmo número de neurônio
 Em regressão contínua, nossa saída tem dimensão 1, pois prevê um valor numérico direto. Usamos MSELoss para calcular o erro quadrático médio.`
   },
 
-  // Slide 11: Formula - CrossEntropyLoss
+  // Slide 10: Formula - CrossEntropyLoss
   {
-    id: 11,
+    id: 10,
     type: 'formula',
     title: 'A Matemática da Entropia Cruzada',
     subtitle: 'Por que o PyTorch não utiliza Softmax explícito na última camada',
@@ -222,9 +205,9 @@ Em regressão contínua, nossa saída tem dimensão 1, pois prevê um valor num�
 O PyTorch espera receber os Logits puros (valores reais sem restrição). Internamente, ele aplica a função LogSoftmax combinada com a perda de forma numericamente estável através do truque Log-Sum-Exp, evitando que exponenciais muito grandes estourem para infinito ou valores pequenos virem zero!`
   },
 
-  // Slide 12: Comparison - Insurance Regression Features
+  // Slide 11: Comparison - Insurance Regression Features
   {
-    id: 12,
+    id: 11,
     type: 'comparison',
     title: 'Modelando Regressão: O Caso do Seguro Saúde',
     subtitle: 'Prevendo custos anuais de pacientes a partir de características biométricas',
@@ -252,9 +235,9 @@ O PyTorch espera receber os Logits puros (valores reais sem restrição). Intern
 Temos atributos numéricos como idade e índice de massa corporal, e categóricos como status de fumante. O alvo contínuo são as despesas médicas. Como a distribuição tem uma cauda longa de custos altíssimos para casos graves, a rede precisa ponderar adequadamente a escala dos erros.`
   },
 
-  // Slide 13: Formula - Regression Metrics
+  // Slide 12: Formula - Regression Metrics
   {
-    id: 13,
+    id: 12,
     type: 'formula',
     title: 'Métricas Essenciais de Regressão',
     subtitle: 'Avaliando a qualidade de predição além da função de perda de treino',
@@ -270,9 +253,9 @@ O RMSE penaliza fortemente erros grandes, servindo de alerta se houver previsõe
 E o R² indica quanto da variabilidade dos custos médicos foi efetivamente capturada pela arquitetura (um R² de 0.85 indica 85% de variância explicada).`
   },
 
-  // Slide 14: Comparison - The Non-Trivial Baseline
+  // Slide 13: Comparison - The Non-Trivial Baseline
   {
-    id: 14,
+    id: 13,
     type: 'comparison',
     title: 'A Necessidade de Baselines Não-Triviais',
     subtitle: 'Como provar cientificamente que sua rede neural realmente aprendeu',
@@ -301,9 +284,9 @@ Você nunca deve comemorar uma acurácia de 75% antes de saber qual é a propor�
 Da mesma forma, na regressão, sua rede neural precisa superar expressivamente o preditor da média global.`
   },
 
-  // Slide 15: Custom - Quiz
+  // Slide 14: Custom - Quiz
   {
-    id: 15,
+    id: 14,
     type: 'custom',
     title: 'Quiz de Fixação: Pipelines & Modelagem Tabular',
     subtitle: 'Teste seus conhecimentos sobre Data Leakage, DataLoaders e Funções de Perda',
@@ -312,9 +295,9 @@ Da mesma forma, na regressão, sua rede neural precisa superar expressivamente o
 Respondam às questões interativas na tela sobre as boas práticas de particionamento de dados, a configuração de mini-batches e os requisitos de camadas de saída para classificação e regressão.`
   },
 
-  // Slide 16: Roadmap - Synthesis & Project 1
+  // Slide 15: Roadmap - Synthesis & Project 1
   {
-    id: 16,
+    id: 15,
     type: 'roadmap',
     title: 'Síntese da Aula & Conexão com o Projeto 1',
     subtitle: 'Checklist de entrega do pipeline fundamental em PyTorch',
@@ -328,9 +311,9 @@ Respondam às questões interativas na tela sobre as boas práticas de particion
 Vocês já têm todo o conhecimento para importar dados reais, garantir que não há vazamento estatístico, criar classes de Dataset customizadas, iterar com DataLoaders e treinar redes neurais tanto para tarefas de classificação quanto de regressão, comparando com baselines!`
   },
 
-  // Slide 17: Next Steps
+  // Slide 16: Next Steps
   {
-    id: 17,
+    id: 16,
     type: 'roadmap',
     title: 'Próximos Passos: Aula 04',
     subtitle: 'A física interna do treinamento: Estabilidade, Inicialização & Normalização',
@@ -344,3 +327,4 @@ Vocês já têm todo o conhecimento para importar dados reais, garantir que não
 Veremos por que pesos aleatórios mal calibrados podem estagnar o gradiente, como inicializações científicas como Xavier e Kaiming He salvam o treino, e como camadas de BatchNorm1d e Dropout impedem o colapso e o sobreajuste. Parabéns a todos pelo empenho de hoje e até a próxima aula!`
   }
 ];
+

@@ -29,21 +29,19 @@ jobs:
         with:
           node-version: 22
 
-      - name: Build Aula 01 Presentation
+      - name: Build Aula 03 Presentation
         run: |
-          cd aula_01_introducao_deep_learning/apresentacao
+          cd aula_03_pipelines_dados_classificacao_regressao/apresentacao
           npm ci || npm install
           npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'aula_01_introducao_deep_learning/apresentacao/dist'
+          path: 'aula_03_pipelines_dados_classificacao_regressao/apresentacao/dist'
 
       - name: Deploy to GitHub Pages
         id: deployment

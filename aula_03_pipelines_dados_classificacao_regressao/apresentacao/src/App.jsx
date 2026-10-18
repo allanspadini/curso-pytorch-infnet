@@ -5,10 +5,23 @@ import Footer from './components/Footer';
 import Controls from './components/Controls';
 import NotesDrawer from './components/NotesDrawer';
 import OverviewModal from './components/OverviewModal';
+import MathView from './components/MathView';
 import { getAssetUrl } from './utils/assetHelper';
 
 export default function App() {
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const getInitialSlideIndex = () => {
+    const params = new URLSearchParams(window.location.search);
+    const slideParam = params.get('slide');
+    if (slideParam) {
+      const parsed = parseInt(slideParam, 10) - 1;
+      if (!isNaN(parsed) && parsed >= 0 && parsed < slidesData.length) {
+        return parsed;
+      }
+    }
+    return 0;
+  };
+
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(getInitialSlideIndex);
   const [showNotes, setShowNotes] = useState(false);
   const [showOverview, setShowOverview] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -17,6 +30,12 @@ export default function App() {
   const totalSlides = slidesData.length;
   const slide = slidesData[currentSlideIndex];
   const containerRef = useRef(null);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('slide', (currentSlideIndex + 1).toString());
+    window.history.replaceState({}, '', url.toString());
+  }, [currentSlideIndex]);
 
   useEffect(() => {
     const handleFSChange = () => {
@@ -120,19 +139,73 @@ export default function App() {
           </div>
         );
 
-      case 'roadmap':
+      case 'instructor':
         return (
-          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center' }}>
-            <div className="grid-5" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
-              {slide.steps?.map((step, idx) => (
-                <div key={idx} className="content-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <div>
-                    <span className="card-header-badge">{step.num}</span>
-                    <h3 className="card-title" style={{ fontSize: '1.15rem' }}>{step.title}</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '36px', alignItems: 'center', flex: 1 }}>
+            <div style={{ background: 'var(--infnet-dark-blue)', padding: '24px', borderRadius: '16px', textAlign: 'center', color: '#FFF', boxShadow: 'var(--shadow-md)' }}>
+              <img 
+                src={getAssetUrl(slide.photo || '/allan_spadini.jpg')} 
+                alt={slide.name} 
+                style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', border: '4px solid var(--infnet-cyan)', margin: '0 auto 16px', display: 'block' }}
+              />
+              <h3 style={{ fontSize: '1.4rem', fontFamily: 'Outfit, sans-serif', color: '#FFF' }}>{slide.name}</h3>
+              <p style={{ color: 'var(--infnet-cyan-light)', fontWeight: '600', fontSize: '0.95rem', marginTop: '4px' }}>{slide.role}</p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {slide.highlights?.map((h, idx) => (
+                <div key={idx} className="content-card" style={{ padding: '20px 24px', display: 'flex', gap: '20px', alignItems: 'center' }}>
+                  <div className="card-header-badge" style={{ marginBottom: 0, minWidth: '140px', textAlign: 'center' }}>
+                    {h.badge}
                   </div>
-                  <p className="card-text" style={{ fontSize: '0.92rem', color: '#64748B' }}>{step.desc}</p>
+                  <div>
+                    <div style={{ fontWeight: '800', color: 'var(--infnet-dark-blue)', fontSize: '1.15rem' }}>{h.title}</div>
+                    <div style={{ color: '#475569', fontSize: '1rem', marginTop: '4px' }}>{h.desc}</div>
+                  </div>
                 </div>
               ))}
+            </div>
+          </div>
+        );
+
+      case 'roadmap':
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${slide.steps?.length || 4}, 1fr)`, gap: '16px' }}>
+              {slide.steps?.map((step, idx) => (
+                <div key={idx} className="content-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '12px' }}>
+                  <div>
+                    <span className="card-header-badge">{step.num}</span>
+                    <h3 className="card-title" style={{ fontSize: '1.2rem' }}>{step.title}</h3>
+                  </div>
+                  <p className="card-text" style={{ fontSize: '0.98rem', color: '#475569' }}>{step.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'formula':
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', flex: 1, justifyContent: 'center' }}>
+            <div className="math-box" style={{ background: '#FFF', border: '2px solid var(--infnet-cyan)', boxShadow: 'var(--shadow-md)', padding: '24px' }}>
+              <MathView math={slide.formula} block={true} />
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(slide.variables?.length || 3, 4)}, 1fr)`, gap: '16px' }}>
+              {slide.variables?.map((v, idx) => {
+                const isLatex = v.name.includes('\\') || v.name.includes('_') || v.name.includes('^');
+                return (
+                  <div key={idx} className="content-card" style={{ padding: '20px' }}>
+                    <div style={{ fontFamily: 'Fira Code, monospace', fontWeight: '800', color: 'var(--infnet-cyan)', fontSize: '1.1rem', marginBottom: '8px' }}>
+                      {isLatex ? <MathView math={v.name} block={false} /> : v.name}
+                    </div>
+                    <div style={{ color: '#334155', fontSize: '0.98rem', lineHeight: '1.5' }}>
+                      {v.desc}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         );
@@ -185,7 +258,7 @@ export default function App() {
 
       case 'custom':
         return (
-          <div style={{ height: '100%', overflowY: 'auto' }}>
+          <div style={{ flex: 1, overflowY: 'auto' }}>
             {slide.component}
           </div>
         );
@@ -203,12 +276,11 @@ export default function App() {
   return (
     <div ref={containerRef} className={`app-container ${isFullscreen ? 'is-fullscreen' : ''}`}>
       <div className="slide-viewport">
-        <Header 
-          title={slide?.type !== 'title' ? slide?.title : undefined} 
-          subtitle={slide?.type !== 'title' ? slide?.subtitle : undefined} 
-        />
-        
         <main className="slide-body">
+          <Header 
+            title={slide?.type !== 'title' ? slide?.title : undefined} 
+            subtitle={slide?.type !== 'title' ? slide?.subtitle : undefined} 
+          />
           {renderSlideContent()}
         </main>
 
@@ -249,3 +321,4 @@ export default function App() {
     </div>
   );
 }
+
