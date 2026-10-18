@@ -3,156 +3,128 @@ import React, { useState } from 'react';
 export default function DataLoaderShuffleVisualizer() {
   const [shuffle, setShuffle] = useState(true);
   const [epoch, setEpoch] = useState(1);
-  const [selectedBatch, setSelectedBatch] = useState(null);
 
-  // Initial dataset sorted strictly by class (0 vs 1)
   const baseDataset = [
-    { id: 1, label: 0, title: 'Transação A (Legítima)' },
-    { id: 2, label: 0, title: 'Transação B (Legítima)' },
-    { id: 3, label: 0, title: 'Transação C (Legítima)' },
-    { id: 4, label: 0, title: 'Transação D (Legítima)' },
-    { id: 5, label: 0, title: 'Transação E (Legítima)' },
-    { id: 6, label: 0, title: 'Transação F (Legítima)' },
-    { id: 7, label: 1, title: 'Transação G (Fraude)' },
-    { id: 8, label: 1, title: 'Transação H (Fraude)' },
-    { id: 9, label: 1, title: 'Transação I (Fraude)' },
-    { id: 10, label: 1, title: 'Transação J (Fraude)' },
-    { id: 11, label: 1, title: 'Transação K (Fraude)' },
-    { id: 12, label: 1, title: 'Transação L (Fraude)' },
+    { id: 1, label: 0 }, { id: 2, label: 0 }, { id: 3, label: 0 },
+    { id: 4, label: 0 }, { id: 5, label: 0 }, { id: 6, label: 0 },
+    { id: 7, label: 1 }, { id: 8, label: 1 }, { id: 9, label: 1 },
+    { id: 10, label: 1 }, { id: 11, label: 1 }, { id: 12, label: 1 }
   ];
 
   const getBatches = () => {
     let items = [...baseDataset];
     if (shuffle) {
-      // Deterministic visual shuffle based on epoch
       const seed = epoch * 7;
-      items = items.sort((a, b) => (Math.sin(a.id * seed) - Math.sin(b.id * seed)));
+      items = items.sort((a, b) => Math.sin(a.id * seed) - Math.sin(b.id * seed));
     }
-    // Batch size = 4
-    const batches = [];
-    for (let i = 0; i < items.length; i += 4) {
-      batches.push(items.slice(i, i + 4));
-    }
-    return batches;
+    return [items.slice(0, 4), items.slice(4, 8), items.slice(8, 12)];
   };
 
   const batches = getBatches();
 
   return (
-    <div style={{ background: '#081D33', border: '1px solid #1E3A5F', borderRadius: '14px', padding: '20px', color: '#FFFFFF' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-        <div>
-          <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.2rem', color: '#64D9EF', margin: 0 }}>
-            🔀 DataLoader Batching & Shuffle Visualizer
-          </h3>
-          <p style={{ fontSize: '0.85rem', color: '#94A3B8', margin: '2px 0 0 0' }}>
-            Impacto da aleatorização de batches no treinamento de Redes Neurais
-          </p>
+    <div style={{ background: '#061F38', border: '1px solid #1E3A5F', borderRadius: '14px', padding: '16px', color: '#FFFFFF', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', fontSize: '0.85rem', fontWeight: '700' }}>
+          <span style={{ color: '#64D9EF' }}>■ Classe 0 (Azul)</span>
+          <span style={{ color: '#FF7043' }}>■ Classe 1 (Laranja)</span>
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <button 
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
             onClick={() => setShuffle(!shuffle)}
             style={{
               background: shuffle ? '#7CB342' : '#FF7043',
               color: '#FFFFFF',
               border: 'none',
-              borderRadius: '8px',
+              borderRadius: '20px',
               padding: '6px 14px',
-              fontWeight: '700',
+              fontWeight: '800',
               cursor: 'pointer',
-              fontSize: '0.85rem'
+              fontSize: '0.82rem'
             }}
           >
-            {shuffle ? '✅ shuffle=True (Recomendado Treino)' : '⚠️ shuffle=False (Ordenado)'}
+            {shuffle ? '✅ shuffle=True' : '⚠️ shuffle=False'}
           </button>
 
-          <button 
+          <button
             onClick={() => setEpoch(e => e + 1)}
             style={{
               background: '#1BB5D8',
               color: '#0A345D',
               border: 'none',
-              borderRadius: '8px',
+              borderRadius: '20px',
               padding: '6px 14px',
-              fontWeight: '700',
+              fontWeight: '800',
               cursor: 'pointer',
-              fontSize: '0.85rem'
+              fontSize: '0.82rem'
             }}
           >
-            🚀 Nova Época (Época {epoch})
+            🔄 Sortear Época #{epoch}
           </button>
         </div>
       </div>
 
-      {/* Batches Visualization */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '14px' }}>
+      {/* SVG Batch & Gradient Vector Diagram */}
+      <svg viewBox="0 0 920 245" style={{ width: '100%', maxHeight: '260px' }}>
         {batches.map((batch, bIdx) => {
-          const class0Count = batch.filter(x => x.label === 0).length;
-          const class1Count = batch.filter(x => x.label === 1).length;
-          const isSelected = selectedBatch === bIdx;
+          const xBase = 55 + bIdx * 290;
+          const c0 = batch.filter(x => x.label === 0).length;
+          const c1 = batch.filter(x => x.label === 1).length;
+          const angle = shuffle ? 0 : (c0 === 4 ? -35 : c1 === 4 ? 35 : 0);
 
           return (
-            <div 
-              key={bIdx}
-              onClick={() => setSelectedBatch(bIdx)}
-              style={{
-                background: isSelected ? '#0F3459' : '#041221',
-                border: `2px solid ${isSelected ? '#64D9EF' : (shuffle ? '#1E3A5F' : '#FF7043')}`,
-                borderRadius: '10px',
-                padding: '12px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                <span style={{ fontWeight: '800', color: '#64D9EF', fontSize: '0.88rem' }}>Batch #{bIdx + 1}</span>
-                <span style={{ fontSize: '0.75rem', background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: '4px' }}>
-                  {batch.length} amostras
-                </span>
-              </div>
+            <g key={bIdx} transform={`translate(${xBase}, 20)`}>
+              <rect x="0" y="0" width="245" height="195" rx="12" fill="#0B2545" stroke={shuffle ? '#1BB5D8' : '#FF7043'} strokeWidth="2.5" />
+              <text x="122" y="28" textAnchor="middle" fill="#FFFFFF" fontSize="15" fontWeight="800" fontFamily="Outfit">
+                Mini-Batch #{bIdx + 1}
+              </text>
 
-              <div style={{ display: 'flex', gap: '4px', marginBottom: '8px' }}>
-                {batch.map(item => (
-                  <div 
-                    key={item.id}
-                    title={item.title}
-                    style={{
-                      flex: 1,
-                      height: '24px',
-                      borderRadius: '4px',
-                      background: item.label === 0 ? '#1BB5D8' : '#FF7043',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.7rem',
-                      fontWeight: '800'
-                    }}
-                  >
+              {/* 4 sample blocks */}
+              {batch.map((item, i) => (
+                <g key={item.id} transform={`translate(${18 + i * 54}, 45)`}>
+                  <rect
+                    x="0"
+                    y="0"
+                    width="46"
+                    height="46"
+                    rx="8"
+                    fill={item.label === 0 ? '#1BB5D8' : '#FF7043'}
+                  />
+                  <text x="23" y="28" textAnchor="middle" fill="#FFF" fontSize="13" fontWeight="800" fontFamily="Fira Code">
                     #{item.id}
-                  </div>
-                ))}
-              </div>
+                  </text>
+                </g>
+              ))}
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: '#CBD5E1' }}>
-                <span style={{ color: '#64D9EF' }}>Legítima: {class0Count}</span>
-                <span style={{ color: '#FF7043' }}>Fraude: {class1Count}</span>
-              </div>
-            </div>
+              {/* Gradient Vector Compass */}
+              <text x="122" y="122" textAnchor="middle" fill="#94A3B8" fontSize="11" fontWeight="700">
+                Direção do Gradiente (∇L)
+              </text>
+              <g transform={`translate(122, 155) rotate(${angle})`}>
+                <line x1="-45" y1="0" x2="45" y2="0" stroke={shuffle ? '#7CB342' : '#FF7043'} strokeWidth="4" />
+                <polygon points="45,-6 58,0 45,6" fill={shuffle ? '#7CB342' : '#FF7043'} />
+              </g>
+              <text x="122" y="184" textAnchor="middle" fill={shuffle ? '#AED581' : '#FF7043'} fontSize="12" fontWeight="800">
+                {c0} Classe 0 | {c1} Classe 1
+              </text>
+            </g>
           );
         })}
-      </div>
+      </svg>
 
-      {/* Diagnostic Alert Box */}
-      <div style={{ background: shuffle ? 'rgba(124, 179, 66, 0.12)' : 'rgba(255, 112, 67, 0.12)', border: `1px solid ${shuffle ? '#7CB342' : '#FF7043'}`, borderRadius: '8px', padding: '12px' }}>
-        <div style={{ color: shuffle ? '#7CB342' : '#FF7043', fontWeight: '700', fontSize: '0.88rem', marginBottom: '4px' }}>
-          {shuffle ? '✨ Convergência Suave (SGD com Variância Controlada)' : '⚠️ Instabilidade e Viés Sequencial de Gradiente'}
-        </div>
-        <div style={{ fontSize: '0.82rem', color: '#CBD5E1' }}>
-          {shuffle 
-            ? 'Com shuffle=True, cada batch mistura amostras de todas as classes. Os gradientes apontam para o mínimo global médio de maneira uniforme a cada iteração!' 
-            : 'Sem shuffle, o Batch 1 tem 100% Legítimas e o Batch 3 tem 100% Fraudes! O modelo atualiza pesos alternando agressivamente para um lado e para o outro, destruindo o aprendizado!'}
-        </div>
+      <div style={{
+        background: '#081D33',
+        borderLeft: `4px solid ${shuffle ? '#7CB342' : '#FF7043'}`,
+        padding: '8px 14px',
+        borderRadius: '6px',
+        fontSize: '0.88rem',
+        fontWeight: '600',
+        color: '#E2E8F0'
+      }}>
+        {shuffle
+          ? '✨ shuffle=True: Lotes misturados mantêm o vetor gradiente apontando de forma estável para o mínimo global.'
+          : '⚠️ shuffle=False: Lotes puros de uma só classe jogam o gradiente em zigue-zague extremo!'}
       </div>
     </div>
   );
