@@ -126,14 +126,33 @@
       color: #FFFFFF;
       font-weight: 700;
       font-size: 0.9rem;
-      padding: 12px 20px;
+      padding: 12px 16px;
       border-radius: 8px;
       text-decoration: none;
       transition: background 0.15s ease;
+      flex: 1;
+      text-align: center;
     }
 
     .btn-link:hover {
       background: var(--infnet-cyan);
+      color: #FFFFFF;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-pdf {
+      background: #0E7490;
+      flex: 0 0 auto;
+      min-width: 100px;
+    }
+
+    .btn-pdf:hover {
+      background: #0284C7;
       color: #FFFFFF;
     }
 
@@ -164,9 +183,14 @@
           <h2>Conceitos de DL e Neurônio Artificial</h2>
           <p>Perceptron, funções de ativação, combinação linear e tensores essenciais no PyTorch.</p>
         </div>
-        <a href="./aula01/" class="btn-link">
-          🖥️ Abrir Slides da Aula 1 ➔
-        </a>
+        <div class="btn-group">
+          <a href="./aula01/" class="btn-link">
+            🖥️ Slides ➔
+          </a>
+          <a href="./aula01/apresentacao.pdf" class="btn-link btn-pdf" download>
+            📄 PDF
+          </a>
+        </div>
       </div>
 
       <!-- Aula 2 -->
@@ -176,9 +200,14 @@
           <h2>Autograd e Primeira MLP</h2>
           <p>Grafos de computação, diferenciação automática e previsão de churn em SaaS.</p>
         </div>
-        <a href="./aula02/" class="btn-link">
-          🖥️ Abrir Slides da Aula 2 ➔
-        </a>
+        <div class="btn-group">
+          <a href="./aula02/" class="btn-link">
+            🖥️ Slides ➔
+          </a>
+          <a href="./aula02/apresentacao.pdf" class="btn-link btn-pdf" download>
+            📄 PDF
+          </a>
+        </div>
       </div>
 
       <!-- Aula 3 -->
@@ -188,29 +217,39 @@
           <h2>Pipelines de Dados Tabulares</h2>
           <p>Dataset, DataLoader, pré-processamento, split sem leakage, classificação e regressão.</p>
         </div>
-        <a href="./aula03/" class="btn-link">
-          🖥️ Abrir Slides da Aula 3 ➔
-        </a>
+        <div class="btn-group">
+          <a href="./aula03/" class="btn-link">
+            🖥️ Slides ➔
+          </a>
+          <a href="./aula03/apresentacao.pdf" class="btn-link btn-pdf" download>
+            📄 PDF
+          </a>
+        </div>
       </div>
 
       <!-- Aula 4 -->
-      <div class="card">
+      <div class="card" style="border-top-color: #7CB342;">
         <div>
-          <span class="card-badge">Aula 04</span>
-          <h2>Estabilidade de Treinamento</h2>
-          <p>Inicializações (Xavier/He), normalização (BatchNorm/LayerNorm) e regularização com Dropout.</p>
+          <span class="card-badge" style="background: rgba(124,179,66,0.15); color: #2E7D32;">Aula 04 • Repasse Prático</span>
+          <h2>Ciclo de Treinamento & Modelagem</h2>
+          <p>Split treino/teste cego, as 5 etapas canônicas do PyTorch e consolidação de classificação e regressão.</p>
         </div>
-        <a href="./aula04/" class="btn-link">
-          🖥️ Abrir Slides da Aula 4 ➔
-        </a>
+        <div class="btn-group">
+          <a href="./aula04/" class="btn-link" style="background: #2E7D32;">
+            🖥️ Slides ➔
+          </a>
+          <a href="./aula04/apresentacao.pdf" class="btn-link btn-pdf" style="background: #15803D;" download>
+            📄 PDF
+          </a>
+        </div>
       </div>
 
       <!-- Aula 5 -->
       <div class="card">
         <div>
           <span class="card-badge">Aula 05</span>
-          <h2>Otimização & Diagnóstico</h2>
-          <p>AdamW, schedulers, diagnóstico de gradientes no TensorBoard e conclusão do Projeto 1.</p>
+          <h2>Estabilidade de Treinamento</h2>
+          <p>Inicializações (Xavier/He), normalização (BatchNorm/LayerNorm) e regularização com Dropout.</p>
         </div>
         <a href="./aula05/" class="btn-link">
           🖥️ Abrir Slides da Aula 5 ➔
@@ -221,8 +260,8 @@
       <div class="card">
         <div>
           <span class="card-badge">Aula 06</span>
-          <h2>Introdução à Visão Computacional</h2>
-          <p>Operações de convolução 1D/2D, pooling, canais de imagens e primeira CNN no MNIST.</p>
+          <h2>Otimização & Diagnóstico</h2>
+          <p>AdamW, schedulers, diagnóstico de gradientes no TensorBoard e conclusão do Projeto 1.</p>
         </div>
         <a href="./aula06/" class="btn-link">
           🖥️ Abrir Slides da Aula 6 ➔
@@ -233,8 +272,8 @@
       <div class="card">
         <div>
           <span class="card-badge">Aula 07</span>
-          <h2>CNNs Profundas em Imagens Reais</h2>
-          <p>PlantVillage RGB, data augmentation, visualização de filtros e base do Projeto 2.</p>
+          <h2>Introdução à Visão Computacional</h2>
+          <p>Operações de convolução 1D/2D, pooling, canais de imagens e primeira CNN no MNIST.</p>
         </div>
         <a href="./aula07/" class="btn-link">
           🖥️ Abrir Slides da Aula 7 ➔
@@ -245,8 +284,8 @@
       <div class="card">
         <div>
           <span class="card-badge">Aula 08</span>
-          <h2>Autoencoders & Espaço Latente</h2>
-          <p>Gargalo de representação, reconstrução de imagens, VAEs e detecção de anomalias (EC2).</p>
+          <h2>CNNs Profundas em Imagens Reais</h2>
+          <p>PlantVillage RGB, data augmentation, visualização de filtros e base do Projeto 2.</p>
         </div>
         <a href="./aula08/" class="btn-link">
           🖥️ Abrir Slides da Aula 8 ➔
@@ -257,8 +296,8 @@
       <div class="card">
         <div>
           <span class="card-badge">Aula 09</span>
-          <h2>Avaliação sob Desbalanceamento</h2>
-          <p>Métricas críticas (PR-AUC, F1, Brier Score), calibração e teste estatístico (EC1).</p>
+          <h2>Autoencoders & Espaço Latente</h2>
+          <p>Gargalo de representação, reconstrução de imagens, VAEs e detecção de anomalias (EC2).</p>
         </div>
         <a href="./aula09/" class="btn-link">
           🖥️ Abrir Slides da Aula 9 ➔
@@ -269,8 +308,8 @@
       <div class="card">
         <div>
           <span class="card-badge">Aula 10</span>
-          <h2>Modelagem Sequencial & RNNs</h2>
-          <p>Quebra do I.I.D., janelamento deslizante, tensores 3D e Vanilla RNN com BPTT.</p>
+          <h2>Avaliação sob Desbalanceamento</h2>
+          <p>Métricas críticas (PR-AUC, F1, Brier Score), calibração e teste estatístico (EC1).</p>
         </div>
         <a href="./aula10/" class="btn-link">
           🖥️ Abrir Slides da Aula 10 ➔
@@ -278,14 +317,26 @@
       </div>
 
       <!-- Aula 11 -->
+      <div class="card">
+        <div>
+          <span class="card-badge">Aula 11</span>
+          <h2>Modelagem Sequencial & RNNs</h2>
+          <p>Quebra do I.I.D., janelamento deslizante, tensores 3D e Vanilla RNN com BPTT.</p>
+        </div>
+        <a href="./aula11/" class="btn-link">
+          🖥️ Abrir Slides da Aula 11 ➔
+        </a>
+      </div>
+
+      <!-- Aula 12 -->
       <div class="card" style="border-top-color: var(--infnet-cyan);">
         <div>
-          <span class="card-badge" style="background: rgba(27,181,216,0.15); color: #0E7490;">Aula 11 • Conclusão</span>
+          <span class="card-badge" style="background: rgba(27,181,216,0.15); color: #0E7490;">Aula 12 • Conclusão</span>
           <h2>LSTMs, GRUs & Features Cíclicas</h2>
           <p>Mecanismos de portão, projeções trigonométricas (sin/cos), métricas WAPE e estudo de caso (EC3).</p>
         </div>
-        <a href="./aula11/" class="btn-link" style="background: var(--infnet-cyan);">
-          🖥️ Abrir Slides da Aula 11 ➔
+        <a href="./aula12/" class="btn-link" style="background: var(--infnet-cyan);">
+          🖥️ Abrir Slides da Aula 12 ➔
         </a>
       </div>
 
@@ -296,5 +347,5 @@
     Instituto Infnet 1994 - Todos os direitos reservados | Graduação EAD
   </footer>
 
-</body>
+ </body>
 </html>
