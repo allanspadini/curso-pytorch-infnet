@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Layers, Split, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 export default function NormComparisonInteractive() {
   const [normType, setNormType] = useState('batchnorm'); // 'batchnorm' vs 'layernorm'
@@ -16,14 +17,25 @@ export default function NormComparisonInteractive() {
   const currentMatrix = rawMatrix.slice(0, batchSize);
 
   return (
-    <div style={{ background: '#081D33', border: '1px solid #1E3A5F', borderRadius: '14px', padding: '20px', color: '#FFFFFF' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+    <div style={{
+      background: '#FFFFFF',
+      border: '1px solid #E2E8F0',
+      borderRadius: '16px',
+      padding: '20px 24px',
+      boxShadow: '0 4px 16px rgba(10, 52, 93, 0.05)',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '14px',
+      height: '100%'
+    }}>
+      {/* Top Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.2rem', color: '#64D9EF', margin: 0 }}>
-            🧮 Comparador Visual: BatchNorm1d vs LayerNorm
+          <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.15rem', color: 'var(--infnet-dark-blue)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Layers size={22} color="var(--infnet-cyan)" /> Simulador Numérico: BatchNorm1d vs LayerNorm
           </h3>
-          <p style={{ fontSize: '0.85rem', color: '#94A3B8', margin: '2px 0 0 0' }}>
-            Inspecione a dimensão de cálculo de Média ($\mu$) e Variância ($\sigma^2$)
+          <p style={{ fontSize: '0.82rem', color: '#64748B', margin: '2px 0 0 0' }}>
+            Observe as células destacadas de onde a Média (μ) e Variância (σ²) são calculadas
           </p>
         </div>
 
@@ -31,86 +43,149 @@ export default function NormComparisonInteractive() {
           <button 
             onClick={() => setNormType('batchnorm')}
             style={{
-              background: normType === 'batchnorm' ? '#1BB5D8' : 'rgba(27, 181, 216, 0.15)',
-              color: normType === 'batchnorm' ? '#0A345D' : '#64D9EF',
-              border: '1px solid #1BB5D8',
+              background: normType === 'batchnorm' ? '#0284C7' : '#F1F5F9',
+              color: normType === 'batchnorm' ? '#FFFFFF' : '#0369A1',
+              border: `1.5px solid ${normType === 'batchnorm' ? '#0284C7' : '#CBD5E1'}`,
               borderRadius: '8px',
               padding: '6px 14px',
               fontWeight: '800',
               cursor: 'pointer',
-              fontSize: '0.85rem'
+              fontSize: '0.82rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease'
             }}
           >
-            BatchNorm1d (Eixo Batch N)
+            <Split size={14} /> BatchNorm1d (Eixo Batch N)
           </button>
           <button 
             onClick={() => setNormType('layernorm')}
             style={{
-              background: normType === 'layernorm' ? '#7CB342' : 'rgba(124, 179, 66, 0.15)',
-              color: normType === 'layernorm' ? '#FFFFFF' : '#7CB342',
-              border: '1px solid #7CB342',
+              background: normType === 'layernorm' ? '#16A34A' : '#F1F5F9',
+              color: normType === 'layernorm' ? '#FFFFFF' : '#15803D',
+              border: `1.5px solid ${normType === 'layernorm' ? '#16A34A' : '#CBD5E1'}`,
               borderRadius: '8px',
               padding: '6px 14px',
               fontWeight: '800',
               cursor: 'pointer',
-              fontSize: '0.85rem'
+              fontSize: '0.82rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease'
             }}
           >
-            LayerNorm (Eixo Features C)
+            <Layers size={14} /> LayerNorm (Eixo Features C)
           </button>
         </div>
       </div>
 
-      {/* Controls row */}
-      <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '14px', background: '#041221', padding: '10px 14px', borderRadius: '8px' }}>
-        <span style={{ fontSize: '0.85rem', color: '#CBD5E1', fontWeight: '600' }}>Tamanho do Batch:</span>
+      {/* Controls Bar */}
+      <div style={{
+        display: 'flex',
+        gap: '12px',
+        alignItems: 'center',
+        background: '#F8FAFC',
+        border: '1px solid #E2E8F0',
+        padding: '8px 14px',
+        borderRadius: '10px'
+      }}>
+        <span style={{ fontSize: '0.82rem', color: '#475569', fontWeight: '700' }}>Tamanho do Batch:</span>
         <button 
           onClick={() => setBatchSize(4)}
-          style={{ background: batchSize === 4 ? '#0E4E8A' : 'transparent', color: '#FFF', border: '1px solid #1E3A5F', borderRadius: '6px', padding: '4px 10px', fontSize: '0.8rem', cursor: 'pointer' }}
+          style={{
+            background: batchSize === 4 ? '#0A345D' : '#FFFFFF',
+            color: batchSize === 4 ? '#FFFFFF' : '#475569',
+            border: '1px solid #CBD5E1',
+            borderRadius: '6px',
+            padding: '4px 10px',
+            fontSize: '0.78rem',
+            cursor: 'pointer',
+            fontWeight: batchSize === 4 ? '700' : '500'
+          }}
         >
           N = 4 (Normal)
         </button>
         <button 
           onClick={() => setBatchSize(1)}
-          style={{ background: batchSize === 1 ? '#FF7043' : 'transparent', color: '#FFF', border: '1px solid #FF7043', borderRadius: '6px', padding: '4px 10px', fontSize: '0.8rem', cursor: 'pointer' }}
+          style={{
+            background: batchSize === 1 ? '#D84315' : '#FFFFFF',
+            color: batchSize === 1 ? '#FFFFFF' : '#D84315',
+            border: `1px solid ${batchSize === 1 ? '#D84315' : '#CBD5E1'}`,
+            borderRadius: '6px',
+            padding: '4px 10px',
+            fontSize: '0.78rem',
+            cursor: 'pointer',
+            fontWeight: batchSize === 1 ? '700' : '500'
+          }}
         >
-          N = 1 (Mini-batch Unitário)
+          N = 1 (Amostra Isolada)
         </button>
 
         {normType === 'batchnorm' && (
           <>
-            <div style={{ width: '1px', height: '18px', background: '#334155', margin: '0 4px' }} />
+            <div style={{ width: '1px', height: '16px', background: '#CBD5E1', margin: '0 4px' }} />
             <button 
               onClick={() => setIsTrainMode(!isTrainMode)}
-              style={{ background: isTrainMode ? '#7CB342' : '#AB47BC', color: '#FFF', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '0.8rem', cursor: 'pointer', fontWeight: '700' }}
+              style={{
+                background: isTrainMode ? '#16A34A' : '#7E22CE',
+                color: '#FFF',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '4px 10px',
+                fontSize: '0.78rem',
+                cursor: 'pointer',
+                fontWeight: '700'
+              }}
             >
-              {isTrainMode ? 'Modo Treino (Stats do Batch)' : 'Modo Eval (Running Mean/Var)'}
+              {isTrainMode ? 'Modo Treino (Stats do Batch Atual)' : 'Modo Eval (Running Stats Congeladas)'}
             </button>
           </>
         )}
       </div>
 
       {/* Matrix Display */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '14px' }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '8px',
+        flex: 1,
+        alignItems: 'center'
+      }}>
         {currentMatrix.map((row, rIdx) => (
           row.map((val, cIdx) => {
-            const isHighlight = normType === 'batchnorm' ? true : true;
+            const isHighlighted = normType === 'batchnorm' ? cIdx === 0 : rIdx === 0;
+            const bg = isHighlighted 
+              ? (normType === 'batchnorm' ? '#E0F2FE' : '#DCFCE7') 
+              : '#F8FAFC';
+            const border = isHighlighted
+              ? (normType === 'batchnorm' ? '#0284C7' : '#16A34A')
+              : '#E2E8F0';
+
             return (
               <div 
                 key={`${rIdx}-${cIdx}`}
                 style={{
-                  background: normType === 'batchnorm' ? 'rgba(27, 181, 216, 0.12)' : 'rgba(124, 179, 66, 0.12)',
-                  border: `1.5px solid ${normType === 'batchnorm' ? '#1BB5D8' : '#7CB342'}`,
-                  borderRadius: '8px',
+                  background: bg,
+                  border: `1.5px solid ${border}`,
+                  borderRadius: '10px',
                   padding: '10px',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  boxShadow: isHighlighted ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
+                  transition: 'all 0.25s ease'
                 }}
               >
-                <div style={{ fontSize: '0.72rem', color: '#94A3B8', marginBottom: '2px' }}>
-                  Amostra #{rIdx + 1} | Feat #{cIdx + 1}
+                <div style={{ fontSize: '0.72rem', color: '#64748B', marginBottom: '2px', fontWeight: '600' }}>
+                  Amostra #{rIdx + 1} | Feature #{cIdx + 1}
                 </div>
-                <div style={{ fontFamily: 'Fira Code, monospace', fontSize: '1.05rem', fontWeight: '700', color: val > 0 ? '#64D9EF' : '#FF7043' }}>
-                  {val.toFixed(1)}
+                <div style={{
+                  fontFamily: 'Fira Code, monospace',
+                  fontSize: '1.05rem',
+                  fontWeight: '800',
+                  color: val > 0 ? '#0A345D' : '#D84315'
+                }}>
+                  {val > 0 ? `+${val.toFixed(1)}` : val.toFixed(1)}
                 </div>
               </div>
             );
@@ -118,17 +193,37 @@ export default function NormComparisonInteractive() {
         ))}
       </div>
 
-      {/* Math Explanation Alert */}
-      <div style={{ background: '#041221', borderRadius: '8px', padding: '12px', border: '1px solid #1E293B' }}>
+      {/* Bottom Math Explanation Alert */}
+      <div style={{
+        background: normType === 'batchnorm' ? '#EFF6FF' : '#F0FDF4',
+        border: `1px solid ${normType === 'batchnorm' ? '#BFDBFE' : '#BBF7D0'}`,
+        borderRadius: '10px',
+        padding: '10px 14px'
+      }}>
         {normType === 'batchnorm' ? (
-          <div style={{ fontSize: '0.84rem', color: '#CBD5E1' }}>
-            <strong style={{ color: '#64D9EF' }}>BatchNorm1d:</strong> Normaliza <strong>VERTICALMENTE</strong> pelas amostras do batch ($N$) para cada feature ($C$). 
-            {batchSize === 1 && <span style={{ color: '#FF7043', fontWeight: '800' }}> ⚠️ AVISO: Quando Batch Size = 1, a variância é ZERO ($\sigma^2 = 0$), causando divisão por zero ou colapso no treino!</span>}
+          <div style={{ fontSize: '0.84rem', color: '#1E293B', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {batchSize === 1 ? (
+              <>
+                <AlertTriangle color="#D84315" size={20} style={{ flexShrink: 0 }} />
+                <span>
+                  <strong style={{ color: '#D84315' }}>ALERTA CRÍTICO:</strong> Quando o Batch Size = 1 no treino, a variância do batch é exatamente zero (σ² = 0). O BatchNorm falha pois não há outros dados para calcular dispersão!
+                </span>
+              </>
+            ) : (
+              <>
+                <CheckCircle2 color="#0284C7" size={20} style={{ flexShrink: 0 }} />
+                <span>
+                  <strong>BatchNorm1d:</strong> Normaliza <strong>verticalmente</strong> através das {batchSize} amostras para cada coluna de feature isoladamente.
+                </span>
+              </>
+            )}
           </div>
         ) : (
-          <div style={{ fontSize: '0.84rem', color: '#CBD5E1' }}>
-            <strong style={{ color: '#AED581' }}>LayerNorm:</strong> Normaliza <strong>HORIZONTALMENTE</strong> pelas features ($C$) dentro de cada amostra individual ($N$). 
-            {batchSize === 1 ? <span style={{ color: '#AED581', fontWeight: '800' }}> ✅ Funciona perfeitamente com Batch Size = 1 pois não depende de outros exemplos no mini-batch!</span> : ' Totalmente independente do tamanho do batch! Ideal para sequências e NLP.'}
+          <div style={{ fontSize: '0.84rem', color: '#1E293B', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <CheckCircle2 color="#16A34A" size={20} style={{ flexShrink: 0 }} />
+            <span>
+              <strong>LayerNorm:</strong> Normaliza <strong>horizontalmente</strong> ao longo das 4 features de cada amostra individual. Funciona perfeitamente mesmo com Batch Size = 1!
+            </span>
           </div>
         )}
       </div>

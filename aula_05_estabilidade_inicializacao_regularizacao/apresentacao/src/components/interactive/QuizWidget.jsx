@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { HelpCircle, CheckCircle2, XCircle, RotateCcw, ArrowRight, Award } from 'lucide-react';
 
 export default function QuizWidget() {
   const [currentQ, setCurrentQ] = useState(0);
@@ -8,44 +9,44 @@ export default function QuizWidget() {
 
   const questions = [
     {
-      question: '1. O que ocorre se aplicarmos o StandardScaler ANTES da divisão train_test_split?',
+      question: '1. O que ocorre se inicializarmos todos os pesos e bias de uma MLP com zero (W = 0, b = 0)?',
       options: [
-        { text: 'A) Vazamento de Dados (Data Leakage), pois as estatísticas (média/desvio) do teste influenciam o treino.', correct: true },
-        { text: 'B) O treinamento fica mais rápido, pois o scaler é executado uma única vez.', correct: false },
-        { text: 'C) O modelo aprende melhor, pois vê a distribuição real inteira.', correct: false },
-        { text: 'D) O PyTorch dispara um erro de runtime ao criar o DataLoader.', correct: false }
+        { text: 'A) Colapso de Simetria: todos os neurônios calculam saídas idênticas, recebem gradientes iguais e a camada age como 1 único neurônio.', correct: true },
+        { text: 'B) O treinamento converge mais rápido, pois o ponto inicial tem perda zero.', correct: false },
+        { text: 'C) O PyTorch dispara automaticamente um erro de divisão por zero.', correct: false },
+        { text: 'D) A rede aprende normalmente, contanto que a taxa de aprendizado seja alta.', correct: false }
       ],
-      explanation: 'Vazamento de dados ocorre quando informações do conjunto de validação/teste contaminam o treino, gerando métricas de validação ilusoriamente altas que despencam em produção real.'
+      explanation: 'Pesos idênticos mantêm gradientes perfeitamente simétricos durante o backward pass. Nenhum neurônio consegue se especializar em uma feature distinta.'
     },
     {
-      question: '2. Qual a diferença fundamental de eixo entre BatchNorm1d e LayerNorm?',
+      question: '2. Qual é a diferença geométrica de eixo entre BatchNorm1d e LayerNorm?',
       options: [
-        { text: 'A) BatchNorm1d normaliza ao longo do eixo de batch N; LayerNorm normaliza ao longo das features C de uma única amostra.', correct: true },
-        { text: 'B) LayerNorm depende fortemente do batch size, enquanto BatchNorm1d funciona com batch size = 1.', correct: false },
-        { text: 'C) BatchNorm1d é aplicada apenas em imagens, enquanto LayerNorm é para dados tabulares.', correct: false },
-        { text: 'D) Não existe diferença; ambos calculam a mesma média e desvio padrão.', correct: false }
+        { text: 'A) BatchNorm1d normaliza verticalmente pelas amostras do batch N; LayerNorm normaliza horizontalmente pelas features C de uma única amostra.', correct: true },
+        { text: 'B) LayerNorm depende fortemente do batch size, enquanto BatchNorm1d opera com batch size = 1.', correct: false },
+        { text: 'C) BatchNorm1d é exclusiva para imagens, enquanto LayerNorm só aceita dados 1D.', correct: false },
+        { text: 'D) Não há diferença matemática; são apenas nomes comerciais diferentes.', correct: false }
       ],
-      explanation: 'BatchNorm1d calcula média e desvio padrão ao longo da dimensão N (batch), enquanto LayerNorm calcula ao longo da dimensão C (features) para cada exemplo individualmente.'
+      explanation: 'BatchNorm1d fatia através de todas as amostras do mini-batch para uma feature específica. LayerNorm fatia através de todas as features de uma única amostra, funcionando até com N=1.'
     },
     {
-      question: '3. Por que a inicialização Kaiming (He) Normal é preferida para ativações ReLU?',
+      question: '3. Por que a inicialização Kaiming He (Normal) dobra a variância inicial para ativações ReLU?',
       options: [
-        { text: 'A) Porque compensa o fato da ReLU zerar 50% dos neurônios (entradas negativas), dobrando a variância inicial.', correct: true },
-        { text: 'B) Porque força todos os pesos a serem estritamente positivos.', correct: false },
-        { text: 'C) Porque funciona apenas com Tanh e Sigmoide.', correct: false },
-        { text: 'D) Porque zera todos os viéses (biases) da rede neural.', correct: false }
+        { text: 'A) Porque a ReLU zera 50% dos sinais negativos, necessitando de Var(W) = 2/fan_in para manter o equilíbrio energético.', correct: true },
+        { text: 'B) Porque força todos os pesos a serem estritamente números pares.', correct: false },
+        { text: 'C) Porque funciona exclusivamente com Tanh e Sigmoide.', correct: false },
+        { text: 'D) Para eliminar a necessidade de bias em camadas densas.', correct: false }
       ],
-      explanation: 'Como a ReLU zera todas as entradas negativas, metade do sinal é perdido. Kaiming Normal usa Var(W) = 2/fan_in para manter a variância das ativações constante em redes profundas.'
+      explanation: 'Como a ReLU joga fora metade das ativações (tudo que for menor que zero), a variância do sinal cai pela metade. A constante 2 restabelece o fluxo contínuo do sinal.'
     },
     {
-      question: '4. O que é o Inverted Dropout implementado nativamente no PyTorch (nn.Dropout)?',
+      question: '4. Por que o PyTorch adota o Inverted Dropout multiplicando por 1/(1-p) no treino?',
       options: [
-        { text: 'A) Zera neurônios no treino com prob p e multiplica os restantes por 1/(1-p), eliminando ajustes no teste (model.eval()).', correct: true },
-        { text: 'B) Zera neurônios apenas durante o teste de produção.', correct: false },
-        { text: 'C) Inverte o sinal dos gradientes durante o backward pass.', correct: false },
-        { text: 'D) Multiplica os pesos por zero para prevenir overfitting.', correct: false }
+        { text: 'A) Para manter o valor esperado inalterado, tornando a inferência em model.eval() uma identidade direta sem custo (y = x).', correct: true },
+        { text: 'B) Para apagar neurônios apenas durante a avaliação de teste.', correct: false },
+        { text: 'C) Para inverter o sentido dos gradientes no retropropagar.', correct: false },
+        { text: 'D) Para dobrar a taxa de aprendizado automaticamente.', correct: false }
       ],
-      explanation: 'Inverted Dropout dimensiona as ativações no treino por 1/(1-p). Assim, na inferência (eval()), nenhum multiplicador precisa ser aplicado, mantendo o tempo de execução veloz.'
+      explanation: 'Reescalar no treinamento por 1/(1-p) garante que na produção não precisamos fazer nenhuma multiplicação corretiva de pesos, acelerando a inferência!'
     }
   ];
 
@@ -69,85 +70,125 @@ export default function QuizWidget() {
   const q = questions[currentQ];
 
   return (
-    <div style={{ background: '#081D33', border: '1px solid #1E3A5F', borderRadius: '14px', padding: '20px', color: '#FFFFFF' }}>
+    <div style={{
+      background: '#FFFFFF',
+      border: '1px solid #E2E8F0',
+      borderRadius: '16px',
+      padding: '20px 24px',
+      boxShadow: '0 4px 16px rgba(10, 52, 93, 0.05)',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '14px',
+      height: '100%'
+    }}>
       {!showResult ? (
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ fontSize: '0.88rem', color: '#64D9EF', fontWeight: '700' }}>
-              ❓ Quiz de Fixação: Questão {currentQ + 1} de {questions.length}
-            </span>
-            <span style={{ fontSize: '0.85rem', color: '#CBD5E1' }}>
-              Pontuação: {score} / {questions.length}
-            </span>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+              <span style={{ fontSize: '0.85rem', color: '#0E4E8A', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <HelpCircle size={16} /> Questão {currentQ + 1} de {questions.length}
+              </span>
+              <span style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: '600' }}>
+                Pontuação: <strong style={{ color: '#0A345D' }}>{score}</strong> / {questions.length}
+              </span>
+            </div>
+
+            <h4 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.05rem', margin: '0 0 12px 0', color: 'var(--infnet-dark-blue)' }}>
+              {q.question}
+            </h4>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+              {q.options.map((opt, idx) => {
+                const isSelected = selectedOpt === idx;
+                let bg = '#F8FAFC';
+                let border = '#CBD5E1';
+                let textColor = '#334155';
+
+                if (selectedOpt !== null) {
+                  if (opt.correct) {
+                    bg = '#F0FDF4';
+                    border = '#16A34A';
+                    textColor = '#15803D';
+                  } else if (isSelected) {
+                    bg = '#FEF2F2';
+                    border = '#DC2626';
+                    textColor = '#991B1B';
+                  }
+                }
+
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => handleSelect(idx)}
+                    style={{
+                      background: bg,
+                      border: `1.5px solid ${border}`,
+                      borderRadius: '8px',
+                      padding: '10px 14px',
+                      color: textColor,
+                      textAlign: 'left',
+                      fontSize: '0.86rem',
+                      fontWeight: isSelected || (selectedOpt !== null && opt.correct) ? '700' : '500',
+                      cursor: selectedOpt === null ? 'pointer' : 'default',
+                      transition: 'all 0.15s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <span>{opt.text}</span>
+                    {selectedOpt !== null && opt.correct && <CheckCircle2 size={16} color="#16A34A" />}
+                    {selectedOpt !== null && isSelected && !opt.correct && <XCircle size={16} color="#DC2626" />}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <h4 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.1rem', marginBottom: '14px', color: '#FFFFFF' }}>
-            {q.question}
-          </h4>
+          <div>
+            {selectedOpt !== null && (
+              <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', padding: '10px 14px', borderRadius: '8px', marginBottom: '10px' }}>
+                <div style={{ fontWeight: '800', color: '#0369A1', fontSize: '0.82rem', marginBottom: '2px' }}>
+                  EXPLICAÇÃO TÉCNICA:
+                </div>
+                <div style={{ fontSize: '0.82rem', color: '#1E293B', lineHeight: '1.4' }}>
+                  {q.explanation}
+                </div>
+              </div>
+            )}
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '14px' }}>
-            {q.options.map((opt, idx) => {
-              const isSelected = selectedOpt === idx;
-              let bg = '#041221';
-              let border = '#1E3A5F';
-
-              if (selectedOpt !== null) {
-                if (opt.correct) {
-                  bg = 'rgba(124, 179, 66, 0.2)';
-                  border = '#7CB342';
-                } else if (isSelected) {
-                  bg = 'rgba(255, 112, 67, 0.2)';
-                  border = '#FF7043';
-                }
-              }
-
-              return (
-                <button
-                  key={idx}
-                  onClick={() => handleSelect(idx)}
+            {selectedOpt !== null && (
+              <div style={{ textAlign: 'right' }}>
+                <button 
+                  onClick={handleNext}
                   style={{
-                    background: bg,
-                    border: `1.5px solid ${border}`,
-                    borderRadius: '8px',
-                    padding: '10px 14px',
+                    background: 'var(--infnet-dark-blue)',
                     color: '#FFFFFF',
-                    textAlign: 'left',
-                    fontSize: '0.88rem',
-                    cursor: selectedOpt === null ? 'pointer' : 'default',
-                    transition: 'all 0.15s ease'
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '8px 20px',
+                    fontWeight: '800',
+                    cursor: 'pointer',
+                    fontSize: '0.85rem',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px'
                   }}
                 >
-                  {opt.text}
+                  {currentQ < questions.length - 1 ? 'Próxima Questão' : 'Ver Resultado Final'}
+                  <ArrowRight size={14} />
                 </button>
-              );
-            })}
+              </div>
+            )}
           </div>
-
-          {selectedOpt !== null && (
-            <div style={{ background: '#041221', padding: '12px', borderRadius: '8px', border: '1px solid #1E293B', marginBottom: '12px' }}>
-              <div style={{ fontWeight: '700', color: '#64D9EF', fontSize: '0.85rem', marginBottom: '2px' }}>💡 Explicação:</div>
-              <div style={{ fontSize: '0.82rem', color: '#CBD5E1' }}>{q.explanation}</div>
-            </div>
-          )}
-
-          {selectedOpt !== null && (
-            <div style={{ textAlign: 'right' }}>
-              <button 
-                onClick={handleNext}
-                style={{ background: '#1BB5D8', color: '#0A345D', border: 'none', borderRadius: '20px', padding: '8px 20px', fontWeight: '800', cursor: 'pointer', fontSize: '0.85rem' }}
-              >
-                {currentQ < questions.length - 1 ? 'Próxima Questão ➔' : 'Ver Resultado Final 🏆'}
-              </button>
-            </div>
-          )}
         </div>
       ) : (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🏆</div>
-          <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.4rem', color: '#64D9EF', marginBottom: '6px' }}>
-            Quiz Concluído!
+        <div style={{ textAlign: 'center', padding: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '12px' }}>
+          <Award size={48} color="#0284C7" />
+          <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.4rem', color: 'var(--infnet-dark-blue)', margin: 0 }}>
+            Quiz de Fixação Concluído!
           </h3>
-          <p style={{ fontSize: '1.1rem', color: '#FFFFFF', marginBottom: '14px' }}>
+          <p style={{ fontSize: '1.05rem', color: '#475569', margin: 0 }}>
             Você acertou <strong>{score}</strong> de <strong>{questions.length}</strong> questões ({Math.round((score / questions.length) * 100)}%).
           </p>
 
@@ -158,9 +199,22 @@ export default function QuizWidget() {
               setShowResult(false);
               setScore(0);
             }}
-            style={{ background: '#7CB342', color: '#FFF', border: 'none', borderRadius: '20px', padding: '8px 22px', fontWeight: '800', cursor: 'pointer', fontSize: '0.88rem' }}
+            style={{
+              background: 'var(--infnet-cyan)',
+              color: 'var(--infnet-dark-blue)',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '10px 24px',
+              fontWeight: '800',
+              cursor: 'pointer',
+              fontSize: '0.9rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              marginTop: '8px'
+            }}
           >
-            🔄 Tentar Novamente
+            <RotateCcw size={15} /> Tentar Novamente
           </button>
         </div>
       )}

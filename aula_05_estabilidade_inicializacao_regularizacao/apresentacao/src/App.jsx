@@ -5,10 +5,23 @@ import Footer from './components/Footer';
 import Controls from './components/Controls';
 import NotesDrawer from './components/NotesDrawer';
 import OverviewModal from './components/OverviewModal';
+import MathView from './components/MathView';
 import { getAssetUrl } from './utils/assetHelper';
 
 export default function App() {
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const getInitialSlideIndex = () => {
+    const params = new URLSearchParams(window.location.search);
+    const slideParam = params.get('slide');
+    if (slideParam) {
+      const parsed = parseInt(slideParam, 10) - 1;
+      if (!isNaN(parsed) && parsed >= 0 && parsed < slidesData.length) {
+        return parsed;
+      }
+    }
+    return 0;
+  };
+
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(getInitialSlideIndex);
   const [showNotes, setShowNotes] = useState(false);
   const [showOverview, setShowOverview] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -17,6 +30,12 @@ export default function App() {
   const totalSlides = slidesData.length;
   const slide = slidesData[currentSlideIndex];
   const containerRef = useRef(null);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('slide', (currentSlideIndex + 1).toString());
+    window.history.replaceState({}, '', url.toString());
+  }, [currentSlideIndex]);
 
   useEffect(() => {
     const handleFSChange = () => {
@@ -123,7 +142,7 @@ export default function App() {
       case 'roadmap':
         return (
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center' }}>
-            <div className="grid-5" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
+            <div className="grid-5" style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(slide.steps?.length || 4, 5)}, 1fr)`, gap: '16px' }}>
               {slide.steps?.map((step, idx) => (
                 <div key={idx} className="content-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div>
@@ -133,6 +152,31 @@ export default function App() {
                   <p className="card-text" style={{ fontSize: '0.92rem', color: '#64748B' }}>{step.desc}</p>
                 </div>
               ))}
+            </div>
+          </div>
+        );
+
+      case 'formula':
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', flex: 1, justifyContent: 'center' }}>
+            <div className="math-box" style={{ background: '#FFF', border: '2px solid var(--infnet-cyan)', boxShadow: 'var(--shadow-md)', padding: '24px' }}>
+              <MathView math={slide.formula} block={true} />
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(slide.variables?.length || 3, 4)}, 1fr)`, gap: '16px' }}>
+              {slide.variables?.map((v, idx) => {
+                const isLatex = v.name.includes('\\') || v.name.includes('_') || v.name.includes('^');
+                return (
+                  <div key={idx} className="content-card" style={{ padding: '20px' }}>
+                    <div style={{ fontFamily: 'Fira Code, monospace', fontWeight: '800', color: 'var(--infnet-cyan)', fontSize: '1.1rem', marginBottom: '8px' }}>
+                      {isLatex ? <MathView math={v.name} block={false} /> : v.name}
+                    </div>
+                    <div style={{ color: '#334155', fontSize: '0.98rem', lineHeight: '1.5' }}>
+                      {v.desc}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         );

@@ -1,7 +1,12 @@
 import React from 'react';
+import { SymmetryCollapseVisualizer, SymmetryBreakingVisualizer } from '../components/interactive/SymmetryVisuals';
 import WeightInitComparison from '../components/interactive/WeightInitComparison';
-import NormComparisonInteractive from '../components/interactive/NormComparisonInteractive';
+import CovariateShiftVisualizer from '../components/interactive/CovariateShiftVisualizer';
+import TensorNormGeometryVisualizer from '../components/interactive/TensorNormGeometryVisualizer';
+import TrainEvalModeVisualizer from '../components/interactive/TrainEvalModeVisualizer';
+import CoadaptationVisualizer from '../components/interactive/CoadaptationVisualizer';
 import DropoutAndSchedulerLab from '../components/interactive/DropoutAndSchedulerLab';
+import IrisCaseStudyVisualizer from '../components/interactive/IrisCaseStudyVisualizer';
 import QuizWidget from '../components/interactive/QuizWidget';
 
 export const slidesData = [
@@ -10,89 +15,53 @@ export const slidesData = [
     id: 1,
     type: 'title',
     title: 'Estabilidade de Treinamento: Inicializações, Normalizações e Regularização',
-    subtitle: 'Aula 04 — A Física Interna do Treinamento Estável em PyTorch',
+    subtitle: 'Aula 05 — A Física Interna do Treinamento Estável em PyTorch',
     instructor: 'Prof. Allan Spadini',
     course: 'Redes Neurais Profundas | Graduação Faculdade Infnet',
-    notes: `Olá a todos e sejam muito bem-vindos à nossa quarta aula de Redes Neurais Profundas!
+    notes: `Olá a todos e sejam muito bem-vindos à nossa quinta aula de Redes Neurais Profundas!
 
 Nas aulas anteriores, aprendemos a construir arquiteturas e estruturar pipelines de dados com Datasets e DataLoaders. Hoje, abriremos o capô da rede para entender a física interna do treinamento estável.
 
 Por que redes profundas muitas vezes não convergem ou travam em platôs? Como a inicialização incorreta de pesos pode matar o fluxo do gradiente logo na primeira época? Qual é a diferença matemática e prática entre BatchNorm1d e LayerNorm? E como o Inverted Dropout impede o sobreajuste e a co-adaptação de neurônios?
 
-Veremos esses conceitos de forma visual, intuitiva e prática, conectando diretamente com as exigências do Projeto 1 da nossa disciplina. Vamos começar!`
+Veremos esses conceitos de forma visual, intuitiva e prática, conectando os fundamentos teóricos com os laboratórios práticos da nossa disciplina. Vamos começar!`
   },
 
-  // Slide 2: Instructor
+  // Slide 2: Custom - Symmetry Collapse
   {
     id: 2,
-    type: 'instructor',
-    title: 'Apresentação do Professor',
-    subtitle: 'Conheça quem estará com você nesta jornada',
-    name: 'Allan Spadini',
-    role: 'Professor & Pesquisador em IA',
-    photo: '/allan_spadini.jpg',
-    highlights: [
-      { badge: 'FORMAÇÃO', title: 'Doutor em Geofísica', desc: 'Foco em modelagem quantitativa, álgebra linear e propagação de ondas.' },
-      { badge: 'ESPECIALIZAÇÃO', title: 'Ciência de Dados e IA', desc: 'Especialista em pipelines de Deep Learning e otimização numérica.' },
-      { badge: 'ATUAÇÃO', title: 'Pesquisador em Inteligência Artificial', desc: 'Desenvolvimento e arquitetura de redes neurais profundas.' }
-    ],
-    notes: `Meu nome é Allan Spadini. Minha trajetória combina métodos quantitativos e pesquisa em Inteligência Artificial. Hoje, vamos nos concentrar nos fatores que separam um modelo amador que diverge de uma rede neural profissional, estável e pronta para ser treinada em centenas de épocas.`
+    type: 'custom',
+    title: 'O Colapso de Simetria: O Desastre dos Pesos Nulos',
+    subtitle: 'Por que inicializar W = 0 e b = 0 reduz 1.000 neurônios a apenas 1',
+    component: <SymmetryCollapseVisualizer />,
+    notes: `Vejam com atenção o visual interativo na tela. Em regressão linear simples com uma reta y = wx + b, começar com w = 0 funciona sem problemas. Porém, em uma rede neural profunda com camadas densas, pesos zerados causam o infame Colapso de Simetria.
+
+Acompanhem os passos no simulador:
+No Passo 1, todas as sinapses da camada intermediária partem de zero.
+No Passo 2, realizamos o Forward Pass: para qualquer ponto de entrada (x₁, x₂), a combinação linear z = w₁x₁ + w₂x₂ dá sempre 0. A função de ativação, seja Sigmoid gerando 0.5 ou ReLU gerando 0, produz exatamente a mesma saída para h₁, h₂ e h₃. Todos os neurônios duplicam o mesmo sinal!
+No Passo 3, entra o Backward Pass: a derivada da perda em relação a cada peso depende da saída do neurônio e do gradiente retropropagado. Como todos os neurônios da camada calcularam o mesmo valor e têm as mesmas conexões de saída, todos recebem RIGOROSAMENTE o mesmo gradiente!
+No Passo 4, quando o otimizador aplica o gradiente descendente W ← W - η∇W, todos os pesos da camada são atualizados para um número idêntico. Eles nunca se diferenciam! Você poderia colocar 1.000 ou 10.000 neurônios nessa camada intermediária: a rede continuará agindo matematicamente como se tivesse apenas UM neurônio!`
   },
 
-  // Slide 3: Roadmap
+  // Slide 3: Custom - Symmetry Breaking
   {
     id: 3,
-    type: 'roadmap',
-    title: 'Roteiro & Objetivos da Aula',
-    subtitle: 'Cinco pilares da estabilidade em redes profundas',
-    steps: [
-      { num: '01', title: 'Simetria & Inicialização', desc: 'Por que pesos zerados falham e as soluções Xavier e He.' },
-      { num: '02', title: 'Covariate Shift', desc: 'A instabilidade da distribuição interna conforme camadas mudam.' },
-      { num: '03', title: 'BatchNorm vs LayerNorm', desc: 'Normalização ao longo do batch vs dentro da amostra.' },
-      { num: '04', title: 'Inverted Dropout', desc: 'Eliminação da co-adaptação e fechamento do gap de generalização.' },
-      { num: '05', title: 'Laboratório Iris & PyTorch', desc: 'Simulação na planilha e experimentos empíricos de convergência.' }
-    ],
-    notes: `Nosso roteiro de 90 minutos cobrirá os cinco pilares da estabilidade:
-Primeiro, a quebra de simetria e calibração de variância de pesos com Xavier e Kaiming He.
-Segundo, a compreensão do Internal Covariate Shift.
-Terceiro, o confronto técnico entre BatchNorm1d e LayerNorm.
-Quarto, o mecanismo do Inverted Dropout.
-E quinto, a exploração prática na planilha e no notebook com o dataset Iris.`
+    type: 'custom',
+    title: 'A Quebra de Simetria: Inicialização Calibrada',
+    subtitle: 'Como o ruído estocástico controlado viabiliza detectores especializados',
+    component: <SymmetryBreakingVisualizer />,
+    notes: `Agora observem a contrapartida: a Quebra de Simetria através de inicialização com pequenas perturbações aleatórias.
+
+No Passo 1, sorteamos pesos de uma distribuição gaussiana de média zero e variância controlada: alguns pesos são positivos, outros negativos, uns mais fortes e outros mais sutis.
+No Passo 2, o Forward Pass já é imediatamente diversificado: cada neurônio projeta as entradas sob um ângulo geométrico distinto. O neurônio h₁ dispara forte para uma característica, enquanto h₂ pode ficar inibido e h₃ foca em outro aspecto.
+No Passo 3, o Backward Pass retropropaga gradientes únicos para cada sinapse. Cada neurônio recebe uma 'ordem de ajuste' independente e especializada.
+E reparem no Passo 4 no diagrama à direita: no espaço de features 2D, cada neurônio traça uma reta de corte diferente. Ao combinarmos as 3 retas na camada de saída, a rede consegue fechar um triângulo ou polígono convexo, separando classes não-lineares como as espécies do dataset Iris!
+A inicialização aleatória quebra a simetria e destrava 100% do potencial representacional da sua arquitetura.`
   },
 
-  // Slide 4: Comparison - Weight Symmetry
+  // Slide 4: Formula - Xavier & He
   {
     id: 4,
-    type: 'comparison',
-    title: 'O Problema da Simetria Inicial',
-    subtitle: 'Por que inicializar pesos com zero impede o aprendizado?',
-    cardLeft: {
-      badge: 'PESOS NULOS (W = 0)',
-      title: 'Colapso de Simetria',
-      bullets: [
-        'Todos os neurônios da camada calculam exatamente a mesma saída.',
-        'No backward, todos recebem exatamente o mesmo gradiente.',
-        'Todos os neurônios são atualizados de forma idêntica a cada época.',
-        'A camada inteira se comporta como se tivesse apenas 1 único neurônio!'
-      ]
-    },
-    cardRight: {
-      badge: 'INICIALIZAÇÃO CALIBRADA',
-      title: 'Quebra de Simetria',
-      bullets: [
-        'Pesos amostrados de distribuições com variância controlada.',
-        'Cada neurônio responde a diferentes facetas e padrões dos dados.',
-        'Gradientes diversificados permitem especialização de features.',
-        'Preserva a magnitude do sinal sem explodir nem desvanecer.'
-      ]
-    },
-    notes: `Em modelos de regressão linear simples, começar com pesos zero funciona. Mas em redes neurais profundas, pesos zerados causam um desastre: o Colapso de Simetria.
-Como todos os neurônios recebem as mesmas entradas multiplicadas por zero, todos produzem a mesma ativação e recebem o mesmo gradiente no backward. Eles nunca se diferenciam, desperdiçando toda a capacidade da rede!`
-  },
-
-  // Slide 5: Formula - Xavier & He
-  {
-    id: 5,
     type: 'formula',
     title: 'A Matemática de Xavier e Kaiming He',
     subtitle: 'Calibrando a variância dos pesos para manter o fluxo de sinal estável',
@@ -108,138 +77,71 @@ Xavier Glorot provou em 2010 que para Tanh e Sigmoid, a variância ótima é 2 d
 Mais tarde, em 2015, Kaiming He notou que a ReLU joga fora todas as ativações negativas (50% do sinal!), dividindo a variância por 2. Por isso, a inicialização He multiplica a escala por 2/fan-in para restabelecer o equilíbrio energético da rede!`
   },
 
-  // Slide 6: Custom - WeightInitComparison
+  // Slide 5: Custom - WeightInitComparison
   {
-    id: 6,
+    id: 5,
     type: 'custom',
     title: 'Comparador Interativo de Inicialização de Pesos',
     subtitle: 'Veja a distribuição das ativações através de 5 camadas profundas',
     component: <WeightInitComparison />,
     notes: `Experimentem este simulador interativo na tela.
-Vejam o que acontece com uma inicialização aleatória ingênua: após 5 camadas, os sinais ou colapsam em zero (desvanecimento) ou saturam em extremos.
-Agora selecionem Xavier ou Kaiming He: a distribuição das ativações se mantém com formato saudável e variância preservada em todas as camadas!`
+Um ponto de atenção crucial: os números e barras na esquerda representam a VARIÂNCIA AMOSTRAL DAS ATIVAÇÕES Var(a), e NÃO o valor individual dos pesos. Os pesos em si — que vocês podem conferir na caixa de exemplos à direita — são variáveis aleatórias sem nenhuma ordem, flutuando livremente entre valores positivos e negativos com média zero.
+O que Xavier e Kaiming He garantem é que a variância estatística dessas ativações permaneça equilibrada em torno de 1.0 ao longo das camadas (com pequenas flutuações amostrais normais), impedindo que o sinal exploda exponencialmente para centenas como na inicialização padrão N(0, 1) ou colapse a zero.`
   },
 
-  // Slide 7: Roadmap - Covariate Shift
+  // Slide 6: Custom - Covariate Shift Visualizer
   {
-    id: 7,
-    type: 'roadmap',
+    id: 6,
+    type: 'custom',
     title: 'O Fenômeno do Internal Covariate Shift',
     subtitle: 'Por que treinar redes profundas sem normalização é como mirar em um alvo móvel',
-    steps: [
-      { num: '01', title: 'Atualização de Pesos', desc: 'A camada 1 atualiza seus pesos a cada mini-batch para reduzir o erro.' },
-      { num: '02', title: 'Mudança de Distribuição', desc: 'As saídas da camada 1 mudam de média e escala radicalmente de uma época para outra.' },
-      { num: '03', title: 'Desestabilização', desc: 'A camada 2 precisa se readaptar continuamente a entradas imprevisíveis.' },
-      { num: '04', title: 'Solução: Normalização', desc: 'Fixar média em 0 e desvio em 1 entre as camadas traz estabilidade imediata.' }
-    ],
+    component: <CovariateShiftVisualizer />,
     notes: `O conceito de Internal Covariate Shift descreve como a distribuição das entradas de uma camada profunda oscila continuamente enquanto as camadas anteriores estão aprendendo.
-É como tentar chutar uma bola para o gol enquanto o goleiro e as traves estão se movendo continuamente! Camadas de normalização como BatchNorm e LayerNorm 'ancoram' as traves no lugar.`
+Vejam a demonstração interativa: na Etapa 1 e 2, observem a curva em vermelho se deslocando de época para época. A média salta de -1.8 para +4.2 e a variância se alarga. A camada seguinte nunca consegue consolidar seu aprendizado porque o chão sob os pés dela está sempre se movendo!
+Na Etapa 3 e 4, ativamos a normalização: a curva é ancorada rigidamente em média 0 e desvio 1. Em seguida, os parâmetros aprendíveis gama (escala) e beta (deslocamento) devolvem flexibilidade representacional para a rede, garantindo convergência estável e muito mais rápida.`
   },
 
-  // Slide 8: Comparison - BatchNorm vs LayerNorm
+  // Slide 7: Custom - TensorNormGeometryVisualizer
+  {
+    id: 7,
+    type: 'custom',
+    title: 'BatchNorm1d vs. LayerNorm: Geometria dos Tensores',
+    subtitle: 'Duas formas complementares de fatiar o tensor 2D [N Amostras × C Features]',
+    component: <TensorNormGeometryVisualizer />,
+    notes: `Prestem atenção na diferença geométrica fundamental entre as duas técnicas:
+O BatchNorm1d faz um corte 'VERTICAL': ele pega uma mesma feature e calcula a média e desvio ao longo de todas as amostras do mini-batch. Por isso, o BatchNorm depende de um batch_size razoável (≥ 32) e precisa calcular médias móveis (running_mean) para usar na hora do teste.
+Já o LayerNorm faz um corte 'HORIZONTAL': ele pega UMA única amostra isolada e calcula a média e desvio ao longo de todos os seus neurônios. Por isso o LayerNorm funciona perfeitamente mesmo com Batch Size = 1 e não precisa de running stats! É a escolha padrão absoluta em Transformers, processamento de linguagem e séries temporais.`
+  },
+
+  // Slide 8: Custom - TrainEvalModeVisualizer
   {
     id: 8,
-    type: 'comparison',
-    title: 'BatchNorm1d vs. LayerNorm',
-    subtitle: 'Duas geometrias distintas de normalização no espaço de tensores',
-    cardLeft: {
-      badge: 'BATCHNORM1D (AO LONGO DO BATCH)',
-      title: 'Média sobre o Eixo N (Batch)',
-      bullets: [
-        'Normaliza cada feature isoladamente através das amostras do batch.',
-        'Depende de batch_size representativo (ideal ≥ 32).',
-        'Calcula running_mean e running_var durante o treino.',
-        'Introduz leve regularização por ruído amostral do mini-batch.'
-      ]
-    },
-    cardRight: {
-      badge: 'LAYERNORM (AO LONGO DA CAMADA)',
-      title: 'Média sobre o Eixo C (Features)',
-      bullets: [
-        'Normaliza todas as features de UMA única amostra independentemente.',
-        'Comportamento idêntico seja batch_size = 1 ou 1000.',
-        'Padrão em Processamento de Linguagem Natural, Transformers e Séries.',
-        'Não depende de estatísticas móveis acumuladas.'
-      ]
-    },
-    notes: `Prestem atenção na diferença geométrica:
-O BatchNorm calcula a média 'vertical': pega a mesma feature e calcula a média ao longo de todas as amostras do mini-batch.
-O LayerNorm calcula a média 'horizontal': pega uma amostra isolada e calcula a média de todos os neurônios daquela camada. Por isso o LayerNorm funciona até mesmo para um único exemplo de teste!`
+    type: 'custom',
+    title: 'O Modo Crucial: model.train() vs model.eval()',
+    subtitle: 'A alternância de estado que previne os maiores bugs silenciosos em PyTorch',
+    component: <TrainEvalModeVisualizer />,
+    notes: `Esta é uma das fontes de bugs mais silenciosas e catastróficas em PyTorch.
+Clique no botão 'model.train()' e depois em 'model.eval()':
+No modo treino (train), o BatchNorm calcula médias do lote atual e atualiza running stats, enquanto o Dropout sorteia uma máscara Bernoulli apagando metade dos neurônios estocasticamente.
+No modo avaliação (eval), o BatchNorm congela suas estatísticas móveis e o Dropout é COMPLETAMENTE DESLIGADO, passando o sinal intacto (y = x).
+Se você esquecer de chamar model.eval() antes do teste, suas predições serão aleatórias porque o Dropout continuará apagando neurônios a cada clique!`
   },
 
-  // Slide 9: Custom - NormComparisonInteractive
+  // Slide 9: Custom - CoadaptationVisualizer
   {
     id: 9,
     type: 'custom',
-    title: 'Visualizador Interativo: Geometria das Normalizações',
-    subtitle: 'Explore visualmente a direção de corte dos tensores 2D e 3D',
-    component: <NormComparisonInteractive />,
-    notes: `Utilizem o visualizador interativo para alternar entre BatchNorm e LayerNorm.
-Observem os planos destacados: no BatchNorm, a lâmina de corte fatia ao longo da dimensão N (amostras). No LayerNorm, a lâmina corta ao longo da dimensão C (canais/features).`
+    title: 'O Que é Co-adaptação de Neurônios?',
+    subtitle: 'Como o sobreajuste surge em um Perceptron Multicamadas (MLP)',
+    component: <CoadaptationVisualizer />,
+    notes: `Vejam na tela a arquitetura completa de um Perceptron de Múltiplas Camadas (MLP) com entradas, duas camadas ocultas densas e saída.
+Na Aba 1, observem o fenômeno da Co-adaptação entre camadas: se um neurônio da Camada 1 comete um erro sistemático respondendo a um ruído do treino, os neurônios da Camada 2 ajustam suas sinapses para anular e mascarar exatamente esse erro. A rede cria uma teia frágil de dependência mútua entre camadas que decora o conjunto de treino, mas quebra no teste.
+Agora cliquem na Aba 2 para ver o Dropout em ação nas múltiplas camadas: cliquem no botão de sortear nova sub-rede. Notem como a cada passo, diferentes neurônios da Camada 1 e da Camada 2 são desligados. Como a Camada 2 nunca sabe qual neurônio da Camada 1 estará presente, nenhum neurônio pode depender do colega! Cada unidade é forçada a extrair características robustas e autônomas. Além disso, essa rede com dropout equivale a treinar um comitê de até 2^(5+4) = 512 sub-redes distintas compartilhando parâmetros!`
   },
 
-  // Slide 10: Comparison - Train vs Eval in BatchNorm
+  // Slide 10: Formula - Inverted Dropout
   {
     id: 10,
-    type: 'comparison',
-    title: 'O Modo Crucial: model.train() vs model.eval()',
-    subtitle: 'O perigo de esquecer a chave de modo ao avaliar o modelo',
-    cardLeft: {
-      badge: 'MODO TREINO: model.train()',
-      title: 'Estatísticas do Mini-Batch',
-      bullets: [
-        'Média e variância calculadas sobre as amostras do lote atual.',
-        'Parâmetros running_mean e running_var são atualizados por média móvel.',
-        'Dropout está ATIVO, desligando neurônios estocasticamente.'
-      ]
-    },
-    cardRight: {
-      badge: 'MODO AVALIAÇÃO: model.eval()',
-      title: 'Estatísticas Congeladas',
-      bullets: [
-        'Usa running_mean e running_var aprendidos durante o treino.',
-        'Dropout é DESATIVADO (todos os neurônios operam a 100%).',
-        'Garante predições determinísticas e idênticas para a mesma entrada.'
-      ]
-    },
-    notes: `Esta é uma das fontes de bugs mais silenciosas em PyTorch:
-Se você esquecer de chamar model.eval() antes do conjunto de teste, o BatchNorm tentará calcular a média do batch do teste (ou pior, quebrará se tiver só 1 amostra), e o Dropout continuará apagando neurônios!
-Lembrem-se: antes de validar ou testar, sempre invoquem model.eval() e com torch.no_grad().`
-  },
-
-  // Slide 11: Comparison - Overfitting & Co-adaptation
-  {
-    id: 11,
-    type: 'comparison',
-    title: 'O Que é Co-adaptação de Neurônios?',
-    subtitle: 'Como o sobreajuste surge quando neurônios criam dependências mútuas',
-    cardLeft: {
-      badge: 'REDE SEM REGULARIZAÇÃO',
-      title: 'Neurônios Co-dependentes',
-      bullets: [
-        'Um neurônio comete um erro sistemático para certo padrão.',
-        'Neurônios vizinhos aprendem a compensar exatamente esse erro.',
-        'A rede decora ruídos específicos do conjunto de treino.',
-        'Gera alto gap entre loss de treino baixa e loss de validação alta.'
-      ]
-    },
-    cardRight: {
-      badge: 'REDE COM DROPOUT',
-      title: 'Neurônios Autônomos',
-      bullets: [
-        'A cada passo, uma fração p dos neurônios é desligada aleatoriamente.',
-        'Nenhum neurônio pode confiar na presença do seu vizinho.',
-        'Cada neurônio é forçado a aprender características robustas e úteis.',
-        'Equivale ao treinamento conjunto de um comitê gigante de sub-redes.'
-      ]
-    },
-    notes: `Quando uma rede neural treina sem regularização, certos neurônios tornam-se dependentes de outros: se um neurônio produz um pico espúrio, outro neurônio aprende a subtrair aquele pico. Eles formam uma dependência frágil chamada co-adaptação.
-O Dropout quebra essa camaradagem: ao apagar aleatoriamente neurônios a cada batch, cada unidade é forçada a ser autônoma e aprender padrões verdadeiros do dado!`
-  },
-
-  // Slide 12: Formula - Inverted Dropout
-  {
-    id: 12,
     type: 'formula',
     title: 'A Matemática do Inverted Dropout',
     subtitle: 'Por que o PyTorch reescala os sinais durante o treinamento',
@@ -255,86 +157,42 @@ O PyTorch adota o Inverted Dropout: durante o treino, os neurônios que sobreviv
 Assim, o valor esperado da soma se mantém inalterado e, na hora da inferência em produção, não precisamos fazer absolutamente nenhuma operação extra!`
   },
 
-  // Slide 13: Custom - DropoutAndSchedulerLab
+  // Slide 11: Custom - DropoutAndSchedulerLab
   {
-    id: 13,
+    id: 11,
     type: 'custom',
     title: 'Laboratório Interativo: Dropout & Generalização',
     subtitle: 'Ajuste a taxa de dropout e observe o fechamento do gap de overfitting',
     component: <DropoutAndSchedulerLab />,
-    notes: `Neste laboratório interativo, observem as curvas de perda de treino e validação.
-Com Dropout = 0.0, notem como a perda de treino despenca enquanto a validação começa a subir (overfitting clássico).
-Aumentem o Dropout para 0.3 ou 0.4: o treino sofre um pouco mais, mas a perda de validação converge para um valor muito mais baixo, fechando o gap de generalização!`
+    notes: `Neste laboratório interativo, arrastem o slider de taxa de dropout:
+Com p = 0.00, notem a curva azul de treino despencando enquanto a curva tracejada de validação começa a subir: overfitting clássico e gap aberto.
+Ajustem para p = 0.30 ou 0.40: vejam como as duas curvas convergem juntas para patamares saudáveis, fechando o gap de generalização.
+Se exagerarem para p = 0.70, verão o underfitting: a rede perde capacidade de aprendizado e ambas as perdas ficam altas.`
   },
 
-  // Slide 14: Comparison - Practical Iris Study
+  // Slide 12: Custom - IrisCaseStudyVisualizer
   {
-    id: 14,
-    type: 'comparison',
+    id: 12,
+    type: 'custom',
     title: 'Estudo de Caso: Classificação no Dataset Iris',
-    subtitle: 'Validando o impacto de ativações e estabilização na planilha e em código',
-    cardLeft: {
-      badge: 'PLANILHA SEM CÓDIGO',
-      title: 'simulacao_mlp_iris.xlsx',
-      bullets: [
-        'Ajuste de pesos em 3 camadas densas com entradas de pétalas e sépalas.',
-        'Observação manual da fronteira de decisão entre espécies.',
-        'Constatação visual da incapacidade de retas simples separarem classes não-lineares.'
-      ]
-    },
-    cardRight: {
-      badge: 'EXPERIMENTOS EM PYTORCH',
-      title: 'aula_04_estabilidade.ipynb',
-      bullets: [
-        'Comparativo de curvas de loss: Sem Norm vs BatchNorm vs LayerNorm.',
-        'Comparativo de inicializações: Padrão vs Xavier vs Kaiming He.',
-        'Rastreamento empírico da variância de gradientes em cada época.'
-      ]
-    },
-    notes: `Reunimos a intuição manual e o rigor do código:
-Na planilha simulacao_mlp_iris.xlsx, vocês podem inspecionar cada multiplicação matricial de uma MLP para flores de Iris sem escrever uma linha de código.
-E no notebook prático, executamos o comparativo sistemático registrando o ganho real de acurácia com Kaiming He e BatchNorm!`
+    subtitle: 'Comparando o impacto da estabilização na planilha e em código PyTorch',
+    component: <IrisCaseStudyVisualizer />,
+    notes: `Neste estudo de caso prático, unimos a planilha sem código ao rigor do notebook:
+Na aba de Experimentos PyTorch, cliquem nos 3 botões para comparar as curvas de loss reais:
+Sem normalização, a rede oscila e estagna com 86% de acurácia.
+Com BatchNorm1d, a convergência é abrupta e a acurácia salta para 96%.
+E combinando BatchNorm com Dropout de 0.3, atingimos 98.3% de acerto com generalização perfeita!
+E na aba da Planilha simulacao_mlp_iris.xlsx, vocês podem inspecionar cada multiplicação matricial de uma MLP para flores de Iris sem escrever uma linha de código.`
   },
 
-  // Slide 15: Custom - Quiz
+  // Slide 13: Custom - Quiz
   {
-    id: 15,
+    id: 13,
     type: 'custom',
     title: 'Quiz de Fixação: Estabilidade e Regularização',
     subtitle: 'Teste seus conhecimentos sobre simetria de pesos, BatchNorm e Dropout',
     component: <QuizWidget />,
     notes: `Hora de verificar o domínio dos conceitos de hoje!
 Respondam às perguntas interativas sobre a escolha entre Xavier e He, a operação de model.eval() com BatchNorm e a função do Inverted Dropout.`
-  },
-
-  // Slide 16: Roadmap - Synthesis & Project 1
-  {
-    id: 16,
-    type: 'roadmap',
-    title: 'Síntese da Aula & Requisitos do Projeto 1',
-    subtitle: 'Como aplicar a estabilidade na entrega do seu trabalho prático',
-    steps: [
-      { num: '01', title: 'Inicialização Justificada', desc: 'Comparar formalmente pesos padrão vs Kaiming/Xavier no relatório.' },
-      { num: '02', title: 'Normalização Comparada', desc: 'Plotar curvas de loss comparando rede sem normalização vs BatchNorm vs LayerNorm.' },
-      { num: '03', title: 'Dropout Calibrado', desc: 'Testar taxas de dropout (ex: 0.2 a 0.5) para controlar o gap treino/validação.' },
-      { num: '04', title: 'Controle de Modos', desc: 'Garantir uso estrito de model.train() e model.eval() no loop de treinamento.' }
-    ],
-    notes: `Lembrem-se da rubrica do Projeto 1:
-A estabilidade não é um detalhe estético; é um requisito formal avaliado. Vocês precisarão documentar em gráficos o impacto da inicialização e a diferença no comportamento das curvas de loss com BatchNorm e Dropout.`
-  },
-
-  // Slide 17: Next Steps
-  {
-    id: 17,
-    type: 'roadmap',
-    title: 'Próximos Passos: Aula 05',
-    subtitle: 'Otimização Avançada, Diagnóstico de Gradientes e TensorBoard',
-    steps: [
-      { num: '01', title: 'Além do SGD', desc: 'Momentum, RMSprop, Adam e AdamW com weight decay desacoplado.' },
-      { num: '02', title: 'Learning Rate Schedulers', desc: 'StepLR, Cosine Annealing e decaimento em platô.' },
-      { num: '03', title: 'Gradient Norms', desc: 'Diagnóstico visual de Vanishing e Exploding Gradients com Gradient Clipping.' },
-      { num: '04', title: 'Monitoramento TensorBoard', desc: 'Painéis interativos em tempo real para curvas de loss e histogramas.' }
-    ],
-    notes: `Na próxima aula — Aula 05 —, fecharemos o ciclo do Projeto 1 explorando o motor de otimização: os algoritmos AdamW, agendadores de taxa de aprendizado, diagnóstico visual de gradientes com Gradient Clipping e a integração completa com o TensorBoard. Muito obrigado a todos e até a próxima!`
   }
 ];

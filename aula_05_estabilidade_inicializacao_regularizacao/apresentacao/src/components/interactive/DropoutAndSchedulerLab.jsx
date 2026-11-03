@@ -1,197 +1,246 @@
 import React, { useState } from 'react';
+import { Sliders, ShieldCheck, AlertTriangle, TrendingDown, RefreshCw, Zap } from 'lucide-react';
 
 export default function DropoutAndSchedulerLab() {
-  const [activeTab, setActiveTab] = useState('dropout'); // 'dropout' vs 'scheduler'
+  const [dropoutRate, setDropoutRate] = useState(0.3); // 0.0 to 0.7
   const [isTrainMode, setIsTrainMode] = useState(true);
-  const [droppedNodes, setDroppedNodes] = useState([false, true, false, true, false, false]);
-  const [lrStep, setLrStep] = useState(1);
+  const [seed, setSeed] = useState(0);
 
-  const toggleDropoutMask = () => {
-    // Random mask generator for 6 hidden neurons
-    const newMask = Array.from({ length: 6 }, () => Math.random() < 0.5);
-    setDroppedNodes(newMask);
+  // Calcula valores dinâmicos de Loss e gap com base em p
+  const getSimulatedCurves = () => {
+    // 10 épocas
+    const trainPoints = [];
+    const valPoints = [];
+
+    for (let e = 1; e <= 10; e++) {
+      // Treino decai
+      const t = 1.0 / (1 + e * (0.8 - dropoutRate * 0.4));
+      // Validação depende de dropout:
+      // se p = 0, overfitting forte (val sobe após época 4)
+      // se p = 0.3, converge suavemente junto com treino
+      // se p = 0.7, underfitting
+      let v;
+      if (dropoutRate < 0.15) {
+        v = (1.0 / (1 + e * 0.5)) + (e > 3 ? (e - 3) * 0.12 : 0);
+      } else if (dropoutRate <= 0.45) {
+        v = t + 0.04 + (Math.sin(e) * 0.02);
+      } else {
+        v = t + 0.25;
+      }
+
+      trainPoints.push(Math.max(0.02, t));
+      valPoints.push(Math.max(0.05, v));
+    }
+
+    return { trainPoints, valPoints };
   };
 
-  const getLrValue = () => {
-    if (lrStep === 1) return 0.01;
-    if (lrStep === 2) return 0.001;
-    if (lrStep === 3) return 0.0001;
-    return 0.00001;
+  const { trainPoints, valPoints } = getSimulatedCurves();
+  const finalTrain = trainPoints[trainPoints.length - 1];
+  const finalVal = valPoints[valPoints.length - 1];
+  const gap = finalVal - finalTrain;
+
+  // Estado dos 6 neurônios
+  const neurons = Array.from({ length: 6 }, (_, i) => {
+    if (!isTrainMode) return true; // eval mode: todos ativos
+    // train mode: desliga com prob p
+    const pseudoRand = Math.abs(Math.sin((seed + 1) * 7.3 + i * 4.9));
+    return pseudoRand >= dropoutRate;
+  });
+
+  const scaleFactor = dropoutRate < 1 ? (1 / (1 - dropoutRate)).toFixed(2) : '∞';
+
+  // SVG path builder
+  const toSvgPath = (points, width = 360, height = 150) => {
+    return points.map((p, idx) => {
+      const x = 30 + (idx / (points.length - 1)) * (width - 50);
+      const y = height - 20 - (p / 1.1) * (height - 40);
+      return `${idx === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${Math.max(10, y).toFixed(1)}`;
+    }).join(' ');
   };
 
   return (
-    <div style={{ background: '#081D33', border: '1px solid #1E3A5F', borderRadius: '14px', padding: '20px', color: '#FFFFFF' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+    <div style={{
+      background: '#FFFFFF',
+      border: '1px solid #E2E8F0',
+      borderRadius: '16px',
+      padding: '20px 24px',
+      boxShadow: '0 4px 16px rgba(10, 52, 93, 0.05)',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '14px',
+      height: '100%'
+    }}>
+      {/* Header with Slider and Mode Switch */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.2rem', color: '#64D9EF', margin: 0 }}>
-            🛡️ Laboratório: Regularização (Dropout) e LR Schedulers
+          <h3 style={{ margin: 0, color: 'var(--infnet-dark-blue)', fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Sliders size={22} color="var(--infnet-cyan)" /> Laboratório: Dropout & Fechamento do Gap de Generalização
           </h3>
-          <p style={{ fontSize: '0.85rem', color: '#94A3B8', margin: '2px 0 0 0' }}>
-            Simulação prática de Inverted Dropout e Decaimento de Taxa de Aprendizado
+          <p style={{ margin: '2px 0 0 0', fontSize: '0.82rem', color: '#64748B' }}>
+            Ajuste a probabilidade de descarte (p) e veja a resposta imediata nas curvas de loss
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button 
-            onClick={() => setActiveTab('dropout')}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button
+            onClick={() => setIsTrainMode(!isTrainMode)}
             style={{
-              background: activeTab === 'dropout' ? '#1BB5D8' : 'rgba(27, 181, 216, 0.15)',
-              color: activeTab === 'dropout' ? '#0A345D' : '#64D9EF',
-              border: '1px solid #1BB5D8',
-              borderRadius: '8px',
               padding: '6px 14px',
+              borderRadius: '8px',
+              border: 'none',
+              background: isTrainMode ? '#D84315' : '#16A34A',
+              color: '#FFFFFF',
               fontWeight: '800',
-              cursor: 'pointer',
-              fontSize: '0.85rem'
+              fontSize: '0.82rem',
+              cursor: 'pointer'
             }}
           >
-            1. Mecanismo de Dropout (p=0.5)
+            {isTrainMode ? 'Modo Treino (Ativo)' : 'Modo Eval (Desativado)'}
           </button>
-
-          <button 
-            onClick={() => setActiveTab('scheduler')}
-            style={{
-              background: activeTab === 'scheduler' ? '#FF7043' : 'rgba(255, 112, 67, 0.15)',
-              color: activeTab === 'scheduler' ? '#FFFFFF' : '#FF7043',
-              border: '1px solid #FF7043',
-              borderRadius: '8px',
-              padding: '6px 14px',
-              fontWeight: '800',
-              cursor: 'pointer',
-              fontSize: '0.85rem'
-            }}
-          >
-            2. LR Decay Schedule
-          </button>
+          {isTrainMode && (
+            <button
+              onClick={() => setSeed(prev => prev + 1)}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '8px',
+                border: '1px solid #CBD5E1',
+                background: '#F8FAFC',
+                color: '#0A345D',
+                fontWeight: '700',
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+            >
+              <RefreshCw size={13} /> Novo Lote
+            </button>
+          )}
         </div>
       </div>
 
-      {activeTab === 'dropout' ? (
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', background: '#041221', padding: '10px 14px', borderRadius: '8px' }}>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <button 
-                onClick={() => setIsTrainMode(!isTrainMode)}
-                style={{
-                  background: isTrainMode ? '#FF7043' : '#7CB342',
-                  color: '#FFF',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '6px 12px',
-                  fontWeight: '800',
-                  fontSize: '0.82rem',
-                  cursor: 'pointer'
-                }}
-              >
-                {isTrainMode ? 'Modo model.train() (Ativo)' : 'Modo model.eval() (Desativado)'}
-              </button>
-
-              {isTrainMode && (
-                <button 
-                  onClick={toggleDropoutMask}
-                  style={{ background: '#0E4E8A', color: '#FFF', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '0.82rem', cursor: 'pointer' }}
-                >
-                  🎲 Gerar Nova Máscara Estocástica
-                </button>
-              )}
-            </div>
-
-            <div style={{ fontSize: '0.82rem', color: '#CBD5E1' }}>
-              Fator de Escala (Inverted Dropout): <strong>{isTrainMode ? '1 / (1 - 0.5) = 2.0x' : '1.0x (Nenhum)'}</strong>
-            </div>
+      {/* Main Grid: Left = Interactive Curves; Right = Neurons & Diagnostics */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: '20px', flex: 1, alignItems: 'stretch' }}>
+        {/* Left: Dynamic Curves */}
+        <div style={{
+          background: '#F8FAFC',
+          border: '1px solid #CBD5E1',
+          borderRadius: '12px',
+          padding: '14px 18px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
+        }}>
+          {/* Slider */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <span style={{ fontSize: '0.84rem', fontWeight: '800', color: '#0A345D' }}>
+              Taxa de Dropout: <strong style={{ color: 'var(--infnet-cyan)' }}>p = {dropoutRate.toFixed(2)}</strong>
+            </span>
+            <span style={{ fontSize: '0.78rem', color: '#64748B', fontFamily: 'Fira Code, monospace' }}>
+              Escala Inverted: {isTrainMode ? `${scaleFactor}x` : '1.0x'}
+            </span>
           </div>
 
-          {/* Neural Net Layer Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '10px', marginBottom: '12px' }}>
-            {droppedNodes.map((isDropped, idx) => {
-              const activeInMode = isTrainMode ? !isDropped : true;
+          <input
+            type="range"
+            min="0.0"
+            max="0.7"
+            step="0.05"
+            value={dropoutRate}
+            onChange={(e) => setDropoutRate(parseFloat(e.target.value))}
+            style={{ width: '100%', cursor: 'pointer', marginBottom: '10px' }}
+          />
 
-              return (
-                <div 
-                  key={idx}
-                  style={{
-                    background: activeInMode ? 'rgba(27, 181, 216, 0.15)' : 'rgba(255, 112, 67, 0.15)',
-                    border: `2px solid ${activeInMode ? '#1BB5D8' : '#FF7043'}`,
-                    borderRadius: '10px',
-                    padding: '12px 8px',
-                    textAlign: 'center',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  <div style={{ fontSize: '1.2rem', marginBottom: '4px' }}>
-                    {activeInMode ? '⚡' : '❌'}
-                  </div>
-                  <div style={{ fontWeight: '700', fontSize: '0.82rem', color: activeInMode ? '#64D9EF' : '#FF7043' }}>
-                    Neurônio #{idx + 1}
-                  </div>
-                  <div style={{ fontSize: '0.72rem', color: '#94A3B8', marginTop: '4px' }}>
-                    {activeInMode ? (isTrainMode ? 'Ativo (2.0x)' : 'Ativo (1.0x)') : 'ZERADO (0.0)'}
-                  </div>
-                </div>
-              );
-            })}
+          {/* SVG Loss Curves */}
+          <div style={{ height: '140px', position: 'relative' }}>
+            <svg viewBox="0 0 360 140" style={{ width: '100%', height: '100%' }}>
+              <line x1="30" y1="120" x2="340" y2="120" stroke="#CBD5E1" strokeWidth="1.5" />
+              <line x1="30" y1="15" x2="30" y2="120" stroke="#CBD5E1" strokeWidth="1.5" />
+              <text x="340" y="132" textAnchor="end" fill="#64748B" fontSize="9">Épocas (1 → 10)</text>
+              <text x="25" y="18" textAnchor="end" fill="#64748B" fontSize="9">Loss</text>
+
+              {/* Train Loss (Blue) */}
+              <path d={toSvgPath(trainPoints, 360, 140)} fill="none" stroke="#0284C7" strokeWidth="2.5" />
+              {/* Val Loss (Orange/Green) */}
+              <path 
+                d={toSvgPath(valPoints, 360, 140)} 
+                fill="none" 
+                stroke={gap > 0.3 ? '#DC2626' : '#16A34A'} 
+                strokeWidth="2.5" 
+                strokeDasharray="4 2" 
+              />
+            </svg>
           </div>
 
-          <div style={{ fontSize: '0.82rem', color: '#CBD5E1', background: '#041221', padding: '10px', borderRadius: '8px' }}>
-            💡 <strong>Por que Inverted Dropout no PyTorch?</strong> Multiplicar por $\frac{1}{1-p}$ durante o treino garante que a soma esperada das ativações se mantenha idêntica no teste (`eval()`), eliminando a necessidade de alterar os pesos durante a inferência!
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', fontWeight: '700', marginTop: '6px' }}>
+            <span style={{ color: '#0284C7' }}>— Loss Treino: {finalTrain.toFixed(2)}</span>
+            <span style={{ color: gap > 0.3 ? '#DC2626' : '#16A34A' }}>
+              --- Loss Validação: {finalVal.toFixed(2)} ({gap > 0.3 ? 'Overfitting Alto!' : 'Gap Fechado ✓'})
+            </span>
           </div>
         </div>
-      ) : (
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', background: '#041221', padding: '10px 14px', borderRadius: '8px' }}>
-            <span style={{ fontSize: '0.85rem', color: '#CBD5E1' }}>
-              Taxa de Aprendizado Atual: <strong style={{ color: '#FF7043', fontFamily: 'Fira Code, monospace', fontSize: '1.05rem' }}>lr = {getLrValue()}</strong>
-            </span>
 
-            <div style={{ display: 'flex', gap: '6px' }}>
-              {[1, 2, 3, 4].map(step => (
-                <button 
-                  key={step}
-                  onClick={() => setLrStep(step)}
+        {/* Right: Neuron Grid & Diagnosis */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', justifyContent: 'space-between' }}>
+          {/* 6 Neurons visualization */}
+          <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '12px' }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#0A345D', marginBottom: '8px' }}>
+              Estado dos Neurônios Ocultos no Lote Atual:
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px' }}>
+              {neurons.map((active, i) => (
+                <div
+                  key={i}
                   style={{
-                    background: lrStep === step ? '#FF7043' : 'transparent',
-                    color: '#FFF',
-                    border: '1px solid #FF7043',
-                    borderRadius: '6px',
-                    padding: '4px 10px',
-                    fontSize: '0.8rem',
-                    cursor: 'pointer'
+                    background: active ? '#ECFDF5' : '#F1F5F9',
+                    border: `1.5px solid ${active ? '#10B981' : '#CBD5E1'}`,
+                    borderRadius: '8px',
+                    padding: '8px 4px',
+                    textAlign: 'center',
+                    transition: 'all 0.25s ease'
                   }}
                 >
-                  Fase {step}
-                </button>
+                  <div style={{ fontSize: '1.1rem' }}>{active ? '⚡' : '✕'}</div>
+                  <div style={{ fontSize: '0.7rem', fontWeight: '800', color: active ? '#047857' : '#94A3B8' }}>
+                    h{i + 1}
+                  </div>
+                  <div style={{ fontSize: '0.65rem', color: active ? '#065F46' : '#94A3B8' }}>
+                    {active ? `${scaleFactor}x` : '0.0'}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
-          {/* Loss Curve Graphic Representation */}
-          <div style={{ background: '#041221', padding: '16px', borderRadius: '10px', border: '1px solid #1E293B', marginBottom: '12px' }}>
-            <div style={{ fontSize: '0.8rem', color: '#94A3B8', marginBottom: '10px' }}>
-              Trajetória de Perda no Espaço de Parâmetros (Loss Bowl):
+          {/* Diagnostic Card */}
+          <div style={{
+            background: gap > 0.3 ? '#FEF2F2' : '#F0FDF4',
+            border: `1.5px solid ${gap > 0.3 ? '#FECACA' : '#BBF7D0'}`,
+            borderRadius: '12px',
+            padding: '12px 14px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+              {gap > 0.3 ? <AlertTriangle color="#DC2626" size={18} /> : <ShieldCheck color="#16A34A" size={18} />}
+              <strong style={{ fontSize: '0.88rem', color: gap > 0.3 ? '#991B1B' : '#166534' }}>
+                {dropoutRate < 0.15 
+                  ? 'p muito baixo (Overfitting)' 
+                  : dropoutRate <= 0.45 
+                  ? 'p ideal (Equilíbrio & Generalização)' 
+                  : 'p muito alto (Underfitting)'}
+              </strong>
             </div>
-            
-            <div style={{ height: '90px', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="100%" height="80" viewBox="0 0 400 80" fill="none">
-                <path d="M 10 10 Q 200 90 390 10" stroke="#1E3A5F" strokeWidth="3" fill="none" />
-                <circle 
-                  cx={lrStep === 1 ? 60 : (lrStep === 2 ? 140 : (lrStep === 3 ? 185 : 200))} 
-                  cy={lrStep === 1 ? 32 : (lrStep === 2 ? 52 : (lrStep === 3 ? 62 : 64))} 
-                  r="9" 
-                  fill="#FF7043" 
-                  style={{ transition: 'all 0.4s ease' }}
-                />
-              </svg>
-            </div>
-          </div>
-
-          <div style={{ fontSize: '0.82rem', color: '#CBD5E1', background: '#041221', padding: '10px', borderRadius: '8px' }}>
-            {lrStep === 1 && '🚀 LR = 0.01 (Alta): Passos largos no início do treino para explorar rapidamente a superfície de perda.'}
-            {lrStep === 2 && '📉 LR = 0.001 (Média): Redução após plateau. O modelo entra no vale de convergência sem oscilar.'}
-            {lrStep === 3 && '🎯 LR = 0.0001 (Baixa): Ajuste fino dos pesos. Aproximação precisa do mínimo global.'}
-            {lrStep === 4 && '✨ LR = 0.00001 (Mínimo): Convergência perfeita travada no fundo do vale de perda!'}
+            <p style={{ margin: 0, fontSize: '0.8rem', color: '#334155', lineHeight: '1.4' }}>
+              {dropoutRate < 0.15 
+                ? 'Sem dropout suficiente, a rede decora o treino e a perda de validação volta a subir.'
+                : dropoutRate <= 0.45 
+                ? 'A rede aprende representações robustas e o gap entre treino e teste permanece mínimo.'
+                : 'Muitos neurônios desligados enfraquecem a capacidade da rede de aprender o problema.'}
+            </p>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

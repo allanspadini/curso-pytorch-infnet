@@ -1,4 +1,4 @@
-# Roteiro de Narração do Apresentador — Aula 04
+# Roteiro de Narração do Apresentador — Aula 05
 ## Estabilidade de Treinamento: Inicializações, Normalizações e Regularização
 
 **Duração da Aula Síncrona**: 1h30 (90 minutos)  
@@ -8,115 +8,107 @@
 ---
 
 ### Slide 1: Título & Abertura
-> "Olá a todos e sejam muito bem-vindos à nossa quarta aula de Redes Neurais Profundas!
+> "Olá a todos e sejam muito bem-vindos à nossa quinta aula de Redes Neurais Profundas!
 >
 > Nas aulas anteriores, aprendemos a construir arquiteturas e estruturar pipelines de dados com Datasets e DataLoaders. Hoje, abriremos o capô da rede para entender a física interna do treinamento estável.
 >
 > Por que redes profundas muitas vezes não convergem ou travam em platôs? Como a inicialização incorreta de pesos pode matar o fluxo do gradiente logo na primeira época? Qual é a diferença matemática e prática entre BatchNorm1d e LayerNorm? E como o Inverted Dropout impede o sobreajuste e a co-adaptação de neurônios?
 >
-> Veremos esses conceitos de forma visual, intuitiva e prática, conectando diretamente com as exigências do Projeto 1 da nossa disciplina. Vamos começar!"
+> Veremos esses conceitos de forma visual, intuitiva e prática, conectando os fundamentos teóricos com os laboratórios práticos da nossa disciplina. Vamos começar!"
 
 ---
 
-### Slide 2: Apresentação do Professor
-> "Meu nome é Allan Spadini. Minha trajetória combina métodos quantitativos e pesquisa em Inteligência Artificial. Hoje, vamos nos concentrar nos fatores que separam um modelo amador que diverge de uma rede neural profissional, estável e pronta para ser treinada em centenas de épocas."
+### Slide 2: O Colapso de Simetria: O Desastre dos Pesos Nulos
+> "Vejam com atenção o visual interativo na tela. Em regressão linear simples com uma reta y = wx + b, começar com w = 0 funciona sem problemas. Porém, em uma rede neural profunda com camadas densas, pesos zerados causam o infame Colapso de Simetria.
+>
+> Acompanhem os passos no simulador:
+> No Passo 1, todas as sinapses da camada intermediária partem de zero.
+> No Passo 2, realizamos o Forward Pass: para qualquer ponto de entrada (x₁, x₂), a combinação linear z = w₁x₁ + w₂x₂ dá sempre 0. A função de ativação, seja Sigmoid gerando 0.5 ou ReLU gerando 0, produz exatamente a mesma saída para h₁, h₂ e h₃. Todos os neurônios duplicam o mesmo sinal!
+> No Passo 3, entra o Backward Pass: a derivada da perda em relação a cada peso depende da saída do neurônio e do gradiente retropropagado. Como todos os neurônios da camada calcularam o mesmo valor e têm as mesmas conexões de saída, todos recebem RIGOROSAMENTE o mesmo gradiente!
+> No Passo 4, quando o otimizador aplica o gradiente descendente W ← W - η∇W, todos os pesos da camada são atualizados para um número idêntico. Eles nunca se diferenciam! Você poderia colocar 1.000 ou 10.000 neurônios nessa camada intermediária: a rede continuará agindo matematicamente como se tivesse apenas UM neurônio!"
 
 ---
 
-### Slide 3: Roteiro & Objetivos da Aula
-> "Nosso roteiro de 90 minutos cobrirá os cinco pilares da estabilidade:
-> Primeiro, a quebra de simetria e calibração de variância de pesos com Xavier e Kaiming He.
-> Segundo, a compreensão do Internal Covariate Shift.
-> Terceiro, o confronto técnico entre BatchNorm1d e LayerNorm.
-> Quarto, o mecanismo do Inverted Dropout.
-> E quinto, a exploração prática na planilha e no notebook com o dataset Iris."
+### Slide 3: A Quebra de Simetria: Inicialização Calibrada
+> "Agora observem a contrapartida: a Quebra de Simetria através de inicialização com pequenas perturbações aleatórias.
+>
+> No Passo 1, sorteamos pesos de uma distribuição gaussiana de média zero e variância controlada: alguns pesos são positivos, outros negativos, uns mais fortes e outros mais sutis.
+> No Passo 2, o Forward Pass já é imediatamente diversificado: cada neurônio projeta as entradas sob um ângulo geométrico distinto. O neurônio h₁ dispara forte para uma característica, enquanto h₂ pode ficar inibido e h₃ foca em outro aspecto.
+> No Passo 3, o Backward Pass retropropaga gradientes únicos para cada sinapse. Cada neurônio recebe uma 'ordem de ajuste' independente e especializada.
+> E reparem no Passo 4 no diagrama à direita: no espaço de features 2D, cada neurônio traça uma reta de corte diferente. Ao combinarmos as 3 retas na camada de saída, a rede consegue fechar um triângulo ou polígono convexo, separando classes não-lineares como as espécies do dataset Iris!
+> A inicialização aleatória quebra a simetria e destrava 100% do potencial representacional da sua arquitetura."
 
 ---
 
-### Slide 4: O Problema da Simetria Inicial
-> "Em modelos de regressão linear simples, começar com pesos zero funciona. Mas em redes neurais profundas, pesos zerados causam um desastre: o Colapso de Simetria.
-> Como todos os neurônios recebem as mesmas entradas multiplicadas por zero, todos produzem a mesma ativação e recebem o mesmo gradiente no backward. Eles nunca se diferenciam, desperdiçando toda a capacidade da rede!"
-
----
-
-### Slide 5: A Matemática de Xavier e Kaiming He
+### Slide 4: A Matemática de Xavier e Kaiming He
 > "Para que o sinal não desapareça nem exploda ao atravessar dezenas de camadas, a variância das saídas deve ser igual à variância das entradas.
 > Xavier Glorot provou em 2010 que para Tanh e Sigmoid, a variância ótima é 2 dividido pela soma de fan-in e fan-out.
 > Mais tarde, em 2015, Kaiming He notou que a ReLU joga fora todas as ativações negativas (50% do sinal!), dividindo a variância por 2. Por isso, a inicialização He multiplica a escala por 2/fan-in para restabelecer o equilíbrio energético da rede!"
 
 ---
 
-### Slide 6: Comparador Interativo de Inicialização de Pesos
+### Slide 5: Comparador Interativo de Inicialização de Pesos
 > "Experimentem este simulador interativo na tela.
-> Vejam o que acontece com uma inicialização aleatória ingênua: após 5 camadas, os sinais ou colapsam em zero (desvanecimento) ou saturam em extremos.
-> Agora selecionem Xavier ou Kaiming He: a distribuição das ativações se mantém com formato saudável e variância preservada em todas as camadas!"
+> Um ponto de atenção crucial: os números e barras na esquerda representam a VARIÂNCIA AMOSTRAL DAS ATIVAÇÕES Var(a), e NÃO o valor individual dos pesos. Os pesos em si — que vocês podem conferir na caixa de exemplos à direita — são variáveis aleatórias sem nenhuma ordem, flutuando livremente entre valores positivos e negativos com média zero.
+> O que Xavier e Kaiming He garantem é que a variância estatística dessas ativações permaneça equilibrada em torno de 1.0 ao longo das camadas (com pequenas flutuações amostrais normais), impedindo que o sinal exploda exponencialmente para centenas como na inicialização padrão N(0, 1) ou colapse a zero."
 
 ---
 
-### Slide 7: O Fenômeno do Internal Covariate Shift
+### Slide 6: O Fenômeno do Internal Covariate Shift
 > "O conceito de Internal Covariate Shift descreve como a distribuição das entradas de uma camada profunda oscila continuamente enquanto as camadas anteriores estão aprendendo.
-> É como tentar chutar uma bola para o gol enquanto o goleiro e as traves estão se movendo continuamente! Camadas de normalização como BatchNorm e LayerNorm 'ancoram' as traves no lugar."
+> Vejam a demonstração interativa: na Etapa 1 e 2, observem a curva em vermelho se deslocando de época para época. A média salta de -1.8 para +4.2 e a variância se alarga. A camada seguinte nunca consegue consolidar seu aprendizado porque o chão sob os pés dela está sempre se movendo!
+> Na Etapa 3 e 4, ativamos a normalização: a curva é ancorada rigidamente em média 0 e desvio 1. Em seguida, os parâmetros aprendíveis gama (escala) e beta (deslocamento) devolvem flexibilidade representacional para a rede, garantindo convergência estável e muito mais rápida."
 
 ---
 
-### Slide 8: BatchNorm1d vs. LayerNorm
-> "Prestem atenção na diferença geométrica:
-> O BatchNorm calcula a média 'vertical': pega a mesma feature e calcula a média ao longo de todas as amostras do mini-batch.
-> O LayerNorm calcula a média 'horizontal': pega uma amostra isolada e calcula a média de todos os neurônios daquela camada. Por isso o LayerNorm funciona até mesmo para um único exemplo de teste!"
+### Slide 7: BatchNorm1d vs. LayerNorm: Geometria dos Tensores
+> "Prestem atenção na diferença geométrica fundamental entre as duas técnicas:
+> O BatchNorm1d faz um corte 'VERTICAL': ele pega uma mesma feature e calcula a média e desvio ao longo de todas as amostras do mini-batch. Por isso, o BatchNorm depende de um batch_size razoável (≥ 32) e precisa calcular médias móveis (running_mean) para usar na hora do teste.
+> Já o LayerNorm faz um corte 'HORIZONTAL': ele pega UMA única amostra isolada e calcula a média e desvio ao longo de todos os seus neurônios. Por isso o LayerNorm funciona perfeitamente mesmo com Batch Size = 1 e não precisa de running stats! É a escolha padrão absoluta em Transformers, processamento de linguagem e séries temporais."
 
 ---
 
-### Slide 9: Visualizador Interativo: Geometria das Normalizações
-> "Utilizem o visualizador interativo para alternar entre BatchNorm e LayerNorm.
-> Observem os planos destacados: no BatchNorm, a lâmina de corte fatia ao longo da dimensão N (amostras). No LayerNorm, a lâmina corta ao longo da dimensão C (canais/features)."
+### Slide 8: O Modo Crucial: model.train() vs model.eval()
+> "Esta é uma das fontes de bugs mais silenciosas e catastróficas em PyTorch.
+> Clique no botão 'model.train()' e depois em 'model.eval()':
+> No modo treino (train), o BatchNorm calcula médias do lote atual e atualiza running stats, enquanto o Dropout sorteia uma máscara Bernoulli apagando metade dos neurônios estocasticamente.
+> No modo avaliação (eval), o BatchNorm congela suas estatísticas móveis e o Dropout é COMPLETAMENTE DESLIGADO, passando o sinal intacto (y = x).
+> Se você esquecer de chamar model.eval() antes do teste, suas predições serão aleatórias porque o Dropout continuará apagando neurônios a cada clique!"
 
 ---
 
-### Slide 10: O Modo Crucial: model.train() vs model.eval()
-> "Esta é uma das fontes de bugs mais silenciosas em PyTorch:
-> Se você esquecer de chamar `model.eval()` antes do conjunto de teste, o BatchNorm tentará calcular a média do batch do teste (ou pior, quebrará se tiver só 1 amostra), e o Dropout continuará apagando neurônios!
-> Lembrem-se: antes de validar ou testar, sempre invoquem `model.eval()` e usem o bloco `with torch.no_grad():`."
+### Slide 9: O Que é Co-adaptação de Neurônios?
+> "Vejam na tela a arquitetura completa de um Perceptron de Múltiplas Camadas (MLP) com entradas, duas camadas ocultas densas e saída.
+> Na Aba 1, observem o fenômeno da Co-adaptação entre camadas: se um neurônio da Camada 1 comete um erro sistemático respondendo a um ruído do treino, os neurônios da Camada 2 ajustam suas sinapses para anular e mascarar exatamente esse erro. A rede cria uma teia frágil de dependência mútua entre camadas que decora o conjunto de treino, mas quebra no teste.
+> Agora cliquem na Aba 2 para ver o Dropout em ação nas múltiplas camadas: cliquem no botão de sortear nova sub-rede. Notem como a cada passo, diferentes neurônios da Camada 1 e da Camada 2 são desligados. Como a Camada 2 nunca sabe qual neurônio da Camada 1 estará presente, nenhum neurônio pode depender do colega! Cada unidade é forçada a extrair características robustas e autônomas. Além disso, essa rede com dropout equivale a treinar um comitê de até 2^(5+4) = 512 sub-redes distintas compartilhando parâmetros!"
 
 ---
 
-### Slide 11: O Que é Co-adaptação de Neurônios?
-> "Quando uma rede neural treina sem regularização, certos neurônios tornam-se dependentes de outros: se um neurônio produz um pico espúrio, outro neurônio aprende a subtrair aquele pico. Eles formam uma dependência frágil chamada co-adaptação.
-> O Dropout quebra essa camaradagem: ao apagar aleatoriamente neurônios a cada batch, cada unidade é forçada a ser autônoma e aprender padrões verdadeiros do dado!"
-
----
-
-### Slide 12: A Matemática do Inverted Dropout
-> "No Dropout tradicional proposto em 2012, no treino os neurônios eram desligados e no teste os pesos eram multiplicados por $(1-p)$.
-> O PyTorch adota o Inverted Dropout: durante o treino, os neurônios que sobrevivem são imediatamente multiplicados por $\frac{1}{1-p}$.
+### Slide 10: A Matemática do Inverted Dropout
+> "No Dropout tradicional proposto em 2012, no treino os neurônios eram desligados e no teste os pesos eram multiplicados por (1-p).
+> O PyTorch adota o Inverted Dropout: durante o treino, os neurônios que sobrevivem são imediatamente multiplicados por 1/(1-p).
 > Assim, o valor esperado da soma se mantém inalterado e, na hora da inferência em produção, não precisamos fazer absolutamente nenhuma operação extra!"
 
 ---
 
-### Slide 13: Laboratório Interativo: Dropout & Generalização
-> "Neste laboratório interativo, observem as curvas de perda de treino e validação.
-> Com Dropout = 0.0, notem como a perda de treino despenca enquanto a validação começa a subir (overfitting clássico).
-> Aumentem o Dropout para 0.3 ou 0.4: o treino sofre um pouco mais, mas a perda de validação converge para um valor muito mais baixo, fechando o gap de generalização!"
+### Slide 11: Laboratório Interativo: Dropout & Generalização
+> "Neste laboratório interativo, arrastem o slider de taxa de dropout:
+> Com p = 0.00, notem a curva azul de treino despencando enquanto a curva tracejada de validação começa a subir: overfitting clássico e gap aberto.
+> Ajustem para p = 0.30 ou 0.40: vejam como as duas curvas convergem juntas para patamares saudáveis, fechando o gap de generalização.
+> Se exagerarem para p = 0.70, verão o underfitting: a rede perde capacidade de aprendizado e ambas as perdas ficam altas."
 
 ---
 
-### Slide 14: Estudo de Caso: Classificação no Dataset Iris
-> "Reunimos a intuição manual e o rigor do código:
-> Na planilha `simulacao_mlp_iris.xlsx`, vocês podem inspecionar cada multiplicação matricial de uma MLP para flores de Iris sem escrever uma linha de código.
-> E no notebook prático, executamos o comparativo sistemático registrando o ganho real de acurácia com Kaiming He e BatchNorm!"
+### Slide 12: Estudo de Caso: Classificação no Dataset Iris
+> "Neste estudo de caso prático, unimos a planilha sem código ao rigor do notebook:
+> Na aba de Experimentos PyTorch, cliquem nos 3 botões para comparar as curvas de loss reais:
+> Sem normalização, a rede oscila e estagna com 86% de acurácia.
+> Com BatchNorm1d, a convergência é abrupta e a acurácia salta para 96%.
+> E combinando BatchNorm com Dropout de 0.3, atingimos 98.3% de acerto com generalização perfeita!
+> E na aba da Planilha simulacao_mlp_iris.xlsx, vocês podem inspecionar cada multiplicação matricial de uma MLP para flores de Iris sem escrever uma linha de código."
 
 ---
 
-### Slide 15: Quiz de Fixação: Estabilidade e Regularização
+### Slide 13: Quiz de Fixação: Estabilidade e Regularização
 > "Hora de verificar o domínio dos conceitos de hoje!
-> Respondam às perguntas interativas sobre a escolha entre Xavier e He, a operação de `model.eval()` com BatchNorm e a função do Inverted Dropout."
-
----
-
-### Slide 16: Síntese da Aula & Requisitos do Projeto 1
-> "Lembrem-se da rubrica do Projeto 1:
-> A estabilidade não é um detalhe estético; é um requisito formal avaliado. Vocês precisarão documentar em gráficos o impacto da inicialização e a diferença no comportamento das curvas de loss com BatchNorm e Dropout."
-
----
-
-### Slide 17: Próximos Passos: Aula 05
-> "Na próxima aula — Aula 05 —, fecharemos o ciclo do Projeto 1 explorando o motor de otimização: os algoritmos AdamW, agendadores de taxa de aprendizado, diagnóstico visual de gradientes com Gradient Clipping e a integração completa com o TensorBoard. Muito obrigado a todos e até a próxima!"
+> Respondam às perguntas interativas sobre a escolha entre Xavier e He, a operação de model.eval() com BatchNorm e a função do Inverted Dropout."

@@ -1,9 +1,9 @@
-# Plano de Aula - Aula 04: Estabilidade de Treinamento: Inicializações, Normalizações e Regularização
+# Plano de Aula - Aula 05: Estabilidade de Treinamento: Inicializações, Normalizações e Regularização
 
 **Tema**: Estabilidade de redes profundas no PyTorch, quebra de simetria de pesos, inicializações científicas (Xavier/Glorot vs He/Kaiming), normalização de ativações (`BatchNorm1d` vs `LayerNorm`), regularização com Inverted Dropout e simulação prática no dataset Iris.  
 **Duração da Aula Síncrona**: 1h30 (90 minutos)  
 **Modalidade**: Graduação EAD (Faculdade Infnet)  
-**Conexão com a Avaliação**: Requisito essencial do **Projeto 1: Pipeline MLP** (comparação de inicialização de pesos, BatchNorm vs LayerNorm e aplicação de Dropout).
+**Critério de Avaliação**: Avaliação formativa contínua baseada em frequência e participação ativa nas aulas síncronas e atividades práticas de laboratório (disciplina de graduação sem entrega de projeto somativo).
 
 ---
 
@@ -47,19 +47,26 @@ Ao final desta aula, o aluno será capaz de:
    - Exploração prática da planilha `simulacao_mlp_iris.xlsx`.
 
 4. **Bloco 4 (70–90 min) — Laboratório Prático no PyTorch**:
-   - Execução do notebook `aula_04_estabilidade_inicializacao_regularizacao.ipynb`.
-   - Comparação empírica das curvas de loss com pesos padrão vs Kaiming, e com/sem BatchNorm.
-   - Perguntas, síntese e conexão com a Aula 05 (Otimizadores e TensorBoard).
+   - Execução do notebook `aula_05_estabilidade_inicializacao_regularizacao.ipynb`.
+   - Classificação no dataset real do Kaggle (*Pima Indians Diabetes*).
+   - Divisão em Treino (70%), Validação (15%) e Teste Cego (15%).
+   - Comparação empírica das curvas de loss e acurácia: Modelo Base vs Modelo Robusto (com `BatchNorm1d`, `Dropout` e inicialização Kaiming He).
+   - Avaliação na partição de Teste Cego com matriz de confusão e simulação de inferência clínica.
+   - Perguntas, síntese e conexão com a Aula 06.
 
 ---
 
 ## 🛠️ Recursos Didáticos & Tecnologias
-- **Apresentação Interativa em React + Vite (`apresentacao/`):** 17 slides visuais sem sobrecarga textual, com cards conceituais e KaTeX.
-- **Simuladores Interativos:**
-  1. *WeightInitComparison*: Comparativo interativo entre pesos zerados, aleatórios ingênuos e Xavier/Kaiming.
-  2. *NormComparisonInteractive*: Visualização 3D da normalização ao longo do batch vs da camada.
-  3. *DropoutAndSchedulerLab*: Simulação da quebra de co-adaptação e controle do gap treino/teste.
-  4. *QuizWidget*: Perguntas de fixação conceitual imediata.
+- **Apresentação Interativa em React + Vite (`apresentacao/`):** 13 slides visuais sem sobrecarga textual, com simuladores interativos e KaTeX.
+- **Simuladores Interativos nos Slides:**
+  1. *SymmetryCollapseVisualizer* & *SymmetryBreakingVisualizer*: Visualização da quebra de simetria e colapso de gradientes.
+  2. *WeightInitComparison*: Comparativo interativo entre pesos zerados, aleatórios ingênuos e Xavier/Kaiming.
+  3. *CovariateShiftVisualizer*: Demonstração dinâmica da deriva de distribuição entre camadas.
+  4. *TensorNormGeometryVisualizer*: Visualização 3D da geometria dos tensores para BatchNorm vs LayerNorm.
+  5. *TrainEvalModeVisualizer*: Painel de comportamento em tempo de execução dos modos `train()` e `eval()`.
+  6. *CoadaptationVisualizer*: Rede profunda de 4 camadas demonstrando o Dropout e a quebra de co-adaptação.
+  7. *DropoutAndSchedulerLab*: Simulação da regularização e controle do gap treino/teste.
+  8. *QuizWidget*: Perguntas de fixação conceitual imediata.
 - **Planilha Interativa Sem Código:** `simulacao_mlp_iris.xlsx`.
-- **Modelos e Checkpoints Salvos:** `model_Sem_Normalizacao.pt`, `model_Com_BatchNorm1d.pt`, `model_Com_LayerNorm.pt`, etc.
-- **Jupyter Notebook Prático:** `aula_04_estabilidade_inicializacao_regularizacao.ipynb`.
+- **Modelos e Checkpoints Salvos:** `melhor_modelo_robusto.pt`.
+- **Jupyter Notebook Prático:** `aula_05_estabilidade_inicializacao_regularizacao.ipynb`.
