@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import Controls from './components/Controls';
 import NotesDrawer from './components/NotesDrawer';
 import OverviewModal from './components/OverviewModal';
+import MathView from './components/MathView';
 import { getAssetUrl } from './utils/assetHelper';
 
 export default function App() {
@@ -201,6 +202,33 @@ export default function App() {
                 ))}
               </ul>
             </div>
+          </div>
+        );
+
+      case 'formula':
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', height: '100%', justifyContent: 'center' }}>
+            <div className="math-box">
+              <MathView math={slideItem.formula} block={true} />
+            </div>
+
+            {slideItem.variables && (
+              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(slideItem.variables.length, 4)}, 1fr)`, gap: '14px' }}>
+                {slideItem.variables.map((v, idx) => {
+                  const isLatex = v.name.includes('\\') || v.name.includes('_') || v.name.includes('^') || v.name.includes('(');
+                  return (
+                    <div key={idx} className="content-card" style={{ padding: '14px', borderTop: '3px solid #1BB5D8' }}>
+                      <div style={{ fontFamily: 'Fira Code, monospace', fontWeight: '800', color: '#0A345D', fontSize: '0.98rem', marginBottom: '6px' }}>
+                        {isLatex ? <MathView math={v.name} block={false} /> : v.name}
+                      </div>
+                      <div style={{ color: '#334155', fontSize: '0.86rem', lineHeight: '1.45' }}>
+                        {v.desc}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         );
 

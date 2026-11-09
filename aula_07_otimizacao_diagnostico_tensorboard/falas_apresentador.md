@@ -1,4 +1,4 @@
-# Roteiro de Narração do Apresentador — Aula 05
+# Roteiro de Narração do Apresentador — Aula 07
 ## Otimização Avançada, Diagnóstico de Gradientes e TensorBoard
 
 **Duração da Aula Síncrona**: 1h30 (90 minutos)  
@@ -8,9 +8,9 @@
 ---
 
 ### Slide 1: Título & Abertura
-> "Olá a todos e sejam muito bem-vindos à nossa quinta aula de Redes Neurais Profundas!
+> "Olá a todos e sejam muito bem-vindos à nossa sétima aula de Redes Neurais Profundas!
 >
-> Hoje fecharemos o ciclo fundamental de modelagem densa e treinamento supervisionado, completando todos os requisitos de entrega do Projeto 1 da disciplina.
+> Hoje consolidaremos o motor de treinamento supervisionado do PyTorch, completando todos os requisitos de entrega do Projeto 1 da disciplina e preparando o terreno para treinar arquiteturas profundas de visão computacional.
 >
 > Exploraremos o coração do aprendizado de máquina: o otimizador. Entenderemos por que o SGD puro muitas vezes fica preso em ravinas, como o Momentum adiciona física e inércia à descida, e por que o AdamW se tornou o padrão absoluto da indústria ao desacoplar a penalização de norma L2.
 >
@@ -118,6 +118,6 @@
 
 ---
 
-### Slide 17: Próximos Passos: Aula 06
-> "Na nossa próxima aula — Aula 06 —, daremos início ao módulo de Visão Computacional!
-> Deixaremos os dados tabulares 1D e entraremos no mundo das imagens bidimensionais, descobrindo por que as redes convolucionais revolucionaram a visão artificial. Parabéns pelo excelente trabalho até aqui e nos vemos na Aula 06!"
+### Slide 17: Próximos Passos: Aula 08
+> "Na nossa próxima aula — Aula 08 —, uniremos a visão computacional da Aula 06 com o motor de otimização e diagnóstico de hoje!
+> Sairemos das imagens simples em preto e branco do MNIST e trabalharemos com fotos coloridas reais de alta resolução com 3 canais RGB, aumento de dados e diagnóstico de doenças agrícolas no dataset PlantVillage. Parabéns pelo excelente trabalho até aqui e nos vemos na Aula 08!"

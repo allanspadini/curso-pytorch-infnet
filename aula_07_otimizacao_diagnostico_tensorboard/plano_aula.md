@@ -1,4 +1,4 @@
-# Plano de Aula - Aula 05: Otimização Avançada, Diagnóstico de Gradientes e TensorBoard
+# Plano de Aula - Aula 07: Otimização Avançada, Diagnóstico de Gradientes e TensorBoard
 
 **Tema**: Motores de otimização em Deep Learning (SGD com Momentum, RMSprop, Adam e AdamW), agendamento de taxa de aprendizado (LR Schedulers), diagnóstico quantitativo de normas de gradientes ($\|\nabla L\|_2$), Gradient Clipping, persistência de checkpoints via `state_dict` e monitoramento visual profissional com o TensorBoard.  
 **Duração da Aula Síncrona**: 1h30 (90 minutos)  
@@ -55,7 +55,7 @@ Ao final desta aula, o aluno será capaz de:
 5. **Bloco 5 (80–90 min) — Introdução ao Optuna & Checklist do Projeto 1**:
    - Amostragem bayesiana de hiperparâmetros com TPE.
    - Checklist definitivo de entrega do Projeto 1.
-   - Síntese pedagógica e transição para o módulo de Visão Computacional (Aula 06).
+   - Síntese pedagógica e transição para CNNs Profundas em Imagens RGB do Mundo Real (Aula 08).
 
 ---
 
@@ -67,4 +67,4 @@ Ao final desta aula, o aluno será capaz de:
   3. *GradientFlowSimulator*: Inspeção do fluxo de gradientes camada por camada.
   4. *QuizWidget*: Perguntas de fixação sobre otimização e diagnóstico.
 - **Ferramentas de Engenharia:** PyTorch, TensorBoard (`SummaryWriter`), Optuna.
-- **Jupyter Notebook Prático:** `aula_05_otimizacao_diagnostico_tensorboard.ipynb`.
+- **Jupyter Notebook Prático:** `aula_07_otimizacao_diagnostico_tensorboard.ipynb`.

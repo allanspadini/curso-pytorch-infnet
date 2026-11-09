@@ -10,12 +10,12 @@ export const slidesData = [
     id: 1,
     type: 'title',
     title: 'Otimização Avançada, Diagnóstico de Gradientes e TensorBoard',
-    subtitle: 'Aula 05 — O Motor de Aprendizado, Monitoramento Visual e Checkpoints em PyTorch',
+    subtitle: 'Aula 07 — O Motor de Aprendizado, Monitoramento Visual e Checkpoints em PyTorch',
     instructor: 'Prof. Allan Spadini',
     course: 'Redes Neurais Profundas | Graduação Faculdade Infnet',
-    notes: `Olá a todos e sejam muito bem-vindos à nossa quinta aula de Redes Neurais Profundas!
+    notes: `Olá a todos e sejam muito bem-vindos à nossa sétima aula de Redes Neurais Profundas!
 
-Hoje fecharemos o ciclo fundamental de modelagem densa e treinamento supervisionado, completando todos os requisitos de entrega do Projeto 1 da disciplina.
+Hoje consolidaremos o motor de treinamento supervisionado do PyTorch, completando todos os requisitos de entrega do Projeto 1 da disciplina e preparando o terreno para treinar arquiteturas profundas de visão computacional.
 
 Exploraremos o coração do aprendizado de máquina: o otimizador. Entenderemos por que o SGD puro muitas vezes fica preso em ravinas, como o Momentum adiciona física e inércia à descida, e por que o AdamW se tornou o padrão absoluto da indústria ao desacoplar a penalização de norma L2.
 
@@ -310,15 +310,15 @@ Ao final desta aula, vocês têm exatamente todo o ferramental teórico e práti
   {
     id: 17,
     type: 'roadmap',
-    title: 'Próximos Passos: Aula 06',
-    subtitle: 'Entrando no Universo da Visão Computacional com Redes Convolucionais',
+    title: 'Próximos Passos: Aula 08',
+    subtitle: 'Convoluções Profundas para Imagens RGB do Mundo Real',
     steps: [
-      { num: '01', title: 'A Imagem Digital', desc: 'Pixels, canais e a representação de imagens como matrizes e tensores.' },
-      { num: '02', title: 'Falha do Flattening', desc: 'Por que esticar imagens para MLPs quebra a localidade espacial.' },
-      { num: '03', title: 'Convolução 2D & Kernels', desc: 'Filtros como detectores automáticos de bordas, cantos e texturas.' },
-      { num: '04', title: 'Primeira CNN no MNIST', desc: 'Construção da primeira arquitetura convolucional completa em PyTorch.' }
+      { num: '01', title: 'Imagens Coloridas RGB', desc: 'Manipulação de tensores 4D multicanal (N, C, H, W) no PyTorch.' },
+      { num: '02', title: 'torchvision.transforms', desc: 'Pipelines de aumento de dados (Data Augmentation) e normalização.' },
+      { num: '03', title: 'PlantVillage Agritech', desc: 'Classificação de doenças foliares em lavouras do mundo real.' },
+      { num: '04', title: 'Base do Projeto 2 (CNN)', desc: 'Unindo CNNs + AdamW, Schedulers e Checkpoints em imagens reais.' }
     ],
-    notes: `Na nossa próxima aula — Aula 06 —, daremos início ao módulo de Visão Computacional!
-Deixaremos os dados tabulares 1D e entraremos no mundo das imagens bidimensionais, descobrindo por que as redes convolucionais revolucionaram a visão artificial. Parabéns pelo excelente trabalho até aqui e nos vemos na Aula 06!`
+    notes: `Na nossa próxima aula — Aula 08 —, uniremos a visão computacional da Aula 06 com o motor de otimização e diagnóstico de hoje!
+Sairemos das imagens simples em preto e branco do MNIST e trabalharemos com fotos coloridas reais de alta resolução com 3 canais RGB, aumento de dados e diagnóstico de doenças agrícolas no dataset PlantVillage. Parabéns pelo excelente trabalho até aqui e nos vemos na Aula 08!`
   }
 ];

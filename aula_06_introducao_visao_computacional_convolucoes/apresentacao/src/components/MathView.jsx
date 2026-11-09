@@ -9,6 +9,7 @@ export default function MathView({ math, block = false }) {
       katex.render(math, containerRef.current, {
         displayMode: block,
         throwOnError: false,
+        output: 'html',
       });
     }
   }, [math, block]);
